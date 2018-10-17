@@ -2,6 +2,7 @@
   "name": "d3/totp",
   "description": "Two-factor authentication for OXID eSales shop",
   "type": "oxideshop-module",
+  "version": "0.1",
   "keywords": [
     "oxid",
     "modules",

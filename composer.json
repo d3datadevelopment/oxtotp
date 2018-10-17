@@ -1,0 +1,43 @@
+{
+  "name": "d3/totp",
+  "description": "Two-factor authentication for OXID eSales shop",
+  "type": "oxideshop-module",
+  "keywords": [
+    "oxid",
+    "modules",
+    "eShop",
+    "d3",
+    "2FA"
+  ],
+  "authors": [
+    {
+        "name": "D3 Data Development (Inh. Thomas Dartsch)",
+        "email": "info@shopmodule.com",
+        "homepage": "http://www.d3data.de",
+        "role": "Owner"
+    }
+  ],
+  "support": {
+    "email": "support@shopmodule.com"
+  },
+  "homepage": "https://www.oxidmodule.com/",
+  "license": [
+    "proprietary"
+  ],
+  "extra": {
+    "oxideshop": {
+      "source-directory": "/src",
+      "target-directory": "d3/totp"
+    }
+  },
+  "require": {
+    "php": ">=5.6",
+    "oxid-esales/oxideshop-metapackage-ce": "~6.0.0 || ~6.1.0",
+    "spomky-labs/otphp": "^8.3 || ^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "D3\\Totp\\": "../../../source/modules/d3/totp"
+    }
+  }
+}

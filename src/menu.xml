@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OX>
+    <OXMENU id="NAVIGATION_ESHOPADMIN">
+        <MAINMENU id="mxuadmin">
+            <SUBMENU id="mxusers" cl="admin_user" list="user_list">
+                <TAB id="d3mxuser_totp" cl="d3user_totp" />
+            </SUBMENU>
+        </MAINMENU>
+    </OXMENU>
+</OX>

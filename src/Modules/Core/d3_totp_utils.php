@@ -15,22 +15,29 @@
 
 namespace D3\Totp\Modules\Core;
 
-use D3\Totp\Modules\Application\Model\d3_totp_user;
-use OxidEsales\Eshop\Application\Model\User;
+use D3\Totp\Application\Model\d3totp;
+use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Registry;
 
 class d3_totp_utils extends d3_totp_utils_parent
 {
+    /**
+     * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     */
     public function checkAccessRights()
     {
         $blAuth = parent::checkAccessRights();
 
-        $userID = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable("auth");
-        /** @var d3_totp_user $user */
-        $user = oxNew(User::class);
-        $user->load($userID);
+        $userID = Registry::getSession()->getVariable("auth");
+        /** @var d3totp $totp */
+        $totp = oxNew(d3totp::class);
 
-        if ($blAuth && $user->d3UseTotp()) {
-            //check TOTP
+        // und kein auth
+        if ($blAuth && $totp->UserUseTotp($userID)) {
+echo __CLASS__." - ".__FUNCTION__." - ".__LINE__."<br>";
         }
 
         return $blAuth;

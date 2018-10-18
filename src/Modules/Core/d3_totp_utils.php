@@ -35,8 +35,9 @@ class d3_totp_utils extends d3_totp_utils_parent
         $totpAuth = (bool) Registry::getSession()->getVariable("totp_auth");
         /** @var d3totp $totp */
         $totp = oxNew(d3totp::class);
+        $totp->loadByUserId($userID);
 
-        if (1 == 0 && $blAuth && $totp->UserUseTotp($userID) && false === $totpAuth) {
+        if ($blAuth && $totp->UserUseTotp() && false === $totpAuth) {
             Registry::getUtils()->redirect('index.php?cl=login', true, 302);
             exit;
         }

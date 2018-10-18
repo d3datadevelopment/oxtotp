@@ -16,6 +16,7 @@
 namespace D3\Totp\Modules\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
@@ -33,12 +34,16 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
         $return = parent::render();
 
+        $totp = oxNew(d3totp::class);
+        $totp->loadByUserId($auth);
+
         if ($auth
-            && oxNew(d3totp::class)->UserUseTotp($auth)
+            && $totp->UserUseTotp()
             && false == Registry::getSession()->getVariable("totp_auth")
         ) {
             // set auth as secured parameter;
-            $return = 'd3login_totp.tpl';
+            Registry::getSession()->setVariable("auth", $auth);
+            $this->addTplParam('request_totp', true);
         }
 
         return $return;
@@ -51,19 +56,48 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function checklogin()
     {
-        $return = parent::checklogin();
+        $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp', true);
 
-        if ($return == "admin_start") {
-            if ((bool) $this->getSession()->checkSessionChallenge()
-                && count(\OxidEsales\Eshop\Core\Registry::getUtilsServer()->getOxCookie())
-                && Registry::getSession()->getVariable("auth")
-                && oxNew(d3totp::class)->UserUseTotp(Registry::getSession()->getVariable("auth"))
-                && false == Registry::getSession()->getVariable("totp_auth")
-            ) {
-                $return = "login";
+        $totp = oxNew(d3totp::class);
+        $totp->loadByUserId(Registry::getSession()->getVariable("auth"));
+
+        $return = 'login';
+
+        try {
+            if ($this->isNoTotpOrNoLogin($totp)) {
+                $return = parent::checklogin();
+            } elseif ($this->hasValidTotp($sTotp, $totp)) {
+                Registry::getSession()->setVariable('totp_auth', $sTotp);
+                $return = "admin_start";
             }
+        } catch (d3totp_wrongOtpException $oEx) {
+            Registry::getUtilsView()->addErrorToDisplay($oEx);
         }
 
         return $return;
+    }
+
+    /**
+     * @param d3totp $totp
+     * @return bool
+     */
+    public function isNoTotpOrNoLogin($totp)
+    {
+        return false == Registry::getSession()->getVariable("auth")
+        || false == $totp->UserUseTotp();
+    }
+
+    /**
+     * @param string $sTotp
+     * @param d3totp $totp
+     * @return bool
+     * @throws d3totp_wrongOtpException
+     */
+    public function hasValidTotp($sTotp, $totp)
+    {
+        return Registry::getSession()->getVariable("totp_auth") ||
+        (
+            $sTotp && $totp->verify($sTotp)
+        );
     }
 }

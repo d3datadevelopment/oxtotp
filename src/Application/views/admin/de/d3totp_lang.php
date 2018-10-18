@@ -24,4 +24,10 @@ $aLang = [
     'TOTP_INPUT_HELP'                                 => 'Den Authentisierungscode erhalten Sie von der Zweifaktorauthentisierung-App auf Ihrem Gerät.',
 
     'd3mxuser_totp'                                   => '2-Faktor-Authentisierung',
+
+    'D3_TOTP_ACTIVE'                                  => 'Benutzer verwendet 2-Faktor-Authentisierung',
+    'D3_TOTP_ACTIVE_HELP'                             => 'Benutzer verwendet 2-Faktor-Authentisierung',
+    'D3_TOTP_QRCODE'                                  => 'QR-Code',
+    'D3_TOTP_SECRET'                                  => 'QR-Code kann nicht gescannt werden?',
+    'D3_TOTP_CURROTP'                                 => 'Bestätigung mit Einmalpasswort',
 ];

@@ -1,5 +1,4 @@
 [{if $request_totp}]
-    <input autocomplete="false" name="hidden" type="text" style="display:none;">
     [{$oViewConf->getHiddenSid()}]
 
     <input type="hidden" name="fnc" value="checklogin">
@@ -10,7 +9,7 @@
     [{/if}]
 
     <label for="d3totp">[{oxmultilang ident="TOTP_INPUT"}]</label>
-    <input type="text" name="d3totp" id="d3totp" value="" size="49" autofocus><br>
+    <input type="text" name="d3totp" id="d3totp" value="" size="49" autofocus autocomplete="off"><br>
 
     [{oxmultilang ident="TOTP_INPUT_HELP"}]
 [{else}]

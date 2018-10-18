@@ -1,4 +1,5 @@
 [{if $request_totp}]
+    <input autocomplete="false" name="hidden" type="text" style="display:none;">
     [{$oViewConf->getHiddenSid()}]
 
     <input type="hidden" name="fnc" value="checklogin">

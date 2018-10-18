@@ -27,6 +27,8 @@ use OxidEsales\Eshop\Core\Registry;
 
 class d3totp extends BaseModel
 {
+    const TOTP_SESSION_VARNAME = 'totp_auth';
+
     public $tableName = 'd3totp';
     public $userId;
     public $totp;
@@ -89,6 +91,7 @@ class d3totp extends BaseModel
     public function getSavedSecret()
     {
         $secret = $this->getFieldData('seed');
+        $sPwd = Registry::getSession()->getVariable('pwdTransmit');
 
         if ($secret) {
             return $secret;
@@ -103,17 +106,36 @@ class d3totp extends BaseModel
     public function getTotp()
     {
         if (false == $this->totp) {
-            $this->totp = oxNew(
-                TOTP::class,
-                $this->getUser()->getFieldData('oxusername')
+
+            if ($this->getTotpLibVersion() == 8) {     // version 0.8 (< PHP 7.1)
+                $this->totp = oxNew(
+                    TOTP::class,
+                    $this->getUser()->getFieldData('oxusername')
+                        ? $this->getUser()->getFieldData('oxusername')
+                        : null,
+                    $this->getSavedSecret()
+                );
+            } else {                                    // version 0.9 (>= PHP 7.1)
+                $this->totp = TOTP::create($this->getSavedSecret());
+                $this->totp->setLabel($this->getUser()->getFieldData('oxusername')
                     ? $this->getUser()->getFieldData('oxusername')
-                    : null,
-                $this->getSavedSecret()
-            );
+                    : null
+                );
+            }
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
         }
 
         return $this->totp;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotpLibVersion()
+    {
+        return method_exists(TOTP::class, 'create') ?
+            9 :
+            8;
     }
 
     /**

@@ -39,7 +39,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
         if ($auth
             && $totp->UserUseTotp()
-            && false == Registry::getSession()->getVariable("totp_auth")
+            && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
         ) {
             // set auth as secured parameter;
             Registry::getSession()->setVariable("auth", $auth);
@@ -61,13 +61,17 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         $totp = oxNew(d3totp::class);
         $totp->loadByUserId(Registry::getSession()->getVariable("auth"));
 
+        if (Registry::getRequest()->getRequestParameter('pwd')) {
+            Registry::getSession()->setVariable('pwdTransmit', Registry::getRequest()->getRequestParameter('pwd'));
+        }
+
         $return = 'login';
 
         try {
             if ($this->isNoTotpOrNoLogin($totp)) {
                 $return = parent::checklogin();
             } elseif ($this->hasValidTotp($sTotp, $totp)) {
-                Registry::getSession()->setVariable('totp_auth', $sTotp);
+                Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
                 $return = "admin_start";
             }
         } catch (d3totp_wrongOtpException $oEx) {
@@ -95,7 +99,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function hasValidTotp($sTotp, $totp)
     {
-        return Registry::getSession()->getVariable("totp_auth") ||
+        return Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME) ||
         (
             $sTotp && $totp->verify($sTotp)
         );

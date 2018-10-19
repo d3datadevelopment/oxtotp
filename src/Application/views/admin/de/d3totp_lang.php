@@ -34,4 +34,10 @@ $aLang = [
     'D3_TOTP_CURRPWD_HELP'                            => 'Die Zeichenkette wird verschlüsselt im Shop abgelegt. Zum Verschlüsseln wird das Passwort des ausgewählten Kundenkontos benötigt. Zugleich stellt dies sicher, dass nur Berechtigte Änderungen an diesen Einstellungen vornehmen dürfen.',
     'D3_TOTP_CURROTP'                                 => 'Bestätigung mit Einmalpasswort',
     'D3_TOTP_CURROTP_HELP'                            => 'Haben Sie dieses Kundenkonto in Ihrer Authentisierungs-App registriert, generieren Sie damit ein Einmalpasswort, tragen Sie es hier ein und senden das Formular direkt darauf hin ab.',
+
+    'D3_TOTP_REGISTEREXIST'                           => 'vorhandene Registrierung',
+    'D3_TOTP_REGISTERDELETE'                          => 'Registrierung löschen',
+    'D3_TOTP_REGISTERDELETE_DESC'                     => 'Das Konto ist dann nicht mehr durch die Zweifaktorauthtisierung geschützt.',
+
+    'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
 ];

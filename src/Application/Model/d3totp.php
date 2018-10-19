@@ -53,12 +53,17 @@ class d3totp extends BaseModel
     {
         $this->userId = $userId;
         $oQB = d3database::getInstance()->getQueryBuilder();
-        $oQB->select('oxid')
-            ->from($this->getViewName())
-            ->where("oxuserid = ".$oQB->createNamedParameter($userId))
-            ->setMaxResults(1);
 
-        return $this->load(DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($oQB->getSQL(), $oQB->getParameters()));
+        if (DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne("SHOW TABLES LIKE 'd3totp'")) {
+            $oQB->select('oxid')
+                ->from($this->getViewName())
+                ->where("oxuserid = " . $oQB->createNamedParameter($userId))
+                ->setMaxResults(1);
+
+            return $this->load(DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($oQB->getSQL(), $oQB->getParameters()));
+        }
+
+        return false;
     }
 
     /**
@@ -184,7 +189,7 @@ class d3totp extends BaseModel
     {
         $blVerify = $this->getTotp($seed)->verify($totp, null, 2);
         if (false == $blVerify) {
-            $oException = oxNew(d3totp_wrongOtpException::class, 'unvalid TOTP');
+            $oException = oxNew(d3totp_wrongOtpException::class, 'D3_TOTP_ERROR_UNVALID');
             throw $oException;
         }
 

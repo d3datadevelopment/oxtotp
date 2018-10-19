@@ -40,6 +40,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         if ($auth
             && $totp->UserUseTotp()
             && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+            && Registry::getSession()->hasVariable('pwdTransmit')
         ) {
             // set auth as secured parameter;
             Registry::getSession()->setVariable("auth", $auth);

@@ -52,6 +52,36 @@
                                         [{oxinputhelp ident="D3_TOTP_QRCODE_HELP"}]
                                     </td>
                                 </tr>
+                            [{else}]
+                                <tr>
+                                    <td class="edittext" colspan="2">
+                                        <h4>[{oxmultilang ident="D3_TOTP_REGISTEREXIST"}]</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="edittext">
+
+                                    </td>
+                                    <td class="edittext">
+                                        [{oxmultilang ident="D3_TOTP_REGISTERDELETE"}]<br>
+                                        [{oxmultilang ident="D3_TOTP_REGISTERDELETE_DESC"}]
+                                    </td>
+                                </tr>
+                            [{/if}]
+
+                        [{/block}]
+                    </table>
+                </td>
+                <!-- Anfang rechte Seite -->
+                <td valign="top" class="edittext" align="left" style="height:99%;padding-left:5px;padding-bottom:30px;padding-top:10px; width: 50%;">
+                    <table cellspacing="0" cellpadding="0" border="0">
+                        [{block name="user_d3user_totp_form2"}]
+                            [{if false == $totp->getId()}]
+                                <tr>
+                                    <td class="edittext" colspan="2">
+                                        <h4>&nbsp;</h4>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="edittext">
                                         <label for="secret">[{oxmultilang ident="D3_TOTP_SECRET"}]</label>
@@ -81,15 +111,6 @@
                                         [{oxinputhelp ident="D3_TOTP_CURROTP_HELP"}]
                                     </td>
                                 </tr>
-                            [{else}]
-                                <tr>
-                                    <td class="edittext">
-
-                                    </td>
-                                    <td class="edittext">
-                                        neuen Zugang anlegen, alle bisherigen Zugännge werden damit ungültig
-                                    </td>
-                                </tr>
                             [{/if}]
 
                         [{/block}]
@@ -99,12 +120,6 @@
                                 <input type="submit" class="edittext" id="oLockButton" name="saveArticle" value="[{oxmultilang ident="ARTICLE_MAIN_SAVE"}]" onClick="document.myedit.fnc.value='save'" [{$readonly}]>
                             </td>
                         </tr>
-                    </table>
-                </td>
-                <!-- Anfang rechte Seite -->
-                <td valign="top" class="edittext" align="left" style="height:99%;padding-left:5px;padding-bottom:30px;padding-top:10px; width: 50%;">
-                    <table cellspacing="0" cellpadding="0" border="0">
-                        [{block name="user_d3user_totp_form2"}][{/block}]
                     </table>
                 </td>
                 <!-- Ende rechte Seite -->

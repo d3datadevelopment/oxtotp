@@ -16,12 +16,18 @@
 namespace D3\Totp\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Registry;
 
 class d3user_totp extends AdminDetailsController
 {
+    protected $_sSaveError = null;
+
     protected $_sThisTemplate = 'd3user_totp.tpl';
 
     /**
@@ -33,18 +39,62 @@ class d3user_totp extends AdminDetailsController
     {
         parent::render();
 
-        $soxId = $this->_aViewData["oxid"] = $this->getEditObjectId();
+        $soxId = $this->getEditObjectId();
+
         if (isset($soxId) && $soxId != "-1") {
-            /** @var d3totp $oTotp */
-            $oTotp = oxNew(d3totp::class);
-            $oTotp->loadByUserId($soxId);
-            $this->_aViewData["edit"] = $oTotp;
+            /** @var d3_totp_user $oUser */
+            $oUser = oxNew(User::class);
+            if ($oUser->load($soxId)) {
+                $this->addTplParam("oxid", $oUser->getId());
+            } else {
+                $this->addTplParam("oxid", '-1');
+            }
+            $this->addTplParam("edit", $oUser);
         }
 
-        if (!$this->_allowAdminEdit($soxId)) {
-            $this->_aViewData['readonly'] = true;
+        if ($this->_sSaveError) {
+            $this->addTplParam("sSaveError", $this->_sSaveError);
         }
 
         return $this->_sThisTemplate;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function save()
+    {
+        parent::save();
+
+        $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");
+
+        try {
+            $pwd = Registry::getRequest()->getRequestEscapedParameter("pwd");
+
+            /** @var d3_totp_user $oUser */
+            $oUser = oxNew(User::class);
+            if (false == $oUser->d3CheckPasswordPass($this->getEditObjectId(), $pwd)) {
+                $oException = oxNew(StandardException::class, 'EXCEPTION_USER_PASSWORDDONTPASS');
+                throw $oException;
+            }
+
+            /** @var d3totp $oTotp */
+            $oTotp = oxNew(d3totp::class);
+            if ($aParams['d3totp__oxid']) {
+                $oTotp->load($aParams['d3totp__oxid']);
+            } else {
+                $aParams['d3totp__usetotp'] = 1;
+                $seed = Registry::getRequest()->getRequestEscapedParameter("secret");
+                $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
+
+                $oTotp->saveSecret($seed, $pwd);
+                $oTotp->assign($aParams);
+                $oTotp->verify($otp, $seed);
+                $oTotp->setId();
+            }
+            $oTotp->save();
+        } catch (\Exception $oExcp) {
+            $this->_sSaveError = $oExcp->getMessage();
+        }
     }
 }

@@ -72,6 +72,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
                 $return = parent::checklogin();
             } elseif ($this->hasValidTotp($sTotp, $totp)) {
                 Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
+                Registry::getSession()->deleteVariable('pwdTransmit');
                 $return = "admin_start";
             }
         } catch (d3totp_wrongOtpException $oEx) {

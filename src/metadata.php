@@ -47,7 +47,7 @@ $aModule = [
     'email'       => 'support@shopmodule.com',
     'url'         => 'http://www.oxidmodule.com/',
     'extend'      => [
-        //OxidModel\User::class              => \D3\Totp\Modules\Application\Model\d3_totp_user::class,
+        OxidModel\User::class              => \D3\Totp\Modules\Application\Model\d3_totp_user::class,
         LoginController::class             => \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::class,
         Utils::class                       => \D3\Totp\Modules\Core\d3_totp_utils::class,
     ],

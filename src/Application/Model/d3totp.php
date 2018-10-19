@@ -81,7 +81,8 @@ class d3totp extends BaseModel
      */
     public function UserUseTotp()
     {
-        return $this->getFieldData('usetotp');
+        return $this->getFieldData('usetotp')
+            && $this->getFieldData('seed');
     }
 
     /**
@@ -90,20 +91,24 @@ class d3totp extends BaseModel
      */
     public function getSavedSecret()
     {
-        $secret = $this->getFieldData('seed');
+        $seed_enc = $this->getFieldData('seed');
         $sPwd = Registry::getSession()->getVariable('pwdTransmit');
 
-        if ($secret) {
-            return $secret;
+        if ($seed_enc && $sPwd) {
+            $seed = $this->decrypt($seed_enc, $sPwd);
+            if ($seed) {
+                return $seed;
+            }
         }
 
         return null;
     }
 
     /**
+     * @param $seed
      * @return TOTP
      */
-    public function getTotp()
+    public function getTotp($seed = null)
     {
         if (false == $this->totp) {
 
@@ -113,10 +118,12 @@ class d3totp extends BaseModel
                     $this->getUser()->getFieldData('oxusername')
                         ? $this->getUser()->getFieldData('oxusername')
                         : null,
-                    $this->getSavedSecret()
+                    $seed
+                        ? $seed
+                        : $this->getSavedSecret()
                 );
             } else {                                    // version 0.9 (>= PHP 7.1)
-                $this->totp = TOTP::create($this->getSavedSecret());
+                $this->totp = TOTP::create($seed ? $seed : $this->getSavedSecret());
                 $this->totp->setLabel($this->getUser()->getFieldData('oxusername')
                     ? $this->getUser()->getFieldData('oxusername')
                     : null
@@ -151,22 +158,75 @@ class d3totp extends BaseModel
      */
     public function getSecret()
     {
-        return $this->getTotp()->getSecret();
+        return trim($this->getTotp()->getSecret());
+    }
+
+    /**
+     * @param $seed
+     * @param $key
+     */
+    public function saveSecret($seed, $key)
+    {
+        $this->assign(
+            array(
+                'seed'  => $this->encrypt($seed, $key)
+            )
+        );
     }
 
     /**
      * @param $totp
+     * @param $seed
      * @return string
      * @throws d3totp_wrongOtpException
      */
-    public function verify($totp)
+    public function verify($totp, $seed = null)
     {
-        $blVerify = $this->getTotp()->verify($totp, null, 2);
+        $blVerify = $this->getTotp($seed)->verify($totp, null, 2);
         if (false == $blVerify) {
             $oException = oxNew(d3totp_wrongOtpException::class, 'unvalid TOTP');
             throw $oException;
         }
 
         return $blVerify;
+    }
+
+    /**
+     * $key should have previously been generated in a cryptographically secure manner, e.g. via openssl_random_pseudo_bytes
+     *
+     * @param $plaintext
+     * @param $key
+     * @return string
+     */
+    public function encrypt($plaintext, $key)
+    {
+        $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
+        $iv = openssl_random_pseudo_bytes($ivlen);
+        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);
+        return base64_encode($iv.$hmac.$ciphertext_raw);
+    }
+
+    /**
+     * $key should have previously been generated in a cryptographically secure manner, e.g. via openssl_random_pseudo_bytes
+     *
+     * @param $ciphertext
+     * @param $key
+     * @return bool|string
+     */
+    public function decrypt($ciphertext, $key)
+    {
+        $c = base64_decode($ciphertext);
+        $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
+        $iv = substr($c, 0, $ivlen);
+        $hmac = substr($c, $ivlen, $sha2len=32);
+        $ciphertext_raw = substr($c, $ivlen+$sha2len);
+        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
+        $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);
+        if (hash_equals($hmac, $calcmac)) { // PHP 5.6+ compute attack-safe comparison
+            return $original_plaintext;
+        }
+
+        return false;
     }
 }

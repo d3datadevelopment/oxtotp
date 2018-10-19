@@ -25,9 +25,13 @@ $aLang = [
 
     'd3mxuser_totp'                                   => '2-Faktor-Authentisierung',
 
-    'D3_TOTP_ACTIVE'                                  => 'Benutzer verwendet 2-Faktor-Authentisierung',
-    'D3_TOTP_ACTIVE_HELP'                             => 'Benutzer verwendet 2-Faktor-Authentisierung',
+    'D3_TOTP_REGISTERNEW'                             => 'neue Registrierung erstellen',
     'D3_TOTP_QRCODE'                                  => 'QR-Code',
+    'D3_TOTP_QRCODE_HELP'                             => 'Scannen Sie diesen QR-Code mit Ihrer Authentisierungs-App, um dieses Benutzerkonto dort zu hinterlegen.',
     'D3_TOTP_SECRET'                                  => 'QR-Code kann nicht gescannt werden?',
+    'D3_TOTP_SECRET_HELP'                             => 'Setzen Sie keine App ein, die den QR-Code scannen kann, können Sie diese Zeichenkette auch in Ihr Authentisierungstool kopieren. Stellen Sie bitte zusätzlich die Passwortlänge auf 6 Zeichen und das Zeitinterval auf 30 Sekunden ein.',
+    'D3_TOTP_CURRPWD'                                 => 'Anmeldepasswort des Benutzerkontos',
+    'D3_TOTP_CURRPWD_HELP'                            => 'Die Zeichenkette wird verschlüsselt im Shop abgelegt. Zum Verschlüsseln wird das Passwort des ausgewählten Kundenkontos benötigt. Zugleich stellt dies sicher, dass nur Berechtigte Änderungen an diesen Einstellungen vornehmen dürfen.',
     'D3_TOTP_CURROTP'                                 => 'Bestätigung mit Einmalpasswort',
+    'D3_TOTP_CURROTP_HELP'                            => 'Haben Sie dieses Kundenkonto in Ihrer Authentisierungs-App registriert, generieren Sie damit ein Einmalpasswort, tragen Sie es hier ein und senden das Formular direkt darauf hin ab.',
 ];

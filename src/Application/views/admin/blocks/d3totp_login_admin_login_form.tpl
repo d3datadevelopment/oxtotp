@@ -12,6 +12,8 @@
     <input type="text" name="d3totp" id="d3totp" value="" size="49" autofocus autocomplete="off"><br>
 
     [{oxmultilang ident="TOTP_INPUT_HELP"}]
+
+    --Anmeldung abbrechen--
 [{else}]
     [{$smarty.block.parent}]
 [{/if}]

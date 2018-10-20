@@ -36,7 +36,7 @@ $sModuleId = 'd3totp';
 $aModule = [
     'id'          => $sModuleId,
     'title'       =>
-        (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;') . ' Zwei-Faktor-Authentisierung',
+        (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;') . ' Zwei-Faktor-Authentisierung / two-factor authentication',
     'description' => [
         'de' => 'Zwei-Faktor-Authentisierung (TOTP) f&uuml;r OXID eSales Shop',
         'en' => 'Two-factor authentication (TOTP) for OXID eSales shop',

@@ -18,6 +18,7 @@ namespace D3\Totp\Modules\Application\Controller\Admin;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 
@@ -105,5 +106,11 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         (
             $sTotp && $totp->verify($sTotp)
         );
+    }
+
+    public function d3CancelLogin()
+    {
+        $oUser = oxNew(User::class);
+        $oUser->logout();
     }
 }

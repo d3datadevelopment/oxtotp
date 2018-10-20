@@ -1,0 +1,12 @@
+#login {
+    display: flex;
+    flex-flow: column;
+}
+#login .btn {
+    order: 1;
+}
+#login .btn.btn_cancel {
+    order: 2;
+    background: lightblue;
+    color: black;
+}

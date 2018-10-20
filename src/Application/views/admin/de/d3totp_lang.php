@@ -21,7 +21,8 @@ $aLang = [
     'charset'                                         => 'UTF-8',
 
     'TOTP_INPUT'                                      => 'Authentisierungscode',
-    'TOTP_INPUT_HELP'                                 => 'Den Authentisierungscode erhalten Sie von der Zweifaktorauthentisierung-App auf Ihrem Gerät.',
+    'TOTP_INPUT_HELP'                                 => 'Das Einmalpasswort erhalten Sie von der Zweifaktorauthentisierung-App auf Ihrem Gerät.',
+    'TOTP_CANCEL_LOGIN'                               => 'Anmeldung abbrechen',
 
     'd3mxuser_totp'                                   => '2-Faktor-Authentisierung',
 
@@ -40,4 +41,5 @@ $aLang = [
     'D3_TOTP_REGISTERDELETE_DESC'                     => 'Das Konto ist dann nicht mehr durch die Zweifaktorauthtisierung geschützt.',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
+    'D3_TOTP_ERROR_PWDONTPASS'                        => 'Das Passwort passt nicht zum gewählten Benutzerkonto.',
 ];

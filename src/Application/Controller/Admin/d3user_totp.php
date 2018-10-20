@@ -74,7 +74,7 @@ class d3user_totp extends AdminDetailsController
             /** @var d3_totp_user $oUser */
             $oUser = oxNew(User::class);
             if (false == $oUser->d3CheckPasswordPass($this->getEditObjectId(), $pwd)) {
-                $oException = oxNew(StandardException::class, 'EXCEPTION_USER_PASSWORDDONTPASS');
+                $oException = oxNew(StandardException::class, 'D3_TOTP_ERROR_PWDONTPASS');
                 throw $oException;
             }
 

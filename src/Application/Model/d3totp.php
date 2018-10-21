@@ -15,6 +15,10 @@
 
 namespace D3\Totp\Application\Model;
 
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use D3\ModCfg\Application\Model\d3database;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
@@ -138,7 +142,7 @@ class d3totp extends BaseModel
                 $this->totp = TOTP::create($seed ? $seed : $this->getSavedSecret());
                 $this->totp->setLabel($this->getUser()->getFieldData('oxusername')
                     ? $this->getUser()->getFieldData('oxusername')
-                    : null
+                    : ''
                 );
             }
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
@@ -163,6 +167,21 @@ class d3totp extends BaseModel
     public function getQrCodeUri()
     {
         return $this->getTotp()->getQrCodeUri();
+    }
+
+    /**
+     * @return string
+     */
+    public function getQrCodeElement()
+    {
+        /** @var ImageRenderer $renderer */
+        $renderer = oxNew(ImageRenderer::class,
+            oxNew(RendererStyle::class, 200),
+            oxNew(SvgImageBackEnd::class)
+        );
+        /** @var Writer $writer */
+        $writer = oxNew(Writer::class, $renderer);
+        return $writer->writeString($this->getTotp()->getProvisioningUri());
     }
 
     /**

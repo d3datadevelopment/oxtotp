@@ -48,7 +48,7 @@
                                         [{oxmultilang ident="D3_TOTP_QRCODE"}]&nbsp;
                                     </td>
                                     <td class="edittext">
-                                        <img src="[{$totp->getQrCodeUri()}]">
+                                        [{$totp->getQrCodeElement()}]
                                         [{oxinputhelp ident="D3_TOTP_QRCODE_HELP"}]
                                     </td>
                                 </tr>

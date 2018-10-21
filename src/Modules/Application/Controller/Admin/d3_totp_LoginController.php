@@ -39,7 +39,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         $totp->loadByUserId($auth);
 
         if ($auth
-            && $totp->UserUseTotp()
+            && $totp->isActive()
             && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
             && Registry::getSession()->hasVariable('pwdTransmit')
         ) {
@@ -91,7 +91,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     public function isNoTotpOrNoLogin($totp)
     {
         return false == Registry::getSession()->getVariable("auth")
-        || false == $totp->UserUseTotp();
+        || false == $totp->isActive();
     }
 
     /**

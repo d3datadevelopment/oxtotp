@@ -78,7 +78,14 @@ class d3totp extends BaseModel
         return $user;
     }
 
-
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return false == Registry::getConfig()->getConfigParam('blDisableTotpGlobally')
+            &&  $this->UserUseTotp();
+    }
 
     /**
      * @param $userId

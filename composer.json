@@ -2,7 +2,6 @@
   "name": "d3/totp",
   "description": "Two-factor authentication for OXID eSales shop",
   "type": "oxideshop-module",
-  "version": "0.1",
   "keywords": [
     "oxid",
     "modules",
@@ -34,8 +33,8 @@
   "require": {
     "php": ">=5.6",
     "oxid-esales/oxideshop-metapackage-ce": "~6.0.3 || ~6.1.0",
-    "spomky-labs/otphp": "^8.3 || ^9.0",
-    "bacon/bacon-qr-code": "^1.0 || ^2.0"
+    "spomky-labs/otphp": "^8.3",
+    "bacon/bacon-qr-code": "^1.0"
   },
   "autoload": {
     "psr-4": {

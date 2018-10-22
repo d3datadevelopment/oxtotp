@@ -15,9 +15,7 @@
 
 namespace D3\Totp\Application\Model;
 
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;
-use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Renderer\Image\Svg;
 use BaconQrCode\Writer;
 use D3\ModCfg\Application\Model\d3database;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
@@ -92,7 +90,6 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $userId
      * @return bool
      */
     public function UserUseTotp()
@@ -102,7 +99,6 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $userId
      * @return string
      */
     public function getSavedSecret()
@@ -128,37 +124,19 @@ class d3totp extends BaseModel
     {
         if (false == $this->totp) {
 
-            if ($this->getTotpLibVersion() == 8) {     // version 0.8 (< PHP 7.1)
-                $this->totp = oxNew(
-                    TOTP::class,
-                    $this->getUser()->getFieldData('oxusername')
-                        ? $this->getUser()->getFieldData('oxusername')
-                        : null,
-                    $seed
-                        ? $seed
-                        : $this->getSavedSecret()
-                );
-            } else {                                    // version 0.9 (>= PHP 7.1)
-                $this->totp = TOTP::create($seed ? $seed : $this->getSavedSecret());
-                $this->totp->setLabel($this->getUser()->getFieldData('oxusername')
+            $this->totp = oxNew(
+                TOTP::class,
+                $this->getUser()->getFieldData('oxusername')
                     ? $this->getUser()->getFieldData('oxusername')
-                    : ''
-                );
-            }
+                    : null,
+                $seed
+                    ? $seed
+                    : $this->getSavedSecret()
+            );
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
         }
 
         return $this->totp;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotpLibVersion()
-    {
-        return method_exists(TOTP::class, 'create') ?
-            9 :
-            8;
     }
 
     /**
@@ -174,11 +152,10 @@ class d3totp extends BaseModel
      */
     public function getQrCodeElement()
     {
-        /** @var ImageRenderer $renderer */
-        $renderer = oxNew(ImageRenderer::class,
-            oxNew(RendererStyle::class, 200),
-            oxNew(SvgImageBackEnd::class)
-        );
+        $renderer = oxNew(Svg::class);
+        $renderer->setHeight(200);
+        $renderer->setWidth(200);
+
         /** @var Writer $writer */
         $writer = oxNew(Writer::class, $renderer);
         return $writer->writeString($this->getTotp()->getProvisioningUri());

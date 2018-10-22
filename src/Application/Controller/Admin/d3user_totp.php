@@ -73,7 +73,8 @@ class d3user_totp extends AdminDetailsController
 
             /** @var d3_totp_user $oUser */
             $oUser = oxNew(User::class);
-            if (false == $oUser->d3CheckPasswordPass($this->getEditObjectId(), $pwd)) {
+            $oUser->load($this->getEditObjectId());
+            if (false == $oUser->isSamePassword($pwd)) {
                 $oException = oxNew(StandardException::class, 'D3_TOTP_ERROR_PWDONTPASS');
                 throw $oException;
             }
@@ -87,7 +88,7 @@ class d3user_totp extends AdminDetailsController
                 $seed = Registry::getRequest()->getRequestEscapedParameter("secret");
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
 
-                $oTotp->saveSecret($seed, $pwd);
+                $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
                 $oTotp->verify($otp, $seed);
                 $oTotp->setId();

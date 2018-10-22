@@ -32,7 +32,7 @@ $aLang = [
     'D3_TOTP_SECRET'                                  => 'Can not scan QR code?',
     'D3_TOTP_SECRET_HELP'                             => 'If you do not use an app that can scan the QR code, you can also copy this string into your authentication tool. Please also set the password length to 6 characters and the time interval to 30 seconds.',
     'D3_TOTP_CURRPWD'                                 => 'Login password of the user account',
-    'D3_TOTP_CURRPWD_HELP'                            => 'The character string is stored encrypted in the shop. To encrypt, the password of the selected customer account is required. Concurrently, this ensures that only authorized users can make changes to these settings.',
+    'D3_TOTP_CURRPWD_HELP'                            => 'This ensures that only authorized users can make changes to these settings.',
     'D3_TOTP_CURROTP'                                 => 'Confirmation with one-time password',
     'D3_TOTP_CURROTP_HELP'                            => 'If you have registered this customer account in your authentication app, you generate a one-time password, enter it here and send the form out immediately.',
 

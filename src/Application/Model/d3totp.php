@@ -20,6 +20,7 @@ use BaconQrCode\Writer;
 use D3\ModCfg\Application\Model\d3database;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
+use Exception;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
@@ -104,10 +105,9 @@ class d3totp extends BaseModel
     public function getSavedSecret()
     {
         $seed_enc = $this->getFieldData('seed');
-        $sPwd = Registry::getSession()->getVariable('pwdTransmit');
 
-        if ($seed_enc && $sPwd) {
-            $seed = $this->decrypt($seed_enc, $sPwd);
+        if ($seed_enc) {
+            $seed = $this->decrypt($seed_enc);
             if ($seed) {
                 return $seed;
             }
@@ -171,13 +171,12 @@ class d3totp extends BaseModel
 
     /**
      * @param $seed
-     * @param $key
      */
-    public function saveSecret($seed, $key)
+    public function saveSecret($seed)
     {
         $this->assign(
             array(
-                'seed'  => $this->encrypt($seed, $key)
+                'seed'  => $this->encrypt($seed)
             )
         );
     }
@@ -200,14 +199,12 @@ class d3totp extends BaseModel
     }
 
     /**
-     * $key should have previously been generated in a cryptographically secure manner, e.g. via openssl_random_pseudo_bytes
-     *
      * @param $plaintext
-     * @param $key
      * @return string
      */
-    public function encrypt($plaintext, $key)
+    public function encrypt($plaintext)
     {
+        $key = Registry::getConfig()->getConfigParam('sConfigKey');
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = openssl_random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
@@ -216,14 +213,12 @@ class d3totp extends BaseModel
     }
 
     /**
-     * $key should have previously been generated in a cryptographically secure manner, e.g. via openssl_random_pseudo_bytes
-     *
      * @param $ciphertext
-     * @param $key
      * @return bool|string
      */
-    public function decrypt($ciphertext, $key)
+    public function decrypt($ciphertext)
     {
+        $key = Registry::getConfig()->getConfigParam('sConfigKey');
         $c = base64_decode($ciphertext);
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = substr($c, 0, $ivlen);

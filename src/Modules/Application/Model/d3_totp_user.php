@@ -17,9 +17,11 @@ namespace D3\Totp\Modules\Application\Model;
 
 use D3\Totp\Application\Model\d3totp;
 use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Application\Controller\ForgotPasswordController;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Application\Controller\Admin\UserMain;
 
 class d3_totp_user extends d3_totp_user_parent
 {
@@ -31,40 +33,6 @@ class d3_totp_user extends d3_totp_user_parent
         Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
 
         return $return;
-    }
-
-    /**
-     * @param $sUserId
-     * @param $sPassword
-     * @return bool
-     * @throws DatabaseConnectionException
-     */
-    public function d3CheckPasswordPass($sUserId, $sPassword)
-    {
-        return (bool) DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne(
-            $this->d3GetPasswordCheckQuery($sUserId, $sPassword)
-        );
-    }
-
-    /**
-     * @param $sUserId
-     * @param $sPassword
-     * @return string
-     * @throws DatabaseConnectionException
-     */
-    public function d3GetPasswordCheckQuery($sUserId, $sPassword)
-    {
-        $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
-
-        $sUserSelect = "oxuser.oxid = " . $oDb->quote($sUserId);
-
-        $sSalt = $oDb->getOne("SELECT `oxpasssalt` FROM `oxuser` WHERE  " . $sUserSelect);
-
-        $sPassSelect = " oxuser.oxpassword = " . $oDb->quote($this->encodePassword($sPassword, $sSalt));
-
-        $sSelect = "select `oxid` from oxuser where 1 and {$sPassSelect} and {$sUserSelect} ";
-
-        return $sSelect;
     }
 
     /**

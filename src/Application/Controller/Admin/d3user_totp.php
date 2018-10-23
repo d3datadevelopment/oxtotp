@@ -98,4 +98,16 @@ class d3user_totp extends AdminDetailsController
             $this->_sSaveError = $oExcp->getMessage();
         }
     }
+
+    public function delete()
+    {
+        $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");
+
+        /** @var d3totp $oTotp */
+        $oTotp = oxNew(d3totp::class);
+        if ($aParams['d3totp__oxid']) {
+            $oTotp->load($aParams['d3totp__oxid']);
+            $oTotp->delete();
+        }
+    }
 }

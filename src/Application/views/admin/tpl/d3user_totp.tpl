@@ -59,12 +59,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="edittext">
-
-                                    </td>
-                                    <td class="edittext">
-                                        [{oxmultilang ident="D3_TOTP_REGISTERDELETE"}]<br>
+                                    <td class="edittext" colspan="2">
                                         [{oxmultilang ident="D3_TOTP_REGISTERDELETE_DESC"}]
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="edittext" colspan="2"><br><br>
+                                        <input type="submit" class="edittext" id="oLockButton" name="delete" value="[{oxmultilang ident="D3_TOTP_REGISTERDELETE"}]" onClick="document.myedit.fnc.value='delete'" [{$readonly}]>
                                     </td>
                                 </tr>
                             [{/if}]
@@ -111,15 +112,14 @@
                                         [{oxinputhelp ident="D3_TOTP_CURROTP_HELP"}]
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="edittext" colspan="2"><br><br>
+                                        <input type="submit" class="edittext" id="oLockButton" name="save" value="[{oxmultilang ident="D3_TOTP_SAVE"}]" onClick="document.myedit.fnc.value='save'" [{$readonly}]>
+                                    </td>
+                                </tr>
                             [{/if}]
 
                         [{/block}]
-
-                        <tr>
-                            <td class="edittext" colspan="2"><br><br>
-                                <input type="submit" class="edittext" id="oLockButton" name="saveArticle" value="[{oxmultilang ident="ARTICLE_MAIN_SAVE"}]" onClick="document.myedit.fnc.value='save'" [{$readonly}]>
-                            </td>
-                        </tr>
                     </table>
                 </td>
                 <!-- Ende rechte Seite -->

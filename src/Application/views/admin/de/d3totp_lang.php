@@ -38,7 +38,9 @@ $aLang = [
 
     'D3_TOTP_REGISTEREXIST'                           => 'vorhandene Registrierung',
     'D3_TOTP_REGISTERDELETE'                          => 'Registrierung löschen',
-    'D3_TOTP_REGISTERDELETE_DESC'                     => 'Das Konto ist dann nicht mehr durch die Zweifaktorauthtisierung geschützt.',
+    'D3_TOTP_REGISTERDELETE_DESC'                     => 'Um die Registrierung zu ändern, löschen Sie diese bitte vorerst. Sie können sofort im Anschluss eine neue Registrierung anlegen.<br>Wenn Sie die Registrierung löschen, ist das Konto nicht mehr durch die Zweifaktorauthentisierung geschützt.',
+
+    'D3_TOTP_SAVE'                                    => 'Speichern',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
     'D3_TOTP_ERROR_PWDONTPASS'                        => 'Das Passwort passt nicht zum gewählten Benutzerkonto.',

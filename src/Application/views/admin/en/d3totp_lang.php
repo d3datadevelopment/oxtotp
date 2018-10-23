@@ -38,7 +38,9 @@ $aLang = [
 
     'D3_TOTP_REGISTEREXIST'                           => 'existing registration',
     'D3_TOTP_REGISTERDELETE'                          => 'Delete registration',
-    'D3_TOTP_REGISTERDELETE_DESC'                     => 'The account is then no longer protected by the two-factor authentication.',
+    'D3_TOTP_REGISTERDELETE_DESC'                     => 'To change the registration, please delete it. You can then immediately create a new registration. <br> If you delete the registration, the account is no longer protected by the two-factor authentication.',
+
+    'D3_TOTP_SAVE'                                    => 'Save',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',
     'D3_TOTP_ERROR_PWDONTPASS'                        => 'The password does not match the selected user account.',

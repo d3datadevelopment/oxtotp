@@ -17,11 +17,8 @@ namespace D3\Totp\Modules\Application\Model;
 
 use D3\Totp\Application\Model\d3totp;
 use Doctrine\DBAL\DBALException;
-use OxidEsales\Eshop\Application\Controller\ForgotPasswordController;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\EshopCommunity\Application\Controller\Admin\UserMain;
 
 class d3_totp_user extends d3_totp_user_parent
 {
@@ -29,7 +26,6 @@ class d3_totp_user extends d3_totp_user_parent
     {
         $return = parent::logout();
 
-        // deleting session info
         Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
 
         return $return;

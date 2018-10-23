@@ -33,7 +33,6 @@ class Installation extends d3install_updatebase
             'do'      => 'fixIndizes'),
     );
 
-    // Standardwerte für checkMultiLangTables() und fixRegisterMultiLangTables()
     public $aMultiLangTables = array();
 
     public $aFields = array(
@@ -98,8 +97,7 @@ class Installation extends d3install_updatebase
         )
     );
 
-    protected $_aRefreshMetaModuleIds = array('d3ordermanager');
-
+    protected $_aRefreshMetaModuleIds = array('d3totp');
 
     /**
      * @return bool

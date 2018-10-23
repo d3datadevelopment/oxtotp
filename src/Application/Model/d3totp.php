@@ -20,7 +20,6 @@ use BaconQrCode\Writer;
 use D3\ModCfg\Application\Model\d3database;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
-use Exception;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
@@ -35,6 +34,7 @@ class d3totp extends BaseModel
     public $tableName = 'd3totp';
     public $userId;
     public $totp;
+    protected $timeWindow = 2;
 
     /**
      * d3totp constructor.
@@ -189,7 +189,7 @@ class d3totp extends BaseModel
      */
     public function verify($totp, $seed = null)
     {
-        $blVerify = $this->getTotp($seed)->verify($totp, null, 2);
+        $blVerify = $this->getTotp($seed)->verify($totp, null, $this->timeWindow);
         if (false == $blVerify) {
             $oException = oxNew(d3totp_wrongOtpException::class);
             throw $oException;

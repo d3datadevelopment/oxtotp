@@ -19,60 +19,61 @@ use D3\Totp\Setup as ModuleSetup;
 use D3\ModCfg\Application\Model\d3utils;
 use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
 use OxidEsales\Eshop\Core\Utils;
-use OxidEsales\Eshop\Application\Controller as OxidController;
 use OxidEsales\Eshop\Application\Model as OxidModel;
-use OxidEsales\Eshop\Application\Component as OxidComponent;
-use OxidEsales\Eshop\Core as OxidCore;
 
 /**
  * Metadata version
  */
 $sMetadataVersion = '2.0';
 
+$logo = (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;');
+
 $sModuleId = 'd3totp';
 /**
  * Module information
  */
 $aModule = [
-    'id'          => $sModuleId,
-    'title'       =>
-        (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;') . ' Zwei-Faktor-Authentisierung / two-factor authentication',
-    'description' => [
-        'de' => 'Zwei-Faktor-Authentisierung (TOTP) f&uuml;r OXID eSales Shop',
-        'en' => 'Two-factor authentication (TOTP) for OXID eSales shop',
+    'id'            => $sModuleId,
+    'title'         => [
+        'de'        => $logo.' Zwei-Faktor-Authentisierung',
+        'en'        => $logo.' two-factor authentication',
     ],
-    'thumbnail'   => 'picture.png',
-    'version'     => '0.1',
-    'author'      => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
-    'email'       => 'support@shopmodule.com',
-    'url'         => 'http://www.oxidmodule.com/',
-    'extend'      => [
+    'description'   => [
+        'de'        => 'Zwei-Faktor-Authentisierung (TOTP) f&uuml;r OXID eSales Shop',
+        'en'        => 'Two-factor authentication (TOTP) for OXID eSales shop',
+    ],
+    'thumbnail'     => 'picture.png',
+    'version'       => '0.1',
+    'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
+    'email'         => 'support@shopmodule.com',
+    'url'           => 'http://www.oxidmodule.com/',
+    'extend'        => [
         OxidModel\User::class              => \D3\Totp\Modules\Application\Model\d3_totp_user::class,
         LoginController::class             => \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::class,
         Utils::class                       => \D3\Totp\Modules\Core\d3_totp_utils::class,
     ],
-    'controllers'   => [
-        'd3user_totp'   =>  \D3\Totp\Application\Controller\Admin\d3user_totp::class
+    'controllers'           => [
+        'd3user_totp'       =>  \D3\Totp\Application\Controller\Admin\d3user_totp::class
     ],
-    'templates'   => [
-        'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
+    'templates'             => [
+        'd3user_totp.tpl'   => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
     ],
-    'events'      => [
-        'onActivate'    => '\D3\Totp\Setup\Events::onActivate',
-        'onDeactivate'  => '\D3\Totp\Setup\Events::onDeactivate',
+    'events'                => [
+        'onActivate'        => '\D3\Totp\Setup\Events::onActivate',
+        'onDeactivate'      => '\D3\Totp\Setup\Events::onDeactivate',
     ],
-    'settings' => [
+    'settings'              => [
     ],
-    'blocks'      => [
+    'blocks'                => [
         [
-            'template'  => 'login.tpl',
-            'block'     => 'admin_login_form',
-            'file'      => 'Application/views/admin/blocks/d3totp_login_admin_login_form.tpl',
+            'template'      => 'login.tpl',
+            'block'         => 'admin_login_form',
+            'file'          => 'Application/views/admin/blocks/d3totp_login_admin_login_form.tpl',
         ]
     ],
-    'd3FileRegister'    => [
+    'd3FileRegister'        => [
     ],
-    'd3SetupClasses'    => [
+    'd3SetupClasses'        => [
         ModuleSetup\Installation::class
     ]
 ];

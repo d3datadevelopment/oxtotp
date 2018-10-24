@@ -77,14 +77,3 @@ $aModule = [
         ModuleSetup\Installation::class
     ]
 ];
-
-// CREATE TABLE `d3totp` (
-//	`OXID` CHAR(32) NOT NULL,
-//	`OXUSERID` CHAR(32) NOT NULL,
-//	`USETOTP` TINYINT(1) NOT NULL DEFAULT '0',
-//	`SEED` VARCHAR(125) NOT NULL DEFAULT '0',
-//	PRIMARY KEY (`OXID`),
-//	UNIQUE INDEX `Schl�ssel 2` (`OXUSERID`)
-//)
-//ENGINE=InnoDB
-//;

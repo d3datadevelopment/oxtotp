@@ -49,26 +49,7 @@
         
         <div class="details">
             <div>Autor: D³ Data Development</div>            <div>Stand: 24.10.2018</div>            <div>Version: 1.0.0.0</div>
-            <div>Version wechseln: 
-<select onchange="window.location.href=this.options[this.selectedIndex].value" size="1">
-
-<?php
-    $versionpath = implode("/", array_slice(explode("/", $_SERVER['SCRIPT_NAME']), 2));
-    $modulepath = implode("/", array_slice(explode("/", $_SERVER['SCRIPT_NAME']), 0, 2));
-    $path = str_replace($versionpath, "", $_SERVER['SCRIPT_FILENAME']);
-    $paths = explode('/', $versionpath);
-    $currpath = $paths[0];
-    
-    $dirs = array_filter(glob($path . '/*'), 'is_dir');
-    arsort($dirs);
-
-    foreach ($dirs as $dir) {
-        $dir = str_replace($path.'/', '', $dir);
-        $selected = ($dir === $currpath) ? 'selected="selected"' : "";
-        echo '<option value="'. $modulepath .'/'. $dir .'" '. $selected .'>'. $dir .'</option>';
-    }
-?>
-</select></div>
+            
             <div>Bearbeiter: DS</div>        </div>
     </div>
 

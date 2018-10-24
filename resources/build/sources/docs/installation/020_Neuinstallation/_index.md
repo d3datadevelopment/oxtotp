@@ -1,5 +1,5 @@
 ---
-Title: Schnellstart per Composer
+title: Schnellstart per Composer
 ---
 
 ## Schnellstart per Composer

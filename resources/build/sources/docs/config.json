@@ -71,6 +71,6 @@
         "modcfgident"   : "d3totp",
         "composerident" : "d3/totp"
     },
-    "versionselector": true,
+    "versionselector": false,
     "versiondirectoryindex": 2
 }

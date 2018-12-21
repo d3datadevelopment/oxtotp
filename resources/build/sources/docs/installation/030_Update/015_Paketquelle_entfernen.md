@@ -1,11 +1,14 @@
 ---
-title: Paketquelle hinzufügen
+title: Paketquelle entfernen
 ---
+
+Durch einen Wechsel der Paketquelle ist die veraltete Angabe nicht mehr erforderlich. Um Konflikte zu vermeiden, sollte die alte Paketquelle entfernt werden. Haben Sie diese schon früher entfernt, können Sie diesen Schritt überspringen.
 
 Starten Sie die Konsole Ihres Webservers und wechseln in das Hauptverzeichnis Ihres Shops (oberhalb des `source`- und `vendor`-Verzeichnisses). Senden Sie dort diesen Befehl ab:
 
 ```bash
-php composer config repositories.d3 composer https://satis.oxidmodule.com
+php composer config --unset repositories.d3
+php composer config --unset repositories.D3modules
 ``` 
 
 > [!] Achten Sie darauf, dass die Installation über Composer mit derselben PHP-Version erfolgt, in der auch Ihr Shop installiert ist. Sie erhalten sonst unpassende Modulpakete.

@@ -7,13 +7,7 @@ title: Systemanforderungen
 * PHP Decoder
     * installierter ionCube Loader
 * Shopversionen / -editionen
-    * OXID eShop Community Edition in Compilation Version 
-        * 6.0.x
-        * 6.1.x
-    * OXID eShop Professional Edition in Compilation Version 
-        * 6.0.x
-        * 6.1.x
-    * oder OXID eShop Enterprise Edition in Compilation Version 
+    * OXID eShop Community Edition (CE), Professional Edition (PE) oder Enterprise Edition (EE) in Compilation Version 
         * 6.0.x
         * 6.1.x
 * Installation via [Composer](https://getcomposer.org)

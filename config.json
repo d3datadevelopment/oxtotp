@@ -26,12 +26,7 @@
         "auto_landing": true,
 
         "links": {
-            "Shop": "https://www.oxidmodule.com",
-            "Blog": "https://blog.oxidmodule.com",
-            "FAQ": "https://faq.oxidmodule.com",
-            "D³ Support-Center": "https://support.shopmodule.com/",
-            "Kontakt": "https://www.oxidmodule.com/kontakt",
-            "Impressum": "https://www.oxidmodule.com/impressum"
+            "Shop": "https://www.oxidmodule.com"
         },
 
         "powered_by": ""

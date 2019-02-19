@@ -8,4 +8,4 @@ Möglicherweise sehen Sie nach dem Neuaktivieren des Moduls den Installationsass
  
 Wird der Assistent nicht gezeigt (Sie sehen wieder die Modulübersicht), waren keine Anpassungen am Shop notwendig.
   
-Ob erforderliche Updates ausgeführt werden sollen, können Sie jederzeit im Adminbereich unter [ D3 Module ] -> [ Modul-Connector ] -> [ Modulverwaltung ] -> [ Modulinstallation ] prüfen.
+Ob erforderliche Updates ausgeführt werden sollen, können Sie jederzeit im Adminbereich unter [ (D3) Module ] -> [ Modul-Connector ] -> [ Modulverwaltung ] -> [ Modulinstallation ] prüfen.

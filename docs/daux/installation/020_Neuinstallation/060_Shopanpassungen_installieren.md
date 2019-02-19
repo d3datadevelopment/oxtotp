@@ -6,7 +6,7 @@ title: Shopanpassungen installieren
 
 Wenn der D3 Modul-Connector installiert ist, startet direkt nach der Modulaktivierung der Assistent, der Sie durch die Shopanpassung führt. Darin können Sie verschiedene Optionen der Installation wählen.
 
-Den Installationsassistenten finden Sie auch unter den Menüpunkten [ Admin ] -> [ D3 Module ] -> [ Modul-Connector ] -> [ Modulverwaltung ] -> [ Modulinstallation ].
+Den Installationsassistenten finden Sie auch unter den Menüpunkten [ Admin ] -> [ (D3) Module ] -> [ Modul-Connector ] -> [ Modulverwaltung ] -> [ Modulinstallation ].
 
 Bei tiefgreifenden Änderungen an Ihrem Shop (z.B. Hinzufügen weiterer Sprachen oder Mandanten) rufen Sie den Installationsassistenten bitte erneut auf, um dann eventuell notwendige Nacharbeiten für das Modul ausführen zu lassen.
 

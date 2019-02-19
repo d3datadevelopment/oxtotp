@@ -1,10 +1,10 @@
 {
-    "title": "<i class='fab fa-d3 d3fa-color-blue'></i> MODULNAME",
-    "moduleversion": "5.0.0.0",
+    "title": "<i class='fab fa-d3 d3fa-color-blue'></i> 2-Faktor-Authentisierung",
+    "moduleversion": "1.0.0.0",
     "titledesc": "für den Oxid eShop",
     "author": "D³ Data Development",
-    "moduledate": "17.04.2018",
-    "editors": "XX/YY",
+    "moduledate": "24.10.2018",
+    "editors": "DS",
     "tagline": "",
     "image": "",
     "ignore": {
@@ -38,7 +38,6 @@
     },
     "languages": {
         "installation": "Installation",
-        "manual": "Handbuch",
         "changelog": "Changelog",
         "support": "Support"
     },
@@ -66,11 +65,11 @@
         }
     },
     "variables": {
-        "modulename"    : "<i class='fab fa-d3 d3fa-color-blue'></i> MODULNAME",
-        "menutitle"     : "<i class='fab fa-d3 d3fa-color-blue'></i> MODULNAME",
-        "modulefolder"  : "module_folder",
-        "modcfgident"   : "d3modident",
-        "composerident" : "d3/moduleident"
+        "modulename"    : "<i class='fab fa-d3 d3fa-color-blue'></i> 2-Faktor-Authentisierung",
+        "menutitle"     : "<i class='fab fa-d3 d3fa-color-blue'></i> 2-Faktor-Authentisierung",
+        "modulefolder"  : "totp",
+        "modcfgident"   : "d3totp",
+        "composerident" : "d3/totp"
     },
     "versionselector": false,
     "versiondirectoryindex": 2

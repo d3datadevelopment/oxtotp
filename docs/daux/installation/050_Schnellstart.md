@@ -2,6 +2,12 @@
 title: Schnellstart
 ---
 
-Das Modul **{$modulename}** bringt einen umfangreichen Adminbereich mit, in dem Sie die Konfigurationseinstellungen des Moduls setzen können. Über das Menü [D3 Module] -> [{$menutitle}] -> [Einstellungen] erreichen Sie die Einstellseiten. Arbeiten Sie idealerweise die Optionen einmal durch. Hinweise zu den einzelnen Einstellungen finden Sie in dem dahinter stehenden Fragezeichenfeld. Durch einen Klick darauf öffnet sich der Hinweistext.
+Aktivieren Sie die 2-Faktor-Authentisierung im Backend unter [ Benutzer verwalten ] -> [ Benutzer ] -> [ 2-Faktor-Authentisierung ].
 
-Die meisten Optionen sind zusätzlich im [Handbuch zum Modul](../manual/000_Handbuch.md) umfangreicher beschrieben.
+Ab dann erfordert das Login im Backend für das jeweilige Benutzerkonto neben Benutzername auch die Angabe eines Einmalpasswortes.
+
+Diese zusätzliche Absicherung kann im Adminbereich jederzeit wieder entfernt werden. 
+
+## zusätzliche Konfigurationsparameter in der Datei `config.inc.php` möglich:
+
+`blDisableTotpGlobally` => true: deaktiviert diese zusätzlichen Sicherung shopweit für alle Benutzer. Diese Option ist für den Fall vorbehalten, wenn der Adminbereich aus einem technischen Grund und von diesem Modul verursacht nicht mehr aufgerufen werden kann.

@@ -17,8 +17,10 @@ namespace D3\Totp\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
+use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 
@@ -30,6 +32,8 @@ class d3user_totp extends AdminDetailsController
 
     /**
      * @return string
+     * @throws DBALException
+     * @throws DatabaseConnectionException
      */
     public function render()
     {
@@ -87,6 +91,7 @@ class d3user_totp extends AdminDetailsController
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
                 $oTotp->verify($otp, $seed);
+                $this->addTplParam('aBackupCodes', $oTotp->generateBackupCodes());
                 $oTotp->setId();
             }
             $oTotp->save();

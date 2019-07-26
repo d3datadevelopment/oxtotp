@@ -26,6 +26,8 @@ use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry;
+use RandomLib\Factory;
+use RandomLib\Generator;
 
 class d3totp extends BaseModel
 {
@@ -35,6 +37,7 @@ class d3totp extends BaseModel
     public $userId;
     public $totp;
     protected $timeWindow = 2;
+    protected $_backupCodes = array();
 
     /**
      * d3totp constructor.
@@ -117,6 +120,21 @@ class d3totp extends BaseModel
     }
 
     /**
+     * @return array
+     */
+    public function generateBackupCodes()
+    {
+        $factory = new Factory();
+        $generator = $factory->getLowStrengthGenerator();
+
+        for ($i = 0; $i < 10; $i++) {
+            $this->_backupCodes[] = $generator->generateString(6, Generator::CHAR_DIGITS);
+        }
+
+        return $this->_backupCodes;
+    }
+
+    /**
      * @param $seed
      * @return TOTP
      */
@@ -179,6 +197,40 @@ class d3totp extends BaseModel
                 'seed'  => $this->encrypt($seed)
             )
         );
+    }
+
+    /**
+     * @param $code
+     * @return false|string
+     * @throws DatabaseConnectionException
+     */
+    public function d3EncodeBC($code)
+    {
+        $oDb = DatabaseProvider::getDb();
+        $salt = $this->getUser()->getFieldData('oxpasssalt');
+        $sSelect = "SELECT BINARY MD5( CONCAT( " . $oDb->quote($code) . ", UNHEX( ".$oDb->quote($salt)." ) ) )";
+
+        return $oDb->getOne($sSelect);
+    }
+
+    public function save()
+    {
+        $this->assign(
+            array(
+                'bc1'   => $this->d3EncodeBC($this->_backupCodes[0]),
+                'bc2'   => $this->d3EncodeBC($this->_backupCodes[1]),
+                'bc3'   => $this->d3EncodeBC($this->_backupCodes[2]),
+                'bc4'   => $this->d3EncodeBC($this->_backupCodes[3]),
+                'bc5'   => $this->d3EncodeBC($this->_backupCodes[4]),
+                'bc6'   => $this->d3EncodeBC($this->_backupCodes[5]),
+                'bc7'   => $this->d3EncodeBC($this->_backupCodes[6]),
+                'bc8'   => $this->d3EncodeBC($this->_backupCodes[7]),
+                'bc9'   => $this->d3EncodeBC($this->_backupCodes[8]),
+                'bc10'   => $this->d3EncodeBC($this->_backupCodes[9]),
+            )
+        );
+
+        return parent::save();
     }
 
     /**

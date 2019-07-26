@@ -8,6 +8,12 @@
     [{assign var="readonly" value=""}]
 [{/if}]
 
+<style type="text/css">
+    td.edittext {
+        white-space: normal;
+    }
+</style>
+
 <form name="transfer" id="transfer" action="[{$oViewConf->getSelfLink()}]" method="post">
     [{$oViewConf->getHiddenSid()}]
     <input type="hidden" name="oxid" value="[{$oxid}]">
@@ -117,6 +123,26 @@
                                         <input type="submit" class="edittext" id="oLockButton" name="save" value="[{oxmultilang ident="D3_TOTP_SAVE"}]" onClick="document.myedit.fnc.value='save'" [{$readonly}]>
                                     </td>
                                 </tr>
+                            [{else}]
+                                [{if $aBackupCodes}]
+
+                                    <tr>
+                                        <td class="edittext" colspan="2">
+                                            <h4>[{oxmultilang ident="D3_TOTP_BACKUPCODES"}]</h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="backupcodes">[{oxmultilang ident="D3_TOTP_BACKUPCODES_DESC"}]</label>
+                                            <br>
+                                            <br>
+                                            <textarea id="backupcodes" rows="10" cols="20">[{strip}]
+                                                [{'
+'|implode:$aBackupCodes}]
+                                            [{/strip}]</textarea>
+                                        </td>
+                                    </tr>
+                                [{/if}]
                             [{/if}]
 
                         [{/block}]

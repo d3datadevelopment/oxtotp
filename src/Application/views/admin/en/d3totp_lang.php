@@ -40,6 +40,9 @@ $aLang = [
     'D3_TOTP_REGISTERDELETE'                          => 'Delete registration',
     'D3_TOTP_REGISTERDELETE_DESC'                     => 'To change the registration, please delete it. You can then immediately create a new registration. <br> If you delete the registration, the account is no longer protected by the two-factor authentication.',
 
+    'D3_TOTP_BACKUPCODES'                             => 'backup codes',
+    'D3_TOTP_BACKUPCODES_DESC'                        => 'You can use these backup codes to log on if it is not possible to generate the one-time password (e.g. device lost or newly installed). You can then change the settings to use 2-factor authentication or create a new 2FA login. Please save these codes safely at this moment. After leaving this page, these codes cannot be displayed again.',
+
     'D3_TOTP_SAVE'                                    => 'Save',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',

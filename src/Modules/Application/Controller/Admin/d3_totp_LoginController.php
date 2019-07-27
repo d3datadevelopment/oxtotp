@@ -92,6 +92,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      * @param string $sTotp
      * @param d3totp $totp
      * @return bool
+     * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
     public function hasValidTotp($sTotp, $totp)

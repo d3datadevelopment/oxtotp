@@ -121,14 +121,21 @@ class d3totp extends BaseModel
 
     /**
      * @return array
+     * @throws DatabaseConnectionException
      */
     public function generateBackupCodes()
     {
         $factory = new Factory();
         $generator = $factory->getLowStrengthGenerator();
 
-        for ($i = 0; $i < 10; $i++) {
-            $this->_backupCodes[] = $generator->generateString(6, Generator::CHAR_DIGITS);
+        for ($i = 1; $i <= 10; $i++) {
+            $sCode = $generator->generateString(6, Generator::CHAR_DIGITS);
+            $this->_backupCodes[] = $sCode;
+            $this->assign(
+                array(
+                    'bc'.$i => $this->d3EncodeBC($sCode)
+                )
+            );
         }
 
         return $this->_backupCodes;
@@ -213,38 +220,30 @@ class d3totp extends BaseModel
         return $oDb->getOne($sSelect);
     }
 
-    public function save()
-    {
-        $this->assign(
-            array(
-                'bc1'   => $this->d3EncodeBC($this->_backupCodes[0]),
-                'bc2'   => $this->d3EncodeBC($this->_backupCodes[1]),
-                'bc3'   => $this->d3EncodeBC($this->_backupCodes[2]),
-                'bc4'   => $this->d3EncodeBC($this->_backupCodes[3]),
-                'bc5'   => $this->d3EncodeBC($this->_backupCodes[4]),
-                'bc6'   => $this->d3EncodeBC($this->_backupCodes[5]),
-                'bc7'   => $this->d3EncodeBC($this->_backupCodes[6]),
-                'bc8'   => $this->d3EncodeBC($this->_backupCodes[7]),
-                'bc9'   => $this->d3EncodeBC($this->_backupCodes[8]),
-                'bc10'   => $this->d3EncodeBC($this->_backupCodes[9]),
-            )
-        );
-
-        return parent::save();
-    }
-
     /**
      * @param $totp
      * @param $seed
      * @return string
+     * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
     public function verify($totp, $seed = null)
     {
         $blVerify = $this->getTotp($seed)->verify($totp, null, $this->timeWindow);
         if (false == $blVerify) {
-            $oException = oxNew(d3totp_wrongOtpException::class);
-            throw $oException;
+            $oDb = DatabaseProvider::getDb();
+            $aFields = array('bc1', 'bc2', 'bc3', 'bc4', 'bc5', 'bc6', 'bc7', 'bc8', 'bc9', 'bc10');
+
+            $query = "SELECT 1 FROM ".$this->getViewName().
+                " WHERE ".$oDb->quote($this->d3EncodeBC($totp))." IN (".implode(', ', array_map([$oDb, 'quoteIdentifier'], $aFields)).") AND ".
+                $oDb->quoteIdentifier("oxuserid") ." = ".$oDb->quote($this->getUser()->getId());
+
+            $blVerify = (bool) $oDb->getOne($query);
+
+            if (false == $blVerify) {
+                $oException = oxNew(d3totp_wrongOtpException::class);
+                throw $oException;
+            }
         }
 
         return $blVerify;

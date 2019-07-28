@@ -27,6 +27,8 @@ class Installation extends d3install_updatebase
     protected $_aUpdateMethods = array(
         array('check' => 'doesTotpTableNotExist',
             'do'      => 'addTotpTable'),
+        array('check' => 'doesTotpBCTableNotExist',
+            'do'      => 'addTotpBCTable'),
         array('check' => 'checkFields',
             'do'      => 'fixFields'),
         array('check' => 'checkIndizes',
@@ -76,103 +78,54 @@ class Installation extends d3install_updatebase
             'sExtra'      => '',
             'blMultilang' => false,
         ),
-        'BC1'    => array(
+        'OXTIMESTAMP'     => array(
             'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC1',
-            'sType'       => 'VARCHAR(64)',
+            'sFieldName'  => 'OXTIMESTAMP',
+            'sType'       => 'TIMESTAMP',
             'blNull'      => false,
-            'sDefault'    => false,
-            'sComment'    => 'BackupCode #1',
+            'sDefault'    => 'CURRENT_TIMESTAMP',
+            'sComment'    => 'Timestamp',
             'sExtra'      => '',
             'blMultilang' => false,
         ),
-        'BC2'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC2',
-            'sType'       => 'VARCHAR(64)',
+
+        'bc_OXID'    => array(
+            'sTableName'  => 'd3totp_backupcodes',
+            'sFieldName'  => 'OXID',
+            'sType'       => 'CHAR(32)',
             'blNull'      => false,
             'sDefault'    => false,
-            'sComment'    => 'BackupCode #2',
+            'sComment'    => '',
             'sExtra'      => '',
             'blMultilang' => false,
         ),
-        'BC3'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC3',
-            'sType'       => 'VARCHAR(64)',
+        'bc_OXUSERID'    => array(
+            'sTableName'  => 'd3totp_backupcodes',
+            'sFieldName'  => 'OXUSERID',
+            'sType'       => 'CHAR(32)',
             'blNull'      => false,
             'sDefault'    => false,
-            'sComment'    => 'BackupCode #3',
+            'sComment'    => 'user id',
             'sExtra'      => '',
             'blMultilang' => false,
         ),
-        'BC4'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC4',
+        'bc_BACKUPCODE'    => array(
+            'sTableName'  => 'd3totp_backupcodes',
+            'sFieldName'  => 'BACKUPCODE',
             'sType'       => 'VARCHAR(64)',
             'blNull'      => false,
             'sDefault'    => false,
-            'sComment'    => 'BackupCode #4',
+            'sComment'    => 'BackupCode',
             'sExtra'      => '',
             'blMultilang' => false,
         ),
-        'BC5'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC5',
-            'sType'       => 'VARCHAR(64)',
+        'bc_OXTIMESTAMP'     => array(
+            'sTableName'  => 'd3totp_backupcodes',
+            'sFieldName'  => 'OXTIMESTAMP',
+            'sType'       => 'TIMESTAMP',
             'blNull'      => false,
-            'sDefault'    => false,
-            'sComment'    => 'BackupCode #5',
-            'sExtra'      => '',
-            'blMultilang' => false,
-        ),
-        'BC6'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC6',
-            'sType'       => 'VARCHAR(64)',
-            'blNull'      => false,
-            'sDefault'    => false,
-            'sComment'    => 'BackupCode #6',
-            'sExtra'      => '',
-            'blMultilang' => false,
-        ),
-        'BC7'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC7',
-            'sType'       => 'VARCHAR(64)',
-            'blNull'      => false,
-            'sDefault'    => false,
-            'sComment'    => 'BackupCode #7',
-            'sExtra'      => '',
-            'blMultilang' => false,
-        ),
-        'BC8'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC8',
-            'sType'       => 'VARCHAR(64)',
-            'blNull'      => false,
-            'sDefault'    => false,
-            'sComment'    => 'BackupCode #8',
-            'sExtra'      => '',
-            'blMultilang' => false,
-        ),
-        'BC9'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC9',
-            'sType'       => 'VARCHAR(64)',
-            'blNull'      => false,
-            'sDefault'    => false,
-            'sComment'    => 'BackupCode #9',
-            'sExtra'      => '',
-            'blMultilang' => false,
-        ),
-        'BC10'    => array(
-            'sTableName'  => 'd3totp',
-            'sFieldName'  => 'BC10',
-            'sType'       => 'VARCHAR(64)',
-            'blNull'      => false,
-            'sDefault'    => false,
-            'sComment'    => 'BackupCode #10',
+            'sDefault'    => 'CURRENT_TIMESTAMP',
+            'sComment'    => 'Timestamp',
             'sExtra'      => '',
             'blMultilang' => false,
         )
@@ -194,7 +147,31 @@ class Installation extends d3install_updatebase
             'aFields'    => array(
                 'OXUSERID' => 'OXUSERID',
             ),
-        )
+        ),
+        'bc_OXID' => array(
+            'sTableName' => 'd3totp_backupcodes',
+            'sType'      => d3database::INDEX_TYPE_PRIMARY,
+            'sName'      => 'PRIMARY',
+            'aFields'    => array(
+                'OXID' => 'OXID',
+            ),
+        ),
+        'bc_OXUSERID' => array(
+            'sTableName' => 'd3totp_backupcodes',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
+            'sName'      => 'OXUSERID',
+            'aFields'    => array(
+                'OXUSERID' => 'OXUSERID',
+            ),
+        ),
+        'bc_BACKUPCODE' => array(
+            'sTableName' => 'd3totp_backupcodes',
+            'sType'      => d3database::INDEX_TYPE_INDEX,
+            'sName'      => 'BACKUPCODE',
+            'aFields'    => array(
+                'BACKUPCODE' => 'BACKUPCODE',
+            ),
+        ),
     );
 
     protected $_aRefreshMetaModuleIds = array('d3totp');
@@ -227,6 +204,41 @@ class Installation extends d3install_updatebase
                 $this->aFields,
                 $this->aIndizes,
                 'totp setting',
+                'InnoDB'
+            );
+        }
+
+        return $blRet;
+    }
+
+    /**
+     * @return bool
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function doesTotpBCTableNotExist()
+    {
+        return $this->_checkTableNotExist('d3totp_backupcodes');
+    }
+
+    /**
+     * @return bool
+     * @throws ConnectionException
+     * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function addTotpBCTable()
+    {
+        $blRet = false;
+        if ($this->doesTotpBCTableNotExist()) {
+            $this->setInitialExecMethod(__METHOD__);
+            $blRet  = $this->_addTable2(
+                'd3totp_backupcodes',
+                $this->aFields,
+                $this->aIndizes,
+                'totp backup codes',
                 'InnoDB'
             );
         }

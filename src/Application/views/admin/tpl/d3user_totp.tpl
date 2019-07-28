@@ -29,7 +29,7 @@
     <input type="hidden" name="editval[d3totp__oxuserid]" value="[{$oxid}]">
 
     [{if $sSaveError}]
-        <table cellspacing="0" cellpadding="0" border="0" style="width:98%;">
+        <table style="padding:0; border:0; width:98%;">
             <tr>
                 <td></td>
                 <td class="errorbox">[{oxmultilang ident=$sSaveError}]</td>
@@ -38,10 +38,10 @@
     [{/if}]
 
     [{if $oxid && $oxid != '-1'}]
-        <table cellspacing="0" cellpadding="0" border="0" style="width:98%;">
+        <table style="padding:0; border:0; width:98%;">
             <tr>
-                <td valign="top" class="edittext" style="padding-top:10px;padding-left:10px; width: 50%;">
-                    <table cellspacing="0" cellpadding="0" border="0">
+                <td class="edittext" style="vertical-align: top; padding-top:10px;padding-left:10px; width: 50%;">
+                    <table style="padding:0; border:0">
                         [{block name="user_d3user_totp_form1"}]
                             [{if false == $totp->getId()}]
                                 <tr>
@@ -80,8 +80,8 @@
                     </table>
                 </td>
                 <!-- Anfang rechte Seite -->
-                <td valign="top" class="edittext" align="left" style="height:99%;padding-left:5px;padding-bottom:30px;padding-top:10px; width: 50%;">
-                    <table cellspacing="0" cellpadding="0" border="0">
+                <td class="edittext" style="text-align: left; vertical-align: top; height:99%;padding-left:5px;padding-bottom:30px;padding-top:10px; width: 50%;">
+                    <table style="padding:0; border:0">
                         [{block name="user_d3user_totp_form2"}]
                             [{if false == $totp->getId()}]
                                 <tr>
@@ -124,7 +124,7 @@
                                     </td>
                                 </tr>
                             [{else}]
-                                [{if $aBackupCodes}]
+                                [{if $oView->getBackupCodes()}]
 
                                     <tr>
                                         <td class="edittext" colspan="2">
@@ -136,10 +136,7 @@
                                             <label for="backupcodes">[{oxmultilang ident="D3_TOTP_BACKUPCODES_DESC"}]</label>
                                             <br>
                                             <br>
-                                            <textarea id="backupcodes" rows="10" cols="20">[{strip}]
-                                                [{'
-'|implode:$aBackupCodes}]
-                                            [{/strip}]</textarea>
+                                            <textarea id="backupcodes" rows="10" cols="20">[{$oView->getBackupCodes()}]</textarea>
                                         </td>
                                     </tr>
                                 [{/if}]

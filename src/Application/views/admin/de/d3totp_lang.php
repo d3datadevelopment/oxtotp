@@ -41,7 +41,7 @@ $aLang = [
     'D3_TOTP_REGISTERDELETE_DESC'                     => 'Um die Registrierung zu ändern, löschen Sie diese bitte vorerst. Sie können sofort im Anschluss eine neue Registrierung anlegen.<br>Wenn Sie die Registrierung löschen, ist das Konto nicht mehr durch die Zweifaktorauthentisierung geschützt.',
 
     'D3_TOTP_BACKUPCODES'                             => 'Backup-Codes',
-    'D3_TOTP_BACKUPCODES_DESC'                        => 'Mit diesen Backup-Codes können Sie sich anmelden, wenn die Generierung des Einmalpasswortes nicht möglich ist (z.B. Gerät verloren oder neu installiert). Sie können dann die Einstellungen zur Verwendung der 2-Faktor-Autetizierung aändern oder einen neuen Zugang erstellen. Speichern Sie sich diese Codes bitte in diesem Moment sicher ab. Nach Verlassen dieser Seite können diese Codes nicht erneut angezeigt werden.',
+    'D3_TOTP_BACKUPCODES_DESC'                        => 'Mit diesen Backup-Codes können Sie sich anmelden, wenn die Generierung des Einmalpasswortes nicht möglich ist (z.B. Gerät verloren oder neu installiert). Sie können dann die Einstellungen zur Verwendung der 2-Faktor-Authentisierung ändern oder einen neuen Zugang erstellen. Speichern Sie sich diese Codes bitte in diesem Moment sicher ab. Nach Verlassen dieser Seite können diese Codes nicht erneut angezeigt werden.',
 
     'D3_TOTP_SAVE'                                    => 'Speichern',
 

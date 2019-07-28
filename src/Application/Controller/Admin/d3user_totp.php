@@ -16,11 +16,11 @@
 namespace D3\Totp\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\Exceptions\d3backupcodelist;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
-use Doctrine\DBAL\DBALException;
+use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 
@@ -30,10 +30,10 @@ class d3user_totp extends AdminDetailsController
 
     protected $_sThisTemplate = 'd3user_totp.tpl';
 
+    public $aBackupCodes = array();
+
     /**
      * @return string
-     * @throws DBALException
-     * @throws DatabaseConnectionException
      */
     public function render()
     {
@@ -60,7 +60,7 @@ class d3user_totp extends AdminDetailsController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function save()
     {
@@ -74,6 +74,7 @@ class d3user_totp extends AdminDetailsController
             /** @var d3_totp_user $oUser */
             $oUser = oxNew(User::class);
             $oUser->load($this->getEditObjectId());
+
             if (false == $oUser->isSamePassword($pwd)) {
                 $oException = oxNew(StandardException::class, 'D3_TOTP_ERROR_PWDONTPASS');
                 throw $oException;
@@ -81,6 +82,7 @@ class d3user_totp extends AdminDetailsController
 
             /** @var d3totp $oTotp */
             $oTotp = oxNew(d3totp::class);
+            $oTotpBackupCodes = oxNew(d3backupcodelist::class);
             if ($aParams['d3totp__oxid']) {
                 $oTotp->load($aParams['d3totp__oxid']);
             } else {
@@ -91,11 +93,12 @@ class d3user_totp extends AdminDetailsController
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
                 $oTotp->verify($otp, $seed);
-                $this->addTplParam('aBackupCodes', $oTotp->generateBackupCodes());
+                $oTotpBackupCodes->generateBackupCodes($this->getEditObjectId());
                 $oTotp->setId();
             }
             $oTotp->save();
-        } catch (\Exception $oExcp) {
+            $oTotpBackupCodes->save();
+        } catch (Exception $oExcp) {
             $this->_sSaveError = $oExcp->getMessage();
         }
     }
@@ -110,5 +113,21 @@ class d3user_totp extends AdminDetailsController
             $oTotp->load($aParams['d3totp__oxid']);
             $oTotp->delete();
         }
+    }
+
+    /**
+     * @param $aCodes
+     */
+    public function setBackupCodes($aCodes)
+    {
+        $this->aBackupCodes = $aCodes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackupCodes()
+    {
+        return implode(PHP_EOL, $this->aBackupCodes);
     }
 }

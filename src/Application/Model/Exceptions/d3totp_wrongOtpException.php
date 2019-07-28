@@ -17,6 +17,7 @@
 
 namespace D3\Totp\Application\Model\Exceptions;
 
+use Exception;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 
 class d3totp_wrongOtpException extends StandardException
@@ -26,9 +27,9 @@ class d3totp_wrongOtpException extends StandardException
      *
      * @param string          $sMessage exception message
      * @param integer         $iCode    exception code
-     * @param \Exception|null $previous previous exception
+     * @param Exception|null $previous previous exception
      */
-    public function __construct($sMessage = "D3_TOTP_ERROR_UNVALID", $iCode = 0, \Exception $previous = null)
+    public function __construct($sMessage = "D3_TOTP_ERROR_UNVALID", $iCode = 0, Exception $previous = null)
     {
         parent::__construct($sMessage, $iCode, $previous);
     }

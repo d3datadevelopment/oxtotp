@@ -18,6 +18,7 @@ namespace D3\Totp\Application\Model;
 use BaconQrCode\Renderer\Image\Svg;
 use BaconQrCode\Writer;
 use D3\ModCfg\Application\Model\d3database;
+use D3\Totp\Application\Model\Exceptions\d3backupcodelist;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use OTPHP\TOTP;
@@ -26,8 +27,6 @@ use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry;
-use RandomLib\Factory;
-use RandomLib\Generator;
 
 class d3totp extends BaseModel
 {
@@ -37,7 +36,6 @@ class d3totp extends BaseModel
     public $userId;
     public $totp;
     protected $timeWindow = 2;
-    protected $_backupCodes = array();
 
     /**
      * d3totp constructor.
@@ -120,28 +118,6 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @return array
-     * @throws DatabaseConnectionException
-     */
-    public function generateBackupCodes()
-    {
-        $factory = new Factory();
-        $generator = $factory->getLowStrengthGenerator();
-
-        for ($i = 1; $i <= 10; $i++) {
-            $sCode = $generator->generateString(6, Generator::CHAR_DIGITS);
-            $this->_backupCodes[] = $sCode;
-            $this->assign(
-                array(
-                    'bc'.$i => $this->d3EncodeBC($sCode)
-                )
-            );
-        }
-
-        return $this->_backupCodes;
-    }
-
-    /**
      * @param $seed
      * @return TOTP
      */
@@ -207,20 +183,6 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $code
-     * @return false|string
-     * @throws DatabaseConnectionException
-     */
-    public function d3EncodeBC($code)
-    {
-        $oDb = DatabaseProvider::getDb();
-        $salt = $this->getUser()->getFieldData('oxpasssalt');
-        $sSelect = "SELECT BINARY MD5( CONCAT( " . $oDb->quote($code) . ", UNHEX( ".$oDb->quote($salt)." ) ) )";
-
-        return $oDb->getOne($sSelect);
-    }
-
-    /**
      * @param $totp
      * @param $seed
      * @return string
@@ -231,14 +193,9 @@ class d3totp extends BaseModel
     {
         $blVerify = $this->getTotp($seed)->verify($totp, null, $this->timeWindow);
         if (false == $blVerify) {
-            $oDb = DatabaseProvider::getDb();
-            $aFields = array('bc1', 'bc2', 'bc3', 'bc4', 'bc5', 'bc6', 'bc7', 'bc8', 'bc9', 'bc10');
-
-            $query = "SELECT 1 FROM ".$this->getViewName().
-                " WHERE ".$oDb->quote($this->d3EncodeBC($totp))." IN (".implode(', ', array_map([$oDb, 'quoteIdentifier'], $aFields)).") AND ".
-                $oDb->quoteIdentifier("oxuserid") ." = ".$oDb->quote($this->getUser()->getId());
-
-            $blVerify = (bool) $oDb->getOne($query);
+            /** @var d3backupcodelist $oBC */
+            $oBC = oxNew(d3backupcodelist::class);
+            $blVerify = $oBC->verify($totp);
 
             if (false == $blVerify) {
                 $oException = oxNew(d3totp_wrongOtpException::class);
@@ -282,5 +239,20 @@ class d3totp extends BaseModel
         }
 
         return false;
+    }
+
+    /**
+     * @param null $oxid
+     * @return bool
+     * @throws DatabaseConnectionException
+     */
+    public function delete($oxid = null)
+    {
+        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        $oBackupCodeList->deleteAllFromUser($this->getFieldData('oxuserid'));
+
+        $blDelete = parent::delete();
+
+        return $blDelete;
     }
 }

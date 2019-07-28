@@ -115,4 +115,19 @@ class d3backupcodelist extends ListModel
             $oBackupCode->delete();
         }
     }
+
+    /**
+     * @param $sUserId
+     * @return int
+     * @throws DatabaseConnectionException
+     */
+    public function getAvailableCodeCount($sUserId)
+    {
+        $oDb = DatabaseProvider::getDb();
+
+        $query = "SELECT count(*) FROM ".$oDb->quoteIdentifier($this->getBaseObject()->getViewName()).
+            " WHERE ".$oDb->quoteIdentifier('oxuserid')." = ".$oDb->quote($sUserId);
+
+        return (int) $oDb->getOne($query);
+    }
 }

@@ -16,6 +16,7 @@
 namespace D3\Totp\Modules\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\Exceptions\d3backupcodelist;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\User;
@@ -76,6 +77,25 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         }
 
         return $return;
+    }
+
+    /**
+     * @return string|void
+     * @throws DatabaseConnectionException
+     */
+    public function getBackupCodeCountMessage()
+    {
+        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable("auth"));
+
+        if ($iCount < 4) {
+            return sprintf(
+                Registry::getLang()->translateString('D3_TOTP_AVAILBACKUPCODECOUNT'),
+                $iCount
+            );
+        };
+
+        return;
     }
 
     /**

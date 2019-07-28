@@ -8,6 +8,8 @@
         [{include file="inc_error.tpl" Errorlist=$Errors.default}]
     [{/if}]
 
+    [{$oView->getBackupCodeCountMessage()}]
+
     <label for="d3totp">[{oxmultilang ident="TOTP_INPUT"}]</label>
     <input type="text" name="d3totp" id="d3totp" value="" size="49" autofocus autocomplete="off"><br>
 

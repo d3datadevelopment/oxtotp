@@ -124,19 +124,29 @@
                                     </td>
                                 </tr>
                             [{else}]
+                                <tr>
+                                    <td class="edittext" colspan="2">
+                                        <h4>[{oxmultilang ident="D3_TOTP_BACKUPCODES"}]</h4>
+                                    </td>
+                                </tr>
                                 [{if $oView->getBackupCodes()}]
-
-                                    <tr>
-                                        <td class="edittext" colspan="2">
-                                            <h4>[{oxmultilang ident="D3_TOTP_BACKUPCODES"}]</h4>
-                                        </td>
-                                    </tr>
                                     <tr>
                                         <td>
                                             <label for="backupcodes">[{oxmultilang ident="D3_TOTP_BACKUPCODES_DESC"}]</label>
                                             <br>
                                             <br>
                                             <textarea id="backupcodes" rows="10" cols="20">[{$oView->getBackupCodes()}]</textarea>
+                                        </td>
+                                    </tr>
+                                [{else}]
+                                    <tr>
+                                        <td>
+                                            [{oxmultilang ident="D3_TOTP_AVAILBACKUPCODECOUNT" args=$oView->getAvailableBackupCodeCount()}]
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            [{oxmultilang ident="D3_TOTP_AVAILBACKUPCODECOUNT_DESC"}]
                                         </td>
                                     </tr>
                                 [{/if}]

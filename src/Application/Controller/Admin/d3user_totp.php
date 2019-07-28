@@ -21,6 +21,7 @@ use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 
@@ -129,5 +130,15 @@ class d3user_totp extends AdminDetailsController
     public function getBackupCodes()
     {
         return implode(PHP_EOL, $this->aBackupCodes);
+    }
+
+    /**
+     * @return int
+     * @throws DatabaseConnectionException
+     */
+    public function getAvailableBackupCodeCount()
+    {
+        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        return $oBackupCodeList->getAvailableCodeCount($this->getUser()->getId());
     }
 }

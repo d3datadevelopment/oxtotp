@@ -32,6 +32,7 @@
         "powered_by": ""
     },
     "languages": {
+        "editions": "Editionen",
         "installation": "Installation",
         "manual": "Handbuch",
         "changelog": "Changelog",

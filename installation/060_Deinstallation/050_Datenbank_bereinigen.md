@@ -20,7 +20,7 @@ und diese Felder in bestehenden Tabellen:
   * das Feld `fieldname3`
   * das Feld `fieldname4`
   
-sowie diese Einträge bestehenden Tabellen:
+sowie diese Einträge in bestehenden Tabellen:
 
 * in Tabelle `d3_cfg_mod`:  
   * den Eintrag `oxmodid = "{$modcfgident}"` **)

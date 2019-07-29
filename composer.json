@@ -1,6 +1,6 @@
 {
-  "name": "d3/totp",
-  "description": "Two-factor authentication for OXID eSales shop",
+  "name": "d3/oxtotp",
+  "description": "Two-factor authentication via time-based one-time password for OXID eSales shop",
   "type": "oxideshop-module",
   "keywords": [
     "oxid",

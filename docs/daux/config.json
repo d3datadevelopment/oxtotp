@@ -64,7 +64,7 @@
         "menutitle"     : "<i class='fab fa-d3 d3fa-color-blue'></i> 2-Faktor-Authentisierung",
         "modulefolder"  : "totp",
         "modcfgident"   : "d3totp",
-        "composerident" : "d3/totp"
+        "composerident" : "d3/oxtotp"
     },
     "versionselector": false,
     "versiondirectoryindex": 2

@@ -9,3 +9,4 @@ Das Modul legt Informationen in der Datenbank ab. Sofern diese Daten nicht mehr 
 Für das Modul **{$modulename}** sind dies die folgende Tabellen und Felder:
 
 * die komplette Tabelle `d3totp`
+* die komplette Tabelle `d3totp_backupcodes`

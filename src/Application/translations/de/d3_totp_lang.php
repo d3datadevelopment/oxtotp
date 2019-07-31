@@ -3,9 +3,11 @@
 /**
  * This Software is the property of Data Development and is protected
  * by copyright law - it is NOT Freeware.
+ *
  * Any unauthorized use of this software without a valid license
  * is a violation of the license agreement and will be prosecuted by
  * civil and criminal law.
+ *
  * http://www.shopmodule.com
  *
  * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
@@ -13,21 +15,12 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Totp\Modules\Application\Model;
+$sLangName = "Deutsch";
 
-use D3\Totp\Application\Model\d3totp;
-use Doctrine\DBAL\DBALException;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Registry;
+$aLang = array(
+    'charset'                                => 'UTF-8',
 
-class d3_totp_user extends d3_totp_user_parent
-{
-    public function logout()
-    {
-        $return = parent::logout();
-
-        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
-
-        return $return;
-    }
-}
+    'TOTP_INPUT'                             => 'Authentisierungscode',
+    'TOTP_INPUT_HELP'                        => 'Das Einmalpasswort erhalten Sie von der Zweifaktorauthentisierung-App auf Ihrem Gerät.',
+    'TOTP_CANCEL_LOGIN'                      => 'Anmeldung abbrechen',
+);

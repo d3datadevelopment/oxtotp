@@ -18,7 +18,6 @@ namespace D3\Totp\Application\Model;
 use BaconQrCode\Renderer\Image\Svg;
 use BaconQrCode\Writer;
 use D3\ModCfg\Application\Model\d3database;
-use D3\Totp\Application\Model\Exceptions\d3backupcodelist;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use OTPHP\TOTP;

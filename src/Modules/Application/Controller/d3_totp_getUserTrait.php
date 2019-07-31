@@ -13,21 +13,36 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Totp\Modules\Application\Model;
+namespace D3\Totp\Modules\Application\Controller;
 
 use D3\Totp\Application\Model\d3totp;
 use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 
-class d3_totp_user extends d3_totp_user_parent
+trait d3_totp_getUserTrait
 {
-    public function logout()
+    /**
+     * @return bool|object|User
+     * @throws DatabaseConnectionException
+     * @throws DBALException
+     */
+    public function getUser()
     {
-        $return = parent::logout();
+        $oUser = parent::getUser();
 
-        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
+        if ($oUser && $oUser->getId()) {
+            $totp = oxNew(d3totp::class);
+            $totp->loadByUserId($oUser->getId());
 
-        return $return;
+            if ($totp->isActive()
+                && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+            ) {
+                return false;
+            }
+        }
+
+        return $oUser;
     }
 }

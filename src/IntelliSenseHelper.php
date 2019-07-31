@@ -13,6 +13,20 @@
  * @link      http://www.oxidmodule.com
  */
 
+namespace D3\Totp\Modules\Application\Component
+{
+    class d3_totp_UserComponent_parent extends \OxidEsales\Eshop\Application\Component\UserComponent { }
+}
+
+namespace D3\Totp\Modules\Application\Controller
+{
+    class d3_totp_UserController_parent extends \OxidEsales\Eshop\Application\Controller\UserController { }
+
+    class d3_totp_PaymentController_parent extends \OxidEsales\Eshop\Application\Controller\PaymentController { }
+
+    class d3_totp_OrderController_parent extends \OxidEsales\Eshop\Application\Controller\OrderController { }
+}
+
 namespace D3\Totp\Modules\Application\Controller\Admin
 {
     class d3_totp_LoginController_parent extends \OxidEsales\Eshop\Application\Controller\Admin\LoginController { }

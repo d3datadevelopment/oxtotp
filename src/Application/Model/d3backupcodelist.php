@@ -13,11 +13,12 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Totp\Application\Model\Exceptions;
+namespace D3\Totp\Application\Model;
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
 use D3\Totp\Application\Model\d3backupcode;
 use Exception;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\ListModel;
@@ -88,7 +89,7 @@ class d3backupcodelist extends ListModel
 
         $query = "SELECT oxid FROM ".$this->getBaseObject()->getViewName().
             " WHERE ".$oDb->quoteIdentifier('backupcode')." = ".$oDb->quote($this->getBaseObject()->d3EncodeBC($totp))." AND ".
-            $oDb->quoteIdentifier("oxuserid") ." = ".$oDb->quote($this->getUser()->getId());
+            $oDb->quoteIdentifier("oxuserid") ." = ".$oDb->quote($this->d3GetUser()->getId());
 
         $sVerify = $oDb->getOne($query);
 
@@ -129,5 +130,17 @@ class d3backupcodelist extends ListModel
             " WHERE ".$oDb->quoteIdentifier('oxuserid')." = ".$oDb->quote($sUserId);
 
         return (int) $oDb->getOne($query);
+    }
+
+    public function d3GetUser()
+    {
+        if ($this->getUser()) {
+            return $this->getUser();
+        }
+
+        $sUserId = Registry::getSession()->getVariable('d3totpCurrentUser');
+        $oUser = oxNew(User::class);
+        $oUser->load($sUserId);
+        return $oUser;
     }
 }

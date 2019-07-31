@@ -17,7 +17,11 @@
 
 use D3\Totp\Setup as ModuleSetup;
 use D3\ModCfg\Application\Model\d3utils;
+use OxidEsales\Eshop\Application\Component\UserComponent;
 use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
+use OxidEsales\Eshop\Application\Controller\OrderController;
+use OxidEsales\Eshop\Application\Controller\PaymentController;
+use OxidEsales\Eshop\Application\Controller\UserController;
 use OxidEsales\Eshop\Core\Utils;
 use OxidEsales\Eshop\Application\Model as OxidModel;
 
@@ -48,15 +52,21 @@ $aModule = [
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
     'extend'        => [
+        UserController::class              => \D3\Totp\Modules\Application\Controller\d3_totp_UserController::class,
+        PaymentController::class           => \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::class,
+        OrderController::class             => \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::class,
         OxidModel\User::class              => \D3\Totp\Modules\Application\Model\d3_totp_user::class,
         LoginController::class             => \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::class,
         Utils::class                       => \D3\Totp\Modules\Core\d3_totp_utils::class,
+        UserComponent::class               => \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::class,
     ],
     'controllers'           => [
-        'd3user_totp'       =>  \D3\Totp\Application\Controller\Admin\d3user_totp::class
+        'd3user_totp'       =>  \D3\Totp\Application\Controller\Admin\d3user_totp::class,
+        'd3totplogin'       =>  \D3\Totp\Application\Controller\d3totplogin::class
     ],
     'templates'             => [
         'd3user_totp.tpl'   => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
+        'd3totplogin.tpl'   => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
     ],
     'events'                => [
         'onActivate'        => '\D3\Totp\Setup\Events::onActivate',

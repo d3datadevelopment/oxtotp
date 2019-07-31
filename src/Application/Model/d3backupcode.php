@@ -15,9 +15,11 @@
 
 namespace D3\Totp\Application\Model;
 
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
+use OxidEsales\Eshop\Core\Registry;
 use RandomLib\Factory;
 use RandomLib\Generator;
 
@@ -54,9 +56,21 @@ class d3backupcode extends BaseModel
     public function d3EncodeBC($code)
     {
         $oDb = DatabaseProvider::getDb();
-        $salt = $this->getUser()->getFieldData('oxpasssalt');
+        $salt = $this->d3GetUser()->getFieldData('oxpasssalt');
         $sSelect = "SELECT BINARY MD5( CONCAT( " . $oDb->quote($code) . ", UNHEX( ".$oDb->quote($salt)." ) ) )";
 
         return $oDb->getOne($sSelect);
+    }
+
+    public function d3GetUser()
+    {
+        if ($this->getUser()) {
+            return $this->getUser();
+        }
+
+        $sUserId = Registry::getSession()->getVariable('d3totpCurrentUser');
+        $oUser = oxNew(User::class);
+        $oUser->load($sUserId);
+        return $oUser;
     }
 }

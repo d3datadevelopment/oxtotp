@@ -13,21 +13,13 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Totp\Modules\Application\Model;
+namespace D3\Totp\Modules\Application\Controller;
 
-use D3\Totp\Application\Model\d3totp;
-use Doctrine\DBAL\DBALException;
+use D3\Totp\Application\Model\d3backupcodelist;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 
-class d3_totp_user extends d3_totp_user_parent
+class d3_totp_UserController extends d3_totp_UserController_parent
 {
-    public function logout()
-    {
-        $return = parent::logout();
-
-        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
-
-        return $return;
-    }
+    use d3_totp_getUserTrait;
 }

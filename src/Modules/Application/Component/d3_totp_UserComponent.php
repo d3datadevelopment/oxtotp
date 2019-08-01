@@ -43,11 +43,11 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
             ) {
                 Registry::getSession()->setVariable(
-                    'd3totpCurrentClass',
+                    d3totp::TOTP_SESSION_CURRENTCLASS,
                     $this->getParent()->getClassKey() != 'd3totplogin' ? $this->getParent()->getClassKey() : 'start');
-                Registry::getSession()->setVariable('d3totpCurrentUser', $oUser->getId());
+                Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, $oUser->getId());
                 Registry::getSession()->setVariable(
-                    'd3totpNavFormParams',
+                    d3totp::TOTP_SESSION_NAVFORMPARAMS,
                     $this->getParent()->getViewConfig()->getNavFormParams()
                 );
 
@@ -66,7 +66,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     {
         $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp', true);
 
-        $sUserId = Registry::getSession()->getVariable('d3totpCurrentUser');
+        $sUserId = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER);
         $oUser = oxNew(User::class);
         $oUser->load($sUserId);
 
@@ -87,13 +87,20 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
         return 'd3totplogin';
     }
 
+    public function cancelTotpLogin()
+    {
+        $this->d3TotpClearSessionVariables();
+
+        return false;
+    }
+
     /**
      * @param d3totp $totp
      * @return bool
      */
     public function isNoTotpOrNoLogin($totp)
     {
-        return false == Registry::getSession()->getVariable("d3totpCurrentUser")
+        return false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER)
             || false == $totp->isActive();
     }
 
@@ -127,8 +134,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 
     public function d3TotpClearSessionVariables()
     {
-        Registry::getSession()->deleteVariable('d3totpCurrentClass');
-        Registry::getSession()->deleteVariable('d3totpCurrentUser');
-        Registry::getSession()->deleteVariable('d3totpNavFormParams');
+        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
+        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_CURRENTUSER);
+        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_NAVFORMPARAMS);
     }
 }

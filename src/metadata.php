@@ -15,6 +15,15 @@
  * @link      http://www.oxidmodule.com
  */
 
+use D3\Totp\Application\Controller\Admin\d3user_totp;
+use D3\Totp\Application\Controller\d3totplogin;
+use D3\Totp\Modules\Application\Component\d3_totp_UserComponent;
+use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
+use D3\Totp\Modules\Application\Controller\d3_totp_OrderController;
+use D3\Totp\Modules\Application\Controller\d3_totp_PaymentController;
+use D3\Totp\Modules\Application\Controller\d3_totp_UserController;
+use D3\Totp\Modules\Application\Model\d3_totp_user;
+use D3\Totp\Modules\Core\d3_totp_utils;
 use D3\Totp\Setup as ModuleSetup;
 use D3\ModCfg\Application\Model\d3utils;
 use OxidEsales\Eshop\Application\Component\UserComponent;
@@ -52,17 +61,17 @@ $aModule = [
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
     'extend'        => [
-        UserController::class              => \D3\Totp\Modules\Application\Controller\d3_totp_UserController::class,
-        PaymentController::class           => \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::class,
-        OrderController::class             => \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::class,
-        OxidModel\User::class              => \D3\Totp\Modules\Application\Model\d3_totp_user::class,
-        LoginController::class             => \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::class,
-        Utils::class                       => \D3\Totp\Modules\Core\d3_totp_utils::class,
-        UserComponent::class               => \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::class,
+        UserController::class              => d3_totp_UserController::class,
+        PaymentController::class           => d3_totp_PaymentController::class,
+        OrderController::class             => d3_totp_OrderController::class,
+        OxidModel\User::class              => d3_totp_user::class,
+        LoginController::class             => d3_totp_LoginController::class,
+        Utils::class                       => d3_totp_utils::class,
+        UserComponent::class               => d3_totp_UserComponent::class,
     ],
     'controllers'           => [
-        'd3user_totp'       =>  \D3\Totp\Application\Controller\Admin\d3user_totp::class,
-        'd3totplogin'       =>  \D3\Totp\Application\Controller\d3totplogin::class
+        'd3user_totp'       =>  d3user_totp::class,
+        'd3totplogin'       =>  d3totplogin::class
     ],
     'templates'             => [
         'd3user_totp.tpl'   => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
@@ -79,6 +88,11 @@ $aModule = [
             'template'      => 'login.tpl',
             'block'         => 'admin_login_form',
             'file'          => 'Application/views/admin/blocks/d3totp_login_admin_login_form.tpl',
+        ],
+        [
+            'template'      => 'page/account/inc/account_menu.tpl',
+            'block'         => 'account_menu',
+            'file'          => 'Application/views/blocks/page/account/inc/account_menu.tpl',
         ]
     ],
     'd3FileRegister'        => [

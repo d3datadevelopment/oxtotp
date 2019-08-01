@@ -31,7 +31,7 @@ class d3user_totp extends AdminDetailsController
 
     protected $_sThisTemplate = 'd3user_totp.tpl';
 
-    public $aBackupCodes = array();
+    public $aBackupCodes = [];
 
     /**
      * @return string
@@ -104,6 +104,9 @@ class d3user_totp extends AdminDetailsController
         }
     }
 
+    /**
+     * @throws DatabaseConnectionException
+     */
     public function delete()
     {
         $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");

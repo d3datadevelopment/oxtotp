@@ -39,10 +39,10 @@ class d3backupcode extends BaseModel
 
         $sCode = $generator->generateString(6, Generator::CHAR_DIGITS);
         $this->assign(
-            array(
+            [
                 'oxuserid'    => $sUserId,
                 'backupcode' => $this->d3EncodeBC($sCode),
-            )
+            ]
         );
 
         return $sCode;
@@ -68,7 +68,7 @@ class d3backupcode extends BaseModel
             return $this->getUser();
         }
 
-        $sUserId = Registry::getSession()->getVariable('d3totpCurrentUser');
+        $sUserId = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER);
         $oUser = oxNew(User::class);
         $oUser->load($sUserId);
         return $oUser;

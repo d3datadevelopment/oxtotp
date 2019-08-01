@@ -17,10 +17,14 @@
 
 $sLangName = "Deutsch";
 
-$aLang = array(
+$aLang = [
     'charset'                                => 'UTF-8',
 
-    'TOTP_INPUT'                             => 'Authentisierungscode',
-    'TOTP_INPUT_HELP'                        => 'Das Einmalpasswort erhalten Sie von der Zweifaktorauthentisierung-App auf Ihrem Gerät.',
-    'TOTP_CANCEL_LOGIN'                      => 'Anmeldung abbrechen',
-);
+    'D3_TOTP_INPUT'                          => 'Authentisierungscode',
+    'D3_TOTP_INPUT_HELP'                     => 'Das Einmalpasswort erhalten Sie von der Zweifaktorauthentisierung-App auf Ihrem Gerät.',
+    'D3_TOTP_SUBMIT_LOGIN'                   => 'Anmelden',
+    'D3_TOTP_CANCEL_LOGIN'                   => 'Anmeldung abbrechen',
+    'D3_TOTP_BREADCRUMB'                     => 'Einmalpasswort-Anmeldung',
+    'D3_TOTP_ERROR_UNVALID'                  => 'Das Einmalpasswort ist ungültig.',
+    'D3_TOTP_ACCOUNT'                        => '2-Faktor-Authentisierung',
+];

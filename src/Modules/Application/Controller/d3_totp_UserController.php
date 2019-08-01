@@ -15,10 +15,6 @@
 
 namespace D3\Totp\Modules\Application\Controller;
 
-use D3\Totp\Application\Model\d3backupcodelist;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Registry;
-
 class d3_totp_UserController extends d3_totp_UserController_parent
 {
     use d3_totp_getUserTrait;

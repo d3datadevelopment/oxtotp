@@ -16,8 +16,6 @@
 namespace D3\Totp\Modules\Application\Model;
 
 use D3\Totp\Application\Model\d3totp;
-use Doctrine\DBAL\DBALException;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 
 class d3_totp_user extends d3_totp_user_parent

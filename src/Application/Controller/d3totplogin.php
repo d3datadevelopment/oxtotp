@@ -28,13 +28,13 @@ class d3totplogin extends FrontendController
     public function render()
     {
         if (Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_VARNAME) ||
-            false == Registry::getSession()->hasVariable('d3totpCurrentUser')
+            false == Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_CURRENTUSER)
         ) {
             Registry::getUtils()->redirect('index.php?cl=start', true, 302);
             exit;
         }
 
-        $this->addTplParam('navFormParams', Registry::getSession()->getVariable('d3totpNavFormParams'));
+        $this->addTplParam('navFormParams', Registry::getSession()->getVariable(d3totp::TOTP_SESSION_NAVFORMPARAMS));
 
         return parent::render();
     }
@@ -46,7 +46,7 @@ class d3totplogin extends FrontendController
     public function getBackupCodeCountMessage()
     {
         $oBackupCodeList = oxNew(d3backupcodelist::class);
-        $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable('d3totpCurrentUser'));
+        $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER));
 
         if ($iCount < 4) {
             return sprintf(
@@ -60,17 +60,43 @@ class d3totplogin extends FrontendController
 
     public function getPreviousClass()
     {
-        return Registry::getSession()->getVariable('d3totpCurrentClass');
+        return Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
     }
 
     public function previousClassIsOrderStep()
     {
-        $sClassKey = Registry::getSession()->getVariable('d3totpCurrentClass');
+        $sClassKey = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
         $resolvedClass = Registry::getControllerClassNameResolver()->getClassNameById($sClassKey);
         $resolvedClass = $resolvedClass ? $resolvedClass : 'start';
 
         /** @var FrontendController $oController */
         $oController = oxNew($resolvedClass);
         return $oController->getIsOrderStep();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsOrderStep()
+    {
+        return $this->previousClassIsOrderStep();
+    }
+
+    /**
+     * Returns Bread Crumb - you are here page1/page2/page3...
+     *
+     * @return array
+     */
+    public function getBreadCrumb()
+    {
+        $aPaths = [];
+        $aPath = [];
+        $iBaseLanguage = Registry::getLang()->getBaseLanguage();
+        $aPath['title'] = Registry::getLang()->translateString('D3_TOTP_BREADCRUMB', $iBaseLanguage, false);
+        $aPath['link'] = $this->getLink();
+
+        $aPaths[] = $aPath;
+
+        return $aPaths;
     }
 }

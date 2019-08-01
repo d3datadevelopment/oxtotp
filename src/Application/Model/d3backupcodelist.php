@@ -16,9 +16,7 @@
 namespace D3\Totp\Application\Model;
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
-use D3\Totp\Application\Model\d3backupcode;
 use Exception;
-use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\ListModel;
@@ -35,7 +33,7 @@ class d3backupcodelist extends ListModel
      */
     protected $_sCoreTable = 'd3totp_backupcodes';
 
-    protected $_backupCodes = array();
+    protected $_backupCodes = [];
 
     /**
      * @param $sUserId
@@ -134,13 +132,6 @@ class d3backupcodelist extends ListModel
 
     public function d3GetUser()
     {
-        if ($this->getUser()) {
-            return $this->getUser();
-        }
-
-        $sUserId = Registry::getSession()->getVariable('d3totpCurrentUser');
-        $oUser = oxNew(User::class);
-        $oUser->load($sUserId);
-        return $oUser;
+        return $this->getBaseObject()->d3GetUser();
     }
 }

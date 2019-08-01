@@ -1,0 +1,17 @@
+#login {
+    display: flex;
+    flex-flow: column;
+}
+#login .btn.btn_cancel {
+    background: silver;
+    color: black;
+}
+
+.cl-d3totplogin .btn {
+    margin: 10px 0;
+}
+
+.cl-d3totplogin .mainforms {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

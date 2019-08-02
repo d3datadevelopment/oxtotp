@@ -16,6 +16,7 @@
  */
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
+use D3\Totp\Application\Controller\d3_account_totp;
 use D3\Totp\Application\Controller\d3totplogin;
 use D3\Totp\Modules\Application\Component\d3_totp_UserComponent;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
@@ -71,11 +72,13 @@ $aModule = [
     ],
     'controllers'           => [
         'd3user_totp'       =>  d3user_totp::class,
-        'd3totplogin'       =>  d3totplogin::class
+        'd3totplogin'       =>  d3totplogin::class,
+        'd3_account_totp'   =>  d3_account_totp::class,
     ],
-    'templates'             => [
-        'd3user_totp.tpl'   => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
-        'd3totplogin.tpl'   => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
+    'templates'                 => [
+        'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
+        'd3totplogin.tpl'       => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
+        'd3_account_totp.tpl'   => 'd3/totp/Application/views/tpl/d3_account_totp.tpl',
     ],
     'events'                => [
         'onActivate'        => '\D3\Totp\Setup\Events::onActivate',

@@ -16,6 +16,8 @@
 namespace D3\Totp\Modules\Application\Model;
 
 use D3\Totp\Application\Model\d3totp;
+use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 
 class d3_totp_user extends d3_totp_user_parent
@@ -27,5 +29,18 @@ class d3_totp_user extends d3_totp_user_parent
         Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
 
         return $return;
+    }
+
+    /**
+     * @return d3totp
+     * @throws DatabaseConnectionException
+     * @throws DBALException
+     */
+    public function d3getTotp()
+    {
+        $oTotp = oxNew(d3totp::class);
+        $oTotp->loadByUserId($this->getId());
+
+        return $oTotp;
     }
 }

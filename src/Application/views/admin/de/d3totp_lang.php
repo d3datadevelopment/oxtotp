@@ -21,7 +21,7 @@ $aLang = [
     'charset'                                         => 'UTF-8',
 
     'TOTP_INPUT'                                      => 'Authentisierungscode',
-    'TOTP_INPUT_HELP'                                 => 'Das Einmalpasswort erhalten Sie von der Zweifaktorauthentisierung-App auf Ihrem Gerät.',
+    'TOTP_INPUT_HELP'                                 => 'Das Einmalpasswort erhalten Sie von der Zwei-Faktor-Authentisierungs-App auf Ihrem Gerät.',
     'TOTP_CANCEL_LOGIN'                               => 'Anmeldung abbrechen',
 
     'd3mxuser_totp'                                   => '2-Faktor-Authentisierung',
@@ -38,7 +38,7 @@ $aLang = [
 
     'D3_TOTP_REGISTEREXIST'                           => 'vorhandene Registrierung',
     'D3_TOTP_REGISTERDELETE'                          => 'Registrierung löschen',
-    'D3_TOTP_REGISTERDELETE_DESC'                     => 'Um die Registrierung zu ändern, löschen Sie diese bitte vorerst. Sie können sofort im Anschluss eine neue Registrierung anlegen.<br>Wenn Sie die Registrierung löschen, ist das Konto nicht mehr durch die Zweifaktorauthentisierung geschützt.',
+    'D3_TOTP_REGISTERDELETE_DESC'                     => 'Um die Registrierung zu ändern, löschen Sie diese bitte vorerst. Sie können sofort im Anschluss eine neue Registrierung anlegen.<br>Wenn Sie die Registrierung löschen, ist das Konto nicht mehr durch die Zwei-Faktor-Authentisierung geschützt.',
 
     'D3_TOTP_BACKUPCODES'                             => 'Backupcodes',
     'D3_TOTP_BACKUPCODES_DESC'                        => 'Mit diesen Backupcodes können Sie sich anmelden, wenn die Generierung des Einmalpasswortes nicht möglich ist (z.B. Gerät verloren oder neu installiert). Sie können dann die Einstellungen zur Verwendung der 2-Faktor-Authentisierung ändern oder einen neuen Zugang erstellen. Speichern Sie sich diese Codes bitte in diesem Moment sicher ab. Nach Verlassen dieser Seite können diese Codes nicht erneut angezeigt werden.',

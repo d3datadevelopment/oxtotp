@@ -18,6 +18,7 @@ namespace D3\Totp\Setup;
 use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Install\d3install_updatebase;
 use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\ConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -33,6 +34,8 @@ class Installation extends d3install_updatebase
             'do'      => 'fixFields'),
         array('check' => 'checkIndizes',
             'do'      => 'fixIndizes'),
+        array('check' => 'checkSEONotExists',
+            'do'      => 'addSEO'),
     );
 
     public $aMultiLangTables = array();
@@ -244,5 +247,32 @@ class Installation extends d3install_updatebase
         }
 
         return $blRet;
+    }
+
+    /**
+     * @return bool
+     * @throws DatabaseConnectionException
+     */
+    public function checkSEONotExists()
+    {
+        $query = "SELECT 1 FROM " . getViewName('oxseo') . " WHERE oxstdurl = 'index.php?cl=d3_account_totp'";
+
+        return !DatabaseProvider::getDb()->getOne($query);
+    }
+
+    /**
+     * @return bool
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function addSEO()
+    {
+        $query = [
+            "INSERT INTO `oxseo` (`OXOBJECTID`, `OXIDENT`, `OXSHOPID`, `OXLANG`, `OXSTDURL`, `OXSEOURL`, `OXTYPE`, `OXFIXED`, `OXEXPIRED`, `OXPARAMS`, `OXTIMESTAMP`) VALUES
+('39f744f17e974988e515558698a29df4', '76282e134ad4e40a3578e121a6cb1f6a', 1, 1, 'index.php?cl=d3_account_totp', 'en/2-factor-authintication/', 'static', 0, 0, '', NOW()),
+('39f744f17e974988e515558698a29df4', 'c1f8b5506e2b5d6ac184dcc5ebdfb591', 1, 0, 'index.php?cl=d3_account_totp', '2-faktor-authentisierung/', 'static', 0, 0, '', NOW());"
+        ];
+
+        return $this->_executeMultipleQueries($query);
     }
 }

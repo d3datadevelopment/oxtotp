@@ -8,9 +8,12 @@ title: Systemanforderungen
     * installierter ionCube Loader
 * Shopversionen / -editionen
     * OXID eShop Community Edition (CE), Professional Edition (PE) oder Enterprise Edition (EE) in Compilation Version 
-        * 6.0.x
+        * 6.0.2 und höher
         * 6.1.x
 * Installation via [Composer](https://getcomposer.org)
+* Themes
+    * flow
+    * wave
 
 Beachten Sie, dass die Ihnen vorliegende Modulversion entsprechend für **PHP 5.6**, **PHP 7.0**, **PHP 7.1** oder **PHP 7.2** kompatibel ist. Im Zweifelsfall kontaktieren Sie uns und nennen den für Ihren Shop genutzten Decoder und die PHP-Version.
 

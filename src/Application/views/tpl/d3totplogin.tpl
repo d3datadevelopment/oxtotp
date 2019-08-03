@@ -7,7 +7,7 @@
     [{/if}]
 
     <div class="row">
-        <div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3 mainforms">
+        <div class="col-xs-12 col-sm-10 col-md-6 [{* flow *}] col-sm-offset-1 col-md-offset-3 [{* wave *}] offset-sm-1 offset-md-3 mainforms">
             <form action="[{$oViewConf->getSelfActionLink()}]" method="post" name="login" id="login">
                 [{$oViewConf->getHiddenSid()}]
 
@@ -26,7 +26,10 @@
 
                 [{oxmultilang ident="D3_TOTP_INPUT_HELP"}]
 
-                <input type="submit" value="[{oxmultilang ident="D3_TOTP_SUBMIT_LOGIN"}]" class="btn btn-primary"><br>
+                <button type="submit" class="btn btn-primary">
+                    [{oxmultilang ident="D3_TOTP_SUBMIT_LOGIN"}]
+                </button><br>
+
             </form>
             <form action="[{$oViewConf->getSelfActionLink()}]" method="post" name="login" id="login">
                 [{$oViewConf->getHiddenSid()}]
@@ -34,7 +37,11 @@
                 <input type="hidden" name="fnc" value="cancelTotplogin">
                 <input type="hidden" name="cl" value="[{$oView->getPreviousClass()}]">
                 [{$navFormParams}]
-                <input class="btn btn_cancel" value="[{oxmultilang ident="D3_TOTP_CANCEL_LOGIN"}]" type="submit">
+
+                <button class="btn btn_cancel" type="submit">
+                    [{oxmultilang ident="D3_TOTP_CANCEL_LOGIN"}]
+                </button>
+
             </form>
         </div>
     </div>

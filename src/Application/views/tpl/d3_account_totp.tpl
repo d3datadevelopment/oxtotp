@@ -8,6 +8,17 @@
         .registerNew {
             display: none;
         }
+        dt, dd {
+            width: 50%;
+            float: left;
+            margin-bottom: 10px;
+        }
+        dd textarea {
+            max-width: 98%;
+        }
+        dt label {
+            font-weight: bold;
+        }
         [{if false == $totp->getId()}]
             .submitBtn {
                 display: none;
@@ -30,38 +41,47 @@
             </p>
 
             [{if false == $totp->getId()}]
-                <div class="registerNew panel panel-default">
-                    <div class="panel-heading">
+                <div class="registerNew [{* flow *}] panel panel-default [{* wave *}] card">
+                    <div class="[{* flow *}] panel-heading [{* wave *}] card-header">
                         [{oxmultilang ident="D3_TOTP_REGISTERNEW"}]
                     </div>
-                    <div class="panel-body">
-                        <p>
-                            [{oxmultilang ident="D3_TOTP_QRCODE"}]&nbsp;
-
-                            [{$totp->getQrCodeElement()}]
-                        </p>
+                    <div class="[{* flow *}] panel-body [{* wave *}] card-body">
+                        <dl>
+                            <dt>
+                                [{oxmultilang ident="D3_TOTP_QRCODE"}]&nbsp;
+                            </dt>
+                            <dd>
+                                [{$totp->getQrCodeElement()}]
+                            </dd>
+                        </dl>
                         <p>
                             [{oxmultilang ident="D3_TOTP_QRCODE_HELP"}]
                         </p>
 
                         <hr>
 
-                        <p>
-                            <label for="secret">[{oxmultilang ident="D3_TOTP_SECRET"}]</label>
-
-                            <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret()}]</textarea>
-                        </p>
+                        <dl>
+                            <dt>
+                                <label for="secret">[{oxmultilang ident="D3_TOTP_SECRET"}]</label>
+                            </dt>
+                            <dd>
+                                <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret()}]</textarea>
+                            </dd>
+                        </dl>
                         <p>
                             [{oxmultilang ident="D3_TOTP_SECRET_HELP"}]
                         </p>
 
                         <hr>
 
-                        <p>
-                            <label for="otp">[{oxmultilang ident="D3_TOTP_CURROTP"}]</label>
-
-                            <input type="text" class="editinput" size="6" maxlength="6" id="otp" name="otp" value="" [{$readonly}]>
-                        </p>
+                        <dl>
+                            <dt>
+                                <label for="otp">[{oxmultilang ident="D3_TOTP_CURROTP"}]</label>
+                            </dt>
+                            <dd>
+                                <input type="text" class="editinput" size="6" maxlength="6" id="otp" name="otp" value="" [{$readonly}]>
+                            </dd>
+                        </dl>
                         <p>
                             [{oxmultilang ident="D3_TOTP_CURROTP_HELP"}]
                         </p>
@@ -71,22 +91,22 @@
 
             [{if $totp->getId()}]
                 [{block name="d3_account_totp_deletenotes"}]
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="[{* flow *}] panel panel-default [{* wave *}] card">
+                        <div class="[{* flow *}] panel-heading [{* wave *}] card-header">
                             [{oxmultilang ident="D3_TOTP_REGISTEREXIST"}]
                         </div>
-                        <div class="panel-body">
+                        <div class="[{* flow *}] panel-body [{* wave *}] card-body">
                             [{oxmultilang ident="D3_TOTP_REGISTERDELETE_DESC"}]
                         </div>
                     </div>
                 [{/block}]
 
                 [{block name="d3_account_totp_backupcodes"}]
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="[{* flow *}] panel panel-default [{* wave *}] card">
+                        <div class="[{* flow *}] panel-heading [{* wave *}] card-header">
                             [{oxmultilang ident="D3_TOTP_BACKUPCODES"}]
                         </div>
-                        <div class="panel-body">
+                        <div class="[{* flow *}] panel-body [{* wave *}] card-body">
                             [{if $oView->getBackupCodes()}]
                                 [{block name="d3_account_totp_backupcodes_list"}]
                                     <label for="backupcodes">[{oxmultilang ident="D3_TOTP_BACKUPCODES_DESC"}]</label>

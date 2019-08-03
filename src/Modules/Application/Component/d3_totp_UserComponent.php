@@ -81,7 +81,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 return false;
             }
         } catch (d3totp_wrongOtpException $oEx) {
-            Registry::getUtilsView()->addErrorToDisplay($oEx);
+            Registry::getUtilsView()->addErrorToDisplay($oEx, false, false, "", 'd3totplogin');
         }
 
         return 'd3totplogin';

@@ -23,17 +23,17 @@ class d3_account_totp extends AccountController
 
     public function render()
     {
+        $sRet = parent::render();
+
         // is logged in ?
         $oUser = $this->getUser();
         if (!$oUser) {
-        dumpvar(__LINE__);
-        dumpvar($this->_sThisLoginTemplate);
             return $this->_sThisTemplate = $this->_sThisLoginTemplate;
         }
 
         $this->addTplParam('user', $this->getUser());
 
-        return parent::render();
+        return $sRet;
     }
 
     /**

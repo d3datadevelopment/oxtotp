@@ -57,7 +57,7 @@ $aModule = [
         'en'        => 'Two-factor authentication (TOTP) for OXID eSales shop',
     ],
     'thumbnail'     => 'picture.png',
-    'version'       => '0.1',
+    'version'       => '1.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'http://www.oxidmodule.com/',
@@ -84,8 +84,6 @@ $aModule = [
         'onActivate'        => '\D3\Totp\Setup\Events::onActivate',
         'onDeactivate'      => '\D3\Totp\Setup\Events::onDeactivate',
     ],
-    'settings'              => [
-    ],
     'blocks'                => [
         [
             'template'      => 'login.tpl',
@@ -97,8 +95,6 @@ $aModule = [
             'block'         => 'account_menu',
             'file'          => 'Application/views/blocks/page/account/inc/account_menu.tpl',
         ]
-    ],
-    'd3FileRegister'        => [
     ],
     'd3SetupClasses'        => [
         ModuleSetup\Installation::class

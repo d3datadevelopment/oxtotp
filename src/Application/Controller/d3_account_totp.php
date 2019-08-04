@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * This Software is the property of Data Development and is protected
+ * by copyright law - it is NOT Freeware.
+ * Any unauthorized use of this software without a valid license
+ * is a violation of the license agreement and will be prosecuted by
+ * civil and criminal law.
+ * http://www.shopmodule.com
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <support@shopmodule.com>
+ * @link      http://www.oxidmodule.com
+ */
 
 namespace D3\Totp\Application\Controller;
 
@@ -9,9 +21,7 @@ use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\AccountController;
-use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
 
@@ -39,7 +49,7 @@ class d3_account_totp extends AccountController
     /**
      * @param $aCodes
      */
-    public function setBackupCodes($aCodes)
+    public function setBackupCodes(array $aCodes)
     {
         $this->aBackupCodes = $aCodes;
     }
@@ -53,13 +63,29 @@ class d3_account_totp extends AccountController
     }
 
     /**
+     * @return d3backupcodelist
+     */
+    public function getBackupCodeListObject()
+    {
+        return oxNew(d3backupcodelist::class);
+    }
+
+    /**
      * @return int
      * @throws DatabaseConnectionException
      */
     public function getAvailableBackupCodeCount()
     {
-        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        $oBackupCodeList = $this->getBackupCodeListObject();
         return $oBackupCodeList->getAvailableCodeCount($this->getUser()->getId());
+    }
+
+    /**
+     * @return d3totp
+     */
+    public function getTotpObject()
+    {
+        return oxNew(d3totp::class);
     }
 
     public function create()
@@ -70,8 +96,8 @@ class d3_account_totp extends AccountController
                 $oUser = $this->getUser();
 
                 /** @var d3totp $oTotp */
-                $oTotp = oxNew(d3totp::class);
-                $oTotpBackupCodes = oxNew(d3backupcodelist::class);
+                $oTotp = $this->getTotpObject();
+                $oTotpBackupCodes = $this->getBackupCodeListObject();
 
                 $aParams = [
                     'd3totp__usetotp' => 1,
@@ -79,7 +105,6 @@ class d3_account_totp extends AccountController
                 ];
                 $seed = Registry::getRequest()->getRequestEscapedParameter("secret");
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
-
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
                 $oTotp->verify($otp, $seed);
@@ -100,11 +125,10 @@ class d3_account_totp extends AccountController
      */
     public function delete()
     {
-        if (Registry::getRequest()->getRequestEscapedParameter('totp_use') != 1) {
-
+        if (Registry::getRequest()->getRequestEscapedParameter('totp_use') !== '1') {
             $oUser = $this->getUser();
             /** @var d3totp $oTotp */
-            $oTotp = oxNew(d3totp::class);
+            $oTotp = $this->getTotpObject();
             if ($oUser && $oUser->getId()) {
                 $oTotp->loadByUserId($oUser->getId());
                 $oTotp->delete();

@@ -44,7 +44,7 @@ class d3user_totp extends AdminDetailsController
 
         if (isset($soxId) && $soxId != "-1") {
             /** @var d3_totp_user $oUser */
-            $oUser = oxNew(User::class);
+            $oUser = $this->getUserObject();
             if ($oUser->load($soxId)) {
                 $this->addTplParam("oxid", $oUser->getId());
             } else {
@@ -61,6 +61,30 @@ class d3user_totp extends AdminDetailsController
     }
 
     /**
+     * @return User
+     */
+    public function getUserObject()
+    {
+        return oxNew(User::class);
+    }
+
+    /**
+     * @return d3totp
+     */
+    public function getTotpObject()
+    {
+        return oxNew(d3totp::class);
+    }
+
+    /**
+     * @return d3backupcodelist
+     */
+    public function getBackupcodeListObject()
+    {
+        return oxNew(d3backupcodelist::class);
+    }
+
+    /**
      * @throws Exception
      */
     public function save()
@@ -73,7 +97,7 @@ class d3user_totp extends AdminDetailsController
             $pwd = Registry::getRequest()->getRequestEscapedParameter("pwd");
 
             /** @var d3_totp_user $oUser */
-            $oUser = oxNew(User::class);
+            $oUser = $this->getUserObject();
             $oUser->load($this->getEditObjectId());
 
             if (false == $oUser->isSamePassword($pwd)) {
@@ -82,8 +106,8 @@ class d3user_totp extends AdminDetailsController
             }
 
             /** @var d3totp $oTotp */
-            $oTotp = oxNew(d3totp::class);
-            $oTotpBackupCodes = oxNew(d3backupcodelist::class);
+            $oTotp = $this->getTotpObject();
+            $oTotpBackupCodes = $this->getBackupcodeListObject();
             if ($aParams['d3totp__oxid']) {
                 $oTotp->load($aParams['d3totp__oxid']);
             } else {
@@ -112,7 +136,7 @@ class d3user_totp extends AdminDetailsController
         $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");
 
         /** @var d3totp $oTotp */
-        $oTotp = oxNew(d3totp::class);
+        $oTotp = $this->getTotpObject();
         if ($aParams['d3totp__oxid']) {
             $oTotp->load($aParams['d3totp__oxid']);
             $oTotp->delete();
@@ -141,7 +165,7 @@ class d3user_totp extends AdminDetailsController
      */
     public function getAvailableBackupCodeCount()
     {
-        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        $oBackupCodeList = $this->getBackupcodeListObject();
         return $oBackupCodeList->getAvailableCodeCount($this->getUser()->getId());
     }
 }

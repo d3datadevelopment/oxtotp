@@ -44,7 +44,7 @@ $aLang = [
 
     'D3_TOTP_BACKUPCODES'                             => 'Backupcodes',
     'D3_TOTP_BACKUPCODES_DESC'                        => 'Mit diesen Backupcodes können Sie sich anmelden, wenn die Generierung des Einmalpasswortes nicht möglich ist (z.B. Gerät verloren oder neu installiert). Sie können dann die Einstellungen zur Verwendung der 2-Faktor-Authentisierung ändern oder einen neuen Zugang erstellen. Speichern Sie sich diese Codes bitte in diesem Moment sicher ab. Nach Verlassen dieser Seite können diese Codes nicht erneut angezeigt werden.',
-    'D3_TOTP_AVAILBACKUPCODECOUNT'                    => 'noch %1$s Backupcodes verfügbar',
+    'D3_TOTP_AVAILBACKUPCODECOUNT'                    => 'noch %1$s Backupcode(s) verfügbar',
     'D3_TOTP_AVAILBACKUPCODECOUNT_DESC'               => 'Um neue Backupcodes zu erstellen, löschen Sie die bestehende Registrierung und legen diese bitte neu an.',
 
     'D3_TOTP_ACCOUNT_SAVE'                            => 'Einstellungen übernehmen',

@@ -44,7 +44,7 @@ $aLang = [
 
     'D3_TOTP_BACKUPCODES'                             => 'backup codes',
     'D3_TOTP_BACKUPCODES_DESC'                        => 'You can use these backup codes to log on if it is not possible to generate the one-time password (e.g. device lost or newly installed). You can then change the settings to use 2-factor authentication or create a new account. Please save these codes securely at this moment. After leaving this page, these codes cannot be displayed again.',
-    'D3_TOTP_AVAILBACKUPCODECOUNT'                    => 'still %1$s backup codes available',
+    'D3_TOTP_AVAILBACKUPCODECOUNT'                    => 'still %1$s backup code(s) available',
     'D3_TOTP_AVAILBACKUPCODECOUNT_DESC'               => 'To create new backup codes, delete the existing registry and create a new one.',
 
     'D3_TOTP_ACCOUNT_SAVE'                            => 'Confirm settings',

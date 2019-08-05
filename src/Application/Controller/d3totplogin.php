@@ -20,6 +20,7 @@ use D3\Totp\Application\Model\d3totp;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Utils;
 
 class d3totplogin extends FrontendController
 {
@@ -30,8 +31,10 @@ class d3totplogin extends FrontendController
         if (Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_VARNAME) ||
             false == Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_CURRENTUSER)
         ) {
-            Registry::getUtils()->redirect('index.php?cl=start', true, 302);
-            exit;
+            $this->getUtils()->redirect('index.php?cl=start', true, 302);
+            if (false == defined('OXID_PHP_UNIT')) {
+                exit;
+            }
         }
 
         $this->addTplParam('navFormParams', Registry::getSession()->getVariable(d3totp::TOTP_SESSION_NAVFORMPARAMS));
@@ -40,12 +43,20 @@ class d3totplogin extends FrontendController
     }
 
     /**
+     * @return Utils
+     */
+    public function getUtils()
+    {
+        return Registry::getUtils();
+    }
+
+    /**
      * @return string|void
      * @throws DatabaseConnectionException
      */
     public function getBackupCodeCountMessage()
     {
-        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        $oBackupCodeList = $this->getBackupCodeListObject();
         $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER));
 
         if ($iCount < 4) {
@@ -56,6 +67,14 @@ class d3totplogin extends FrontendController
         };
 
         return;
+    }
+
+    /**
+     * @return d3backupcodelist
+     */
+    public function getBackupCodeListObject()
+    {
+        return oxNew(d3backupcodelist::class);
     }
 
     public function getPreviousClass()

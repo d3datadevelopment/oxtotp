@@ -34,10 +34,8 @@ class d3backupcode extends BaseModel
      */
     public function generateCode($sUserId)
     {
-        $factory = new Factory();
-        $generator = $factory->getLowStrengthGenerator();
+        $sCode = d3RandomGenerator::getRandomTotpBackupCode();
 
-        $sCode = $generator->generateString(6, Generator::CHAR_DIGITS);
         $this->assign(
             [
                 'oxuserid'    => $sUserId,

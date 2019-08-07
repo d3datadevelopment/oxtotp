@@ -22,6 +22,8 @@ use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
+use OxidEsales\Eshop\Core\UtilsView;
 
 class d3_totp_LoginController extends d3_totp_LoginController_parent
 {
@@ -32,23 +34,55 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function render()
     {
-        $auth = Registry::getSession()->getVariable("auth");
+        $auth = $this->d3GetSession()->getVariable("auth");
 
         $return = parent::render();
 
-        $totp = oxNew(d3totp::class);
+        $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($auth);
 
         if ($auth
             && $totp->isActive()
-            && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+            && false == $this->d3GetSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
         ) {
             // set auth as secured parameter;
-            Registry::getSession()->setVariable("auth", $auth);
+            $this->d3GetSession()->setVariable("auth", $auth);
             $this->addTplParam('request_totp', true);
         }
 
         return $return;
+    }
+
+    /**
+     * @return d3totp
+     */
+    public function d3GetTotpObject()
+    {
+        return oxNew(d3totp::class);
+    }
+
+    /**
+     * @return d3backupcodelist
+     */
+    public function d3GetBackupCodeListObject()
+    {
+        return oxNew(d3backupcodelist::class);
+    }
+
+    /**
+     * @return UtilsView
+     */
+    public function d3GetUtilsView()
+    {
+        return Registry::getUtilsView();
+    }
+
+    /**
+     * @return Session
+     */
+    public function d3GetSession()
+    {
+        return Registry::getSession();
     }
 
     /**
@@ -60,7 +94,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     {
         $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp', true);
 
-        $totp = oxNew(d3totp::class);
+        $totp = $this->d3GetTotpObject();
         $totp->loadByUserId(Registry::getSession()->getVariable("auth"));
 
         $return = 'login';
@@ -69,11 +103,11 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             if ($this->isNoTotpOrNoLogin($totp)) {
                 $return = parent::checklogin();
             } elseif ($this->hasValidTotp($sTotp, $totp)) {
-                Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
+                $this->d3GetSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
                 $return = "admin_start";
             }
         } catch (d3totp_wrongOtpException $oEx) {
-            Registry::getUtilsView()->addErrorToDisplay($oEx);
+            $this->d3GetUtilsView()->addErrorToDisplay($oEx);
         }
 
         return $return;
@@ -85,7 +119,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function getBackupCodeCountMessage()
     {
-        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        $oBackupCodeList = $this->d3GetBackupCodeListObject();
         $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable("auth"));
 
         if ($iCount < 4) {
@@ -104,7 +138,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function isNoTotpOrNoLogin($totp)
     {
-        return false == Registry::getSession()->getVariable("auth")
+        return false == $this->d3GetSession()->getVariable("auth")
         || false == $totp->isActive();
     }
 
@@ -125,7 +159,15 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
     public function d3CancelLogin()
     {
-        $oUser = oxNew(User::class);
+        $oUser = $this->d3GetUserObject();
         $oUser->logout();
+    }
+
+    /**
+     * @return User
+     */
+    public function d3GetUserObject()
+    {
+        return oxNew(User::class);
     }
 }

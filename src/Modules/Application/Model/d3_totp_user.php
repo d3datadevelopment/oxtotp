@@ -19,6 +19,7 @@ use D3\Totp\Application\Model\d3totp;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
 
 class d3_totp_user extends d3_totp_user_parent
 {
@@ -26,7 +27,7 @@ class d3_totp_user extends d3_totp_user_parent
     {
         $return = parent::logout();
 
-        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
+        $this->d3GetSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
 
         return $return;
     }
@@ -42,5 +43,13 @@ class d3_totp_user extends d3_totp_user_parent
         $oTotp->loadByUserId($this->getId());
 
         return $oTotp;
+    }
+
+    /**
+     * @return Session
+     */
+    public function d3GetSession()
+    {
+        return Registry::getSession();
     }
 }

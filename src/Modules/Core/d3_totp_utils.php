@@ -19,6 +19,7 @@ use D3\Totp\Application\Model\d3totp;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
 
 class d3_totp_utils extends d3_totp_utils_parent
 {
@@ -31,17 +32,35 @@ class d3_totp_utils extends d3_totp_utils_parent
     {
         $blAuth = parent::checkAccessRights();
 
-        $userID = Registry::getSession()->getVariable("auth");
-        $totpAuth = (bool) Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME);
+        $userID = $this->d3GetSessionObject()->getVariable("auth");
+        $totpAuth = (bool) $this->d3GetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME);
         /** @var d3totp $totp */
-        $totp = oxNew(d3totp::class);
+        $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($userID);
 
         if ($blAuth && $totp->isActive() && false === $totpAuth) {
-            Registry::getUtils()->redirect('index.php?cl=login', true, 302);
-            exit;
+            $this->redirect('index.php?cl=login', true, 302);
+            if (false == defined('OXID_PHP_UNIT')) {
+                exit;
+            }
         }
 
         return $blAuth;
+    }
+
+    /**
+     * @return Session
+     */
+    public function d3GetSessionObject()
+    {
+        return Registry::getSession();
+    }
+
+    /**
+     * @return d3totp
+     */
+    public function d3GetTotpObject()
+    {
+        return oxNew(d3totp::class);
     }
 }

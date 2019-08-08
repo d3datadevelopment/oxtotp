@@ -20,6 +20,7 @@ use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
 
 trait d3_totp_getUserTrait
 {
@@ -33,16 +34,32 @@ trait d3_totp_getUserTrait
         $oUser = parent::getUser();
 
         if ($oUser && $oUser->getId()) {
-            $totp = oxNew(d3totp::class);
+            $totp = $this->d3GetTotpObject();
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+                && false == $this->d3GetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME)
             ) {
                 return false;
             }
         }
 
         return $oUser;
+    }
+
+    /**
+     * @return d3totp
+     */
+    public function d3GetTotpObject()
+    {
+        return oxNew(d3totp::class);
+    }
+
+    /**
+     * @return Session
+     */
+    public function d3GetSessionObject()
+    {
+        return Registry::getSession();
     }
 }

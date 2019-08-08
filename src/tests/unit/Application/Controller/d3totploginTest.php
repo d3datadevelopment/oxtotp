@@ -21,9 +21,6 @@ use D3\Totp\Application\Controller\d3totplogin;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
-use Doctrine\DBAL\DBALException;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Utils;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -36,9 +33,6 @@ class d3totploginTest extends d3TotpUnitTestCase
 
     /**
      * setup basic requirements
-     * @throws DBALException
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
      */
     public function setUp()
     {

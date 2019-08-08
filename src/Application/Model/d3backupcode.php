@@ -20,8 +20,6 @@ use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry;
-use RandomLib\Factory;
-use RandomLib\Generator;
 
 class d3backupcode extends BaseModel
 {

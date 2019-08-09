@@ -19,6 +19,7 @@ namespace D3\Totp\tests\unit\Modules\Application\Controller;
 
 use D3\Totp\Modules\Application\Controller\d3_totp_PaymentController;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
+use OxidEsales\Eshop\Application\Controller\PaymentController;
 
 class d3_totp_PaymentControllerTest extends d3TotpUnitTestCase
 {
@@ -27,7 +28,7 @@ class d3_totp_PaymentControllerTest extends d3TotpUnitTestCase
     /** @var d3_totp_PaymentController */
     protected $_oController;
 
-    protected $sControllerClass = d3_totp_PaymentController::class;
+    protected $sControllerClass = PaymentController::class;
 
     /**
      * setup basic requirements
@@ -36,7 +37,7 @@ class d3_totp_PaymentControllerTest extends d3TotpUnitTestCase
     {
         parent::setUp();
 
-        $this->_oController = oxNew(d3_totp_PaymentController::class);
+        $this->_oController = oxNew(PaymentController::class);
     }
 
     public function tearDown()

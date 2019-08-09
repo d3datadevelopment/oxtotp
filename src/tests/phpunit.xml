@@ -1,0 +1,30 @@
+<phpunit backupGlobals="true"
+         backupStaticAttributes="false"
+         cacheTokens="true"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="true"
+         forceCoversAnnotation="false"
+         mapTestClassNameToCoveredClassName="false"
+         processIsolation="false"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         verbose="false">
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../Application</directory>
+            <directory suffix=".php">../Modules</directory>
+            <directory suffix=".php">../Setup</directory>
+            <exclude>
+                <directory suffix=".php">../Application/views</directory>
+                <directory suffix=".php">../Application/translations</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="junit" target="reports/logfile.xml"/>
+    </logging>
+</phpunit>

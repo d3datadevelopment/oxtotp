@@ -41,7 +41,9 @@ class d3_totp_utils extends d3_totp_utils_parent
         if ($blAuth && $totp->isActive() && false === $totpAuth) {
             $this->redirect('index.php?cl=login', true, 302);
             if (false == defined('OXID_PHP_UNIT')) {
+                // @codeCoverageIgnoreStart
                 exit;
+                // @codeCoverageIgnoreEnd
             }
         }
 

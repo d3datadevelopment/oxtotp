@@ -33,7 +33,9 @@ class d3totplogin extends FrontendController
         ) {
             $this->getUtils()->redirect('index.php?cl=start', true, 302);
             if (false == defined('OXID_PHP_UNIT')) {
+                // @codeCoverageIgnoreStart
                 exit;
+                // @codeCoverageIgnoreEnd
             }
         }
 

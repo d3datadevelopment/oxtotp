@@ -3,6 +3,8 @@
     <h1 class="page-header">[{oxmultilang ident="D3_TOTP_ACCOUNT"}]</h1>
 
     [{assign var="totp" value=$user->d3GetTotp()}]
+    [{assign var="userid" value=$user->getId()}]
+    [{$totp->loadByUserId($userid)}]
 
     <style type="text/css">
         .registerNew {

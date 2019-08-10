@@ -60,7 +60,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMock(d3totp::class, array(
             'loadByUserId',
             'isActive',
-        ));
+        ), array(), '', false);
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(false);
 
@@ -91,7 +91,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMock(d3totp::class, array(
             'loadByUserId',
             'isActive',
-        ));
+        ), array(), '', false);
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(false);
 
@@ -130,7 +130,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMock(d3totp::class, array(
             'loadByUserId',
             'isActive',
-        ));
+        ), array(), '', false);
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(true);
 
@@ -177,7 +177,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMock(d3totp::class, array(
             'loadByUserId',
             'isActive',
-        ));
+        ), array(), '', false);
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(true);
 

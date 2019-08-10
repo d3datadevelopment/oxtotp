@@ -1,6 +1,8 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
 [{assign var="totp" value=$edit->d3GetTotp()}]
+[{assign var="userid" value=$edit->getId()}]
+[{$totp->loadByUserId($userid)}]
 
 [{if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]

@@ -15,7 +15,7 @@
  * @link      http://www.oxidmodule.com
  */
 
-namespace D3\Totp\tests\unit\Application\Controller;
+namespace D3\Totp\tests\unit\Application\Controller\Admin;
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
 use D3\Totp\Application\Model\d3backupcodelist;
@@ -108,6 +108,49 @@ class d3user_totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      */
+    public function canRenderUnloadableUser()
+    {
+        /** @var User|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oUserMock = $this->getMock(User::class, array(
+            'getId',
+            'load',
+        ));
+        $oUserMock->expects($this->never())->method('getId');
+        $oUserMock->expects($this->atLeast(1))->method('load')->willReturn(false);
+
+        /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3user_totp::class, array(
+            'getEditObjectId',
+            'getUserObject',
+            'addTplParam'
+        ));
+        $oControllerMock->method('getEditObjectId')->willReturn('foobar');
+        $oControllerMock->expects($this->once())->method('getUserObject')->willReturn($oUserMock);
+        $oControllerMock->expects($this->exactly(3))->method('addTplParam')->with(
+            $this->logicalOr(
+                $this->stringContains('sSaveError'),
+                $this->stringContains('oxid'),
+                $this->stringContains('edit')
+            )
+        );
+
+        $this->_oController = $oControllerMock;
+
+        $this->setValue($this->_oController, '_sSaveError', 'foo');
+
+        $sTpl = $this->callMethod($this->_oController, 'render');
+        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', array('edit'));
+        $oxid = $this->callMethod($this->_oController, 'getViewDataElement', array('oxid'));
+
+        $this->assertSame('d3user_totp.tpl', $sTpl);
+        $this->assertNull($tplUser);
+        $this->assertSame($oxid, 'foobar');
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
     public function getUserObjectReturnsRightInstance()
     {
         $this->assertInstanceOf(
@@ -155,7 +198,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oTotpMock = $this->getMock(d3totp::class, array(
             'save',
-        ));
+        ), array(), '', false);
         $oTotpMock->expects($this->never())->method('save')->willReturn(true);
 
         /** @var User|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
@@ -202,7 +245,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'verify',
             'saveSecret',
             'assign'
-        ));
+        ), array(), '', false);
         $oTotpMock->method('load')->willReturn(true);
         $oTotpMock->expects($this->never())->method('save')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willThrowException(new Exception());
@@ -255,10 +298,68 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'verify',
             'saveSecret',
             'assign'
-        ));
-        $oTotpMock->method('load')->willReturn(true);
+        ), array(), '', false);
+        $oTotpMock->expects($this->never())->method('load')->willReturn(true);
         $oTotpMock->expects($this->once())->method('save')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willReturn(true);
+        $oTotpMock->method('saveSecret')->willReturn(true);
+        $oTotpMock->method('assign')->willReturn(true);
+
+        /** @var User|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oUserMock = $this->getMock(User::class, array(
+            'load',
+            'isSamePassword',
+        ));
+        $oUserMock->expects($this->atLeast(1))->method('load')->willReturn(true);
+        $oUserMock->expects($this->atLeast(1))->method('isSamePassword')->willReturn(true);
+
+        /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3user_totp::class, array(
+            'getEditObjectId',
+            'getUserObject',
+            'getTotpObject',
+            'getBackupcodeListObject'
+        ));
+        $oControllerMock->method('getEditObjectId')->willReturn('foobar');
+        $oControllerMock->expects($this->once())->method('getUserObject')->willReturn($oUserMock);
+        $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
+        $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod($this->_oController, 'save');
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function canSaveWithKnownOXID()
+    {
+        $aEditval = [
+            'd3totp__oxid'  => 'foo'
+        ];
+        $_GET['editval'] = $aEditval;
+
+        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
+            'save',
+            'generateBackupCodes'
+        ));
+        $oBackupCodeListMock->expects($this->once())->method('save')->willReturn(true);
+        $oBackupCodeListMock->method('generateBackupCodes')->willReturn(true);
+
+        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oTotpMock = $this->getMock(d3totp::class, array(
+            'load',
+            'save',
+            'verify',
+            'saveSecret',
+            'assign'
+        ), array(), '', false);
+        $oTotpMock->expects($this->once())->method('load')->willReturn(true);
+        $oTotpMock->expects($this->once())->method('save')->willReturn(true);
+        $oTotpMock->expects($this->never())->method('verify')->willReturn(true);
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
 
@@ -317,7 +418,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
         $oTotpMock = $this->getMock(d3totp::class, array(
             'delete'
-        ));
+        ), array(), '', false);
         $oTotpMock->expects($this->never())->method('delete');
 
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
@@ -344,9 +445,11 @@ class d3user_totpTest extends d3TotpUnitTestCase
 
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
         $oTotpMock = $this->getMock(d3totp::class, array(
-            'delete'
-        ));
+            'delete',
+            'load'
+        ), array(), '', false);
         $oTotpMock->expects($this->once())->method('delete')->willReturn(true);
+        $oTotpMock->method('load')->willReturn(true);
 
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3user_totp::class, array(

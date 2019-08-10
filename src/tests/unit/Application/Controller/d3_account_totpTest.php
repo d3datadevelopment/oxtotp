@@ -202,7 +202,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             'assign',
             'verify',
             'save'
-        ));
+        ), array(), '', false);
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willThrowException(new Exception('foo'));
@@ -250,7 +250,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             'verify',
             'save',
             'setId',
-        ));
+        ), array(), '', false);
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->method('verify')->willReturn(true);
@@ -305,7 +305,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
         $oTotpMock = $this->getMock(d3totp::class, array(
             'delete'
-        ));
+        ), array(), '', false);
         $oTotpMock->expects($this->never())->method('delete');
 
         /** @var d3_account_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
@@ -331,9 +331,11 @@ class d3_account_totpTest extends d3TotpUnitTestCase
 
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
         $oTotpMock = $this->getMock(d3totp::class, array(
-            'delete'
-        ));
+            'delete',
+            'loadByUserId'
+        ), array(), '', false);
         $oTotpMock->expects($this->once())->method('delete')->willReturn(true);
+        $oTotpMock->method('loadByUserId')->willReturn(true);
 
         $oUser = oxNew(User::class);
         $oUser->setId('foo');
@@ -349,5 +351,17 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->callMethod($this->_oController, 'delete');
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function getTotpObjectReturnsRightObject()
+    {
+        $this->assertInstanceOf(
+            d3totp::class,
+            $this->callMethod($this->_oController, 'getTotpObject')
+        );
     }
 }

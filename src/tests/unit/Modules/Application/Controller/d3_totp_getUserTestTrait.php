@@ -64,7 +64,7 @@ trait d3_totp_getUserTestTrait
         $oTotpMock = $this->getMock(d3totp::class, array(
             'isActive',
             'loadByUserId'
-        ));
+        ), array(), '', false);
         $oTotpMock->method('isActive')->willReturn(false);
         $oTotpMock->method('loadByUserId')->willReturn(true);
 
@@ -107,7 +107,7 @@ trait d3_totp_getUserTestTrait
         $oTotpMock = $this->getMock(d3totp::class, array(
             'isActive',
             'loadByUserId'
-        ));
+        ), array(), '', false);
         $oTotpMock->method('isActive')->willReturn(true);
         $oTotpMock->method('loadByUserId')->willReturn(true);
 
@@ -150,7 +150,7 @@ trait d3_totp_getUserTestTrait
         $oTotpMock = $this->getMock(d3totp::class, array(
             'isActive',
             'loadByUserId'
-        ));
+        ), array(), '', false);
         $oTotpMock->method('isActive')->willReturn(true);
         $oTotpMock->method('loadByUserId')->willReturn(true);
 

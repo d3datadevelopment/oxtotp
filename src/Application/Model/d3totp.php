@@ -51,7 +51,6 @@ class d3totp extends BaseModel
 
     /**
      * @param $userId
-     * @return bool
      * @throws DBALException
      * @throws DatabaseConnectionException
      */
@@ -66,10 +65,8 @@ class d3totp extends BaseModel
                 ->where("oxuserid = " . $oQB->createNamedParameter($userId))
                 ->setMaxResults(1);
 
-            return $this->load(DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($oQB->getSQL(), $oQB->getParameters()));
+            $this->load(DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($oQB->getSQL(), $oQB->getParameters()));
         }
-
-        return false;
     }
 
     /**

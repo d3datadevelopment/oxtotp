@@ -39,10 +39,7 @@ class d3_totp_user extends d3_totp_user_parent
      */
     public function d3getTotp()
     {
-        $oTotp = oxNew(d3totp::class);
-        $oTotp->loadByUserId($this->getId());
-
-        return $oTotp;
+        return oxNew(d3totp::class);
     }
 
     /**

@@ -166,6 +166,6 @@ class d3user_totp extends AdminDetailsController
     public function getAvailableBackupCodeCount()
     {
         $oBackupCodeList = $this->getBackupcodeListObject();
-        return $oBackupCodeList->getAvailableCodeCount($this->getUser()->getId());
+        return $oBackupCodeList->getAvailableCodeCount($this->getEditObjectId());
     }
 }

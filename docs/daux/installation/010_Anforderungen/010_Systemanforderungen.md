@@ -11,7 +11,7 @@ title: Systemanforderungen
         * 6.0.2 und höher
         * 6.1.x
 * Installation via [Composer](https://getcomposer.org)
-* Themes
+* Themes (weitere Themes nach Ergänzung der Templates möglich)
     * flow
     * wave
 

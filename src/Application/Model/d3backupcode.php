@@ -32,8 +32,7 @@ class d3backupcode extends BaseModel
      */
     public function generateCode($sUserId)
     {
-        $sCode = d3RandomGenerator::getRandomTotpBackupCode();
-
+        $sCode = $this->getRandomTotpBackupCode();
         $this->assign(
             [
                 'oxuserid'    => $sUserId,
@@ -42,6 +41,11 @@ class d3backupcode extends BaseModel
         );
 
         return $sCode;
+    }
+
+    public function getRandomTotpBackupCode()
+    {
+        return d3RandomGenerator::getRandomTotpBackupCode();
     }
 
     /**

@@ -17,6 +17,8 @@ namespace D3\Totp\Application\Model;
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
 use Exception;
+use OxidEsales\Eshop\Core\Config;
+use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\ListModel;
@@ -44,14 +46,30 @@ class d3backupcodelist extends ListModel
         $this->deleteAllFromUser($sUserId);
 
         for ($i = 1; $i <= 10; $i++) {
-            $oBackupCode = oxNew(d3backupcode::class);
+            $oBackupCode = $this->getD3BackupCodeObject();
             $this->_backupCodes[] = $oBackupCode->generateCode($sUserId);
             $this->offsetSet(md5(rand()), $oBackupCode);
         }
 
         /** @var d3user_totp $oActView */
-        $oActView = Registry::getConfig()->getActiveView();
+        $oActView = $this->d3GetConfig()->getActiveView();
         $oActView->setBackupCodes($this->_backupCodes);
+    }
+
+    /**
+     * @return d3backupcode
+     */
+    public function getD3BackupCodeObject()
+    {
+        return oxNew(d3backupcode::class);
+    }
+
+    /**
+     * @return Config
+     */
+    public function d3GetConfig()
+    {
+        return Registry::getConfig();
     }
 
     /**
@@ -83,7 +101,7 @@ class d3backupcodelist extends ListModel
      */
     public function verify($totp)
     {
-        $oDb = DatabaseProvider::getDb();
+        $oDb = $this->d3GetDb();
 
         $query = "SELECT oxid FROM ".$this->getBaseObject()->getViewName().
             " WHERE ".$oDb->quoteIdentifier('backupcode')." = ".$oDb->quote($this->getBaseObject()->d3EncodeBC($totp))." AND ".
@@ -91,9 +109,20 @@ class d3backupcodelist extends ListModel
 
         $sVerify = $oDb->getOne($query);
 
-        $this->getBaseObject()->delete($sVerify);
+        if ($sVerify) {
+            $this->getBaseObject()->delete($sVerify);
+        }
 
         return (bool) $sVerify;
+    }
+
+    /**
+     * @return DatabaseInterface
+     * @throws DatabaseConnectionException
+     */
+    public function d3GetDb()
+    {
+        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
     }
 
     /**
@@ -102,7 +131,7 @@ class d3backupcodelist extends ListModel
      */
     public function deleteAllFromUser($sUserId)
     {
-        $oDb = DatabaseProvider::getDb();
+        $oDb = $this->d3GetDb();
 
         $query = "SELECT OXID FROM ".$oDb->quoteIdentifier($this->getBaseObject()->getCoreTableName()).
             " WHERE ".$oDb->quoteIdentifier('oxuserid')." = ".$oDb->quote($sUserId);
@@ -122,7 +151,7 @@ class d3backupcodelist extends ListModel
      */
     public function getAvailableCodeCount($sUserId)
     {
-        $oDb = DatabaseProvider::getDb();
+        $oDb = $this->d3GetDb();
 
         $query = "SELECT count(*) FROM ".$oDb->quoteIdentifier($this->getBaseObject()->getViewName()).
             " WHERE ".$oDb->quoteIdentifier('oxuserid')." = ".$oDb->quote($sUserId);

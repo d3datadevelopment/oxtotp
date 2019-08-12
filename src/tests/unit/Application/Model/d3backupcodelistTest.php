@@ -19,15 +19,11 @@ namespace D3\Totp\tests\unit\Application\Model;
 
 use D3\Totp\Application\Model\d3backupcode;
 use D3\Totp\Application\Model\d3backupcodelist;
-use D3\Totp\Application\Model\d3totp;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Config;
-use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
 use OxidEsales\Eshop\Core\Database\Adapter\Doctrine\Database;
-use OxidEsales\Eshop\Core\DatabaseProvider;
-use OxidEsales\Eshop\Core\Registry;
 use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionException;
 

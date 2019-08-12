@@ -16,12 +16,14 @@
 namespace D3\Totp\Application\Model;
 
 use BaconQrCode\Renderer\Image\Svg;
+use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\ModCfg\Application\Model\d3database;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
@@ -58,15 +60,25 @@ class d3totp extends BaseModel
     {
         $this->userId = $userId;
         $oQB = d3database::getInstance()->getQueryBuilder();
+        $oDb = $this->d3GetDb();
 
-        if (DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne("SHOW TABLES LIKE '".$this->tableName."'")) {
+        if ($oDb->getOne("SHOW TABLES LIKE '".$this->tableName."'")) {
             $oQB->select('oxid')
                 ->from($this->getViewName())
                 ->where("oxuserid = " . $oQB->createNamedParameter($userId))
                 ->setMaxResults(1);
 
-            $this->load(DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($oQB->getSQL(), $oQB->getParameters()));
+            $this->load($oDb->getOne($oQB->getSQL(), $oQB->getParameters()));
         }
+    }
+
+    /**
+     * @return DatabaseInterface
+     * @throws DatabaseConnectionException
+     */
+    public function d3GetDb()
+    {
+        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
     }
 
     /**
@@ -76,9 +88,17 @@ class d3totp extends BaseModel
     {
         $userId = $this->userId ? $this->userId : $this->getFieldData('oxuserid');
 
-        $user = oxNew(User::class);
+        $user = $this->d3GetUser();
         $user->load($userId);
         return $user;
+    }
+
+    /**
+     * @return User
+     */
+    public function d3GetUser()
+    {
+        return oxNew(User::class);
     }
 
     /**
@@ -156,9 +176,17 @@ class d3totp extends BaseModel
         $renderer->setHeight(200);
         $renderer->setWidth(200);
 
-        /** @var Writer $writer */
-        $writer = oxNew(Writer::class, $renderer);
+        $writer = $this->d3GetWriter($renderer);
         return $writer->writeString($this->getTotp()->getProvisioningUri());
+    }
+
+    /**
+     * @param RendererInterface $renderer
+     * @return Writer
+     */
+    public function d3GetWriter(RendererInterface $renderer)
+    {
+        return oxNew(Writer::class, $renderer);
     }
 
     /**
@@ -192,8 +220,7 @@ class d3totp extends BaseModel
     {
         $blVerify = $this->getTotp($seed)->verify($totp, null, $this->timeWindow);
         if (false == $blVerify) {
-            /** @var d3backupcodelist $oBC */
-            $oBC = oxNew(d3backupcodelist::class);
+            $oBC = $this->d3GetBackupCodeListObject();
             $blVerify = $oBC->verify($totp);
 
             if (false == $blVerify) {
@@ -203,6 +230,14 @@ class d3totp extends BaseModel
         }
 
         return $blVerify;
+    }
+
+    /**
+     * @return d3backupcodelist
+     */
+    public function d3GetBackupCodeListObject()
+    {
+        return oxNew(d3backupcodelist::class);
     }
 
     /**
@@ -216,7 +251,7 @@ class d3totp extends BaseModel
         $iv = openssl_random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
         $hmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);
-        return base64_encode($iv.$hmac.$ciphertext_raw);
+        return $this->d3Base64_decode($iv.$hmac.$ciphertext_raw);
     }
 
     /**
@@ -226,7 +261,7 @@ class d3totp extends BaseModel
     public function decrypt($ciphertext)
     {
         $key = Registry::getConfig()->getConfigParam('sConfigKey');
-        $c = base64_decode($ciphertext);
+        $c = $this->d3Base64_decode($ciphertext);
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = substr($c, 0, $ivlen);
         $hmac = substr($c, $ivlen, $sha2len=32);
@@ -241,13 +276,23 @@ class d3totp extends BaseModel
     }
 
     /**
+     * required for unit tests
+     * @param $source
+     * @return bool|string
+     */
+    public function d3Base64_decode($source)
+    {
+        return base64_decode($source);
+    }
+
+    /**
      * @param null $oxid
      * @return bool
      * @throws DatabaseConnectionException
      */
     public function delete($oxid = null)
     {
-        $oBackupCodeList = oxNew(d3backupcodelist::class);
+        $oBackupCodeList = $this->d3GetBackupCodeListObject();
         $oBackupCodeList->deleteAllFromUser($this->getFieldData('oxuserid'));
 
         $blDelete = parent::delete();

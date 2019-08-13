@@ -59,16 +59,18 @@ class d3totp extends BaseModel
     public function loadByUserId($userId)
     {
         $this->userId = $userId;
-        $oQB = d3database::getInstance()->getQueryBuilder();
+        //$oQB = d3database::getInstance()->getQueryBuilder();
         $oDb = $this->d3GetDb();
 
         if ($oDb->getOne("SHOW TABLES LIKE '".$this->tableName."'")) {
-            $oQB->select('oxid')
+            $query = "SELECT oxid FROM ".$this->getViewName().' WHERE oxuserid = '.$oDb->quote($userId).' LIMIT 1';
+            /*$oQB->select('oxid')
                 ->from($this->getViewName())
                 ->where("oxuserid = " . $oQB->createNamedParameter($userId))
                 ->setMaxResults(1);
-
-            $this->load($oDb->getOne($oQB->getSQL(), $oQB->getParameters()));
+            */
+            //$this->load($oDb->getOne($oQB->getSQL(), $oQB->getParameters()));
+            $this->load($oDb->getOne($query));
         }
     }
 

@@ -32,7 +32,7 @@
   },
   "require": {
     "php": ">=5.6",
-    "oxid-esales/oxideshop-metapackage-ce": "~6.0.3 || ~6.1.0",
+    "oxid-esales/oxideshop-metapackage-ce": "~6.0.3 || ~6.1.0 || ~6.2.0",
     "spomky-labs/otphp": "^8.3",
     "bacon/bacon-qr-code": "^1.0",
     "zendframework/zend-math": "^3.2"

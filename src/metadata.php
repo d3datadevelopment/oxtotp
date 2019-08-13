@@ -95,8 +95,5 @@ $aModule = [
             'block'         => 'account_menu',
             'file'          => 'Application/views/blocks/page/account/inc/account_menu.tpl',
         ]
-    ],
-    'd3SetupClasses'        => [
-        ModuleSetup\Installation::class
     ]
 ];

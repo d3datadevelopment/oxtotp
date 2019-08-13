@@ -732,8 +732,11 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         $sReturn = $this->callMethod($this->_oModel, 'encrypt', ['foobar']);
 
+        // indirect tests, because string changes on every call
         $this->assertInternalType('string', $sReturn);
         $this->assertNotSame('foobar', $sReturn);
+        $this->assertStringEndsWith('==', $sReturn);
+        $this->assertTrue(strlen($sReturn) === 88);
     }
 
     /**

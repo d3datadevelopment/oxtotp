@@ -251,7 +251,7 @@ class d3totp extends BaseModel
         $iv = openssl_random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
         $hmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);
-        return $this->d3Base64_decode($iv.$hmac.$ciphertext_raw);
+        return base64_encode($iv.$hmac.$ciphertext_raw);
     }
 
     /**

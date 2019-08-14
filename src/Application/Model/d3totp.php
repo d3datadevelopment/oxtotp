@@ -52,7 +52,6 @@ class d3totp extends BaseModel
 
     /**
      * @param $userId
-     * @throws DBALException
      * @throws DatabaseConnectionException
      */
     public function loadByUserId($userId)

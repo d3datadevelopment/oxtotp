@@ -34,8 +34,6 @@ class d3_totp_user extends d3_totp_user_parent
 
     /**
      * @return d3totp
-     * @throws DatabaseConnectionException
-     * @throws DBALException
      */
     public function d3getTotp()
     {

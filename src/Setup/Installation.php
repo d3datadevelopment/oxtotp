@@ -18,6 +18,7 @@ namespace D3\Totp\Setup;
 use D3\ModCfg\Application\Model\d3database;
 use D3\ModCfg\Application\Model\Install\d3install_updatebase;
 use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\ConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -257,7 +258,16 @@ class Installation extends d3install_updatebase
     {
         $query = "SELECT 1 FROM " . getViewName('oxseo') . " WHERE oxstdurl = 'index.php?cl=d3_account_totp'";
 
-        return !DatabaseProvider::getDb()->getOne($query);
+        return !$this->d3GetDb()->getOne($query);
+    }
+
+    /**
+     * @return DatabaseInterface
+     * @throws DatabaseConnectionException
+     */
+    public function d3GetDb()
+    {
+        return DatabaseProvider::getDb();
     }
 
     /**

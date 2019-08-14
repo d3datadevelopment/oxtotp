@@ -19,15 +19,12 @@ namespace D3\Totp\tests\unit\Application\Model;
 
 use BaconQrCode\Renderer\Image\Svg;
 use BaconQrCode\Writer;
-use D3\Totp\Application\Model\d3backupcode;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OTPHP\TOTP;
-use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Database\Adapter\Doctrine\Database;
 use OxidEsales\Eshop\Core\Registry;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -105,9 +102,11 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
         $oDbMock = $this->getMock(Database::class, array(
-            'getOne'
+            'getOne',
+            'quote'
         ), array(), '', false);
         $oDbMock->expects($this->exactly(2))->method('getOne')->willReturnOnConsecutiveCalls(true, true);
+        $oDbMock->method('quote')->willReturn(true);
 
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(d3totp::class, array(

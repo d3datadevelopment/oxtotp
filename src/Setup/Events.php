@@ -28,6 +28,7 @@ use OxidEsales\Eshop\Core\Exception\SystemComponentException;
 class Events
 {
     /**
+     * @codeCoverageIgnore
      * @throws d3ShopCompatibilityAdapterException
      * @throws DBALException
      * @throws DatabaseConnectionException
@@ -42,6 +43,9 @@ class Events
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function onDeactivate()
     {
     }

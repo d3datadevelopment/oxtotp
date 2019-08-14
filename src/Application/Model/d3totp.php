@@ -18,7 +18,6 @@ namespace D3\Totp\Application\Model;
 use BaconQrCode\Renderer\Image\Svg;
 use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
-use D3\ModCfg\Application\Model\d3database;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use OTPHP\TOTP;
@@ -59,17 +58,10 @@ class d3totp extends BaseModel
     public function loadByUserId($userId)
     {
         $this->userId = $userId;
-        //$oQB = d3database::getInstance()->getQueryBuilder();
         $oDb = $this->d3GetDb();
 
         if ($oDb->getOne("SHOW TABLES LIKE '".$this->tableName."'")) {
             $query = "SELECT oxid FROM ".$this->getViewName().' WHERE oxuserid = '.$oDb->quote($userId).' LIMIT 1';
-            /*$oQB->select('oxid')
-                ->from($this->getViewName())
-                ->where("oxuserid = " . $oQB->createNamedParameter($userId))
-                ->setMaxResults(1);
-            */
-            //$this->load($oDb->getOne($oQB->getSQL(), $oQB->getParameters()));
             $this->load($oDb->getOne($query));
         }
     }

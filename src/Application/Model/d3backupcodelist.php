@@ -104,7 +104,7 @@ class d3backupcodelist extends ListModel
         $oDb = $this->d3GetDb();
 
         $query = "SELECT oxid FROM ".$this->getBaseObject()->getViewName().
-            " WHERE ".$oDb->quoteIdentifier('backupcode')." = ".$oDb->quote($this->getBaseObject()->d3EncodeBC($totp))." AND ".
+            " WHERE ".$oDb->quoteIdentifier('backupcode')." = ".$oDb->quote($this->getBaseObject()->d3EncodeBC($totp, $this->d3GetUser()->getId()))." AND ".
             $oDb->quoteIdentifier("oxuserid") ." = ".$oDb->quote($this->d3GetUser()->getId());
 
         $sVerify = $oDb->getOne($query);

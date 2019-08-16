@@ -36,7 +36,7 @@ class d3backupcode extends BaseModel
         $this->assign(
             [
                 'oxuserid'    => $sUserId,
-                'backupcode' => $this->d3EncodeBC($sCode),
+                'backupcode' => $this->d3EncodeBC($sCode, $sUserId),
             ]
         );
 
@@ -53,10 +53,12 @@ class d3backupcode extends BaseModel
      * @return false|string
      * @throws DatabaseConnectionException
      */
-    public function d3EncodeBC($code)
+    public function d3EncodeBC($code, $sUserId)
     {
         $oDb = DatabaseProvider::getDb();
-        $salt = $this->d3GetUser()->getFieldData('oxpasssalt');
+        $oUser = $this->d3GetUserObject();
+        $oUser->load($sUserId);
+        $salt = $oUser->getFieldData('oxpasssalt');
         $sSelect = "SELECT BINARY MD5( CONCAT( " . $oDb->quote($code) . ", UNHEX( ".$oDb->quote($salt)." ) ) )";
 
         return $oDb->getOne($sSelect);
@@ -72,5 +74,13 @@ class d3backupcode extends BaseModel
         $oUser = oxNew(User::class);
         $oUser->load($sUserId);
         return $oUser;
+    }
+
+    /**
+     * @return User
+     */
+    public function d3GetUserObject()
+    {
+        return oxNew(User::class);
     }
 }

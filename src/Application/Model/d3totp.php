@@ -212,7 +212,8 @@ class d3totp extends BaseModel
     public function verify($totp, $seed = null)
     {
         $blVerify = $this->getTotp($seed)->verify($totp, null, $this->timeWindow);
-        if (false == $blVerify) {
+
+        if (false == $blVerify && null == $seed) {
             $oBC = $this->d3GetBackupCodeListObject();
             $blVerify = $oBC->verify($totp);
 
@@ -220,6 +221,9 @@ class d3totp extends BaseModel
                 $oException = oxNew(d3totp_wrongOtpException::class);
                 throw $oException;
             }
+        } elseif (false == $blVerify && $seed) {
+            $oException = oxNew(d3totp_wrongOtpException::class);
+            throw $oException;
         }
 
         return $blVerify;

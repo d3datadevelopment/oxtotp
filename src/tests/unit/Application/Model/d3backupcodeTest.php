@@ -95,7 +95,8 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     public function d3EncodeBCPass()
     {
         /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(), array(), '', false);
+        $oUserMock = $this->getMock(User::class, array('load'), array(), '', false);
+        $oUserMock->method('load')->willReturn(true);
         $oUserMock->assign(
             array(
                 'oxpasssalt' => 'abcdefghijk'
@@ -106,13 +107,13 @@ class d3backupcodeTest extends d3TotpUnitTestCase
         $oModelMock = $this->getMock(d3backupcode::class, array(
             'd3GetUser',
         ));
-        $oModelMock->method('d3GetUser')->willReturn($oUserMock);
+        $oModelMock->method('d3GetUserObject')->willReturn($oUserMock);
 
         $this->_oModel = $oModelMock;
 
         $this->assertSame(
             'e10adc3949ba59abbe56e057f20f883e',
-            $this->callMethod($this->_oModel, 'd3EncodeBC', array('123456'))
+            $this->callMethod($this->_oModel, 'd3EncodeBC', array('123456', 'userId'))
         );
     }
 
@@ -154,6 +155,18 @@ class d3backupcodeTest extends d3TotpUnitTestCase
         );
         $this->assertNull(
             $oUser->getId()
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function d3getUserObjectReturnsRightInstance()
+    {
+        $this->assertInstanceOf(
+            User::class,
+            $this->callMethod($this->_oModel, 'd3GetUserObject')
         );
     }
 }

@@ -715,6 +715,39 @@ class d3totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      */
+    public function verifyWithSeedFailed()
+    {
+        $this->setExpectedException(d3totp_wrongOtpException::class);
+
+        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oBackupCodeListMock */
+        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
+            'verify'
+        ));
+        $oBackupCodeListMock->expects($this->never())->method('verify')->willReturn(false);
+
+        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
+        $oTotpMock = $this->getMock(d3totp::class, array(
+            'verify'
+        ));
+        $oTotpMock->expects($this->once())->method('verify')->willReturn(false);
+
+        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
+        $oModelMock = $this->getMock(d3totp::class, array(
+            'getTotp',
+            'd3GetBackupCodeListObject'
+        ));
+        $oModelMock->method('getTotp')->willReturn($oTotpMock);
+        $oModelMock->method('d3GetBackupCodeListObject')->willReturn($oBackupCodeListMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->callMethod($this->_oModel, 'verify', ['012345', 'abcdef']);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
     public function d3GetBackupCodeListObjectReturnsRightInstance()
     {
         $this->assertInstanceOf(

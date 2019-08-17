@@ -10,6 +10,9 @@ title: Systemanforderungen
     * OXID eShop Community Edition (CE), Professional Edition (PE) oder Enterprise Edition (EE) in Compilation Version 
         * 6.0.x
         * 6.1.x
+* Themes
+    * flow
+    * wave
 * D3 Modul-Connector ([kostenfrei bei D3 erhältlich](https://www.oxidmodule.com/connector/)) ab Version 5.1.0.0 
 * Installation via [Composer](https://getcomposer.org)
 * mindestens ein freier Cronjob zur automatischen Ausführung der angelegten Aufgaben

@@ -201,13 +201,59 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'save',
             'verify',
             'saveSecret',
-            'assign'
+            'assign',
+            'checkIfAlreadyExist'
         ), array(), '', false);
         $oTotpMock->method('load')->willReturn(true);
         $oTotpMock->expects($this->never())->method('save')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willThrowException(new Exception());
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
+        $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
+
+        /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oControllerMock = $this->getMock(d3user_totp::class, array(
+            'getEditObjectId',
+            'getUserObject',
+            'getTotpObject',
+            'getBackupcodeListObject'
+        ));
+        $oControllerMock->method('getEditObjectId')->willReturn('foobar');
+        $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
+        $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod($this->_oController, 'save');
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
+    public function cantSaveBecauseExistingRegistration()
+    {
+        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
+            'save',
+        ));
+        $oBackupCodeListMock->expects($this->never())->method('save')->willReturn(true);
+
+        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
+        $oTotpMock = $this->getMock(d3totp::class, array(
+            'load',
+            'save',
+            'verify',
+            'saveSecret',
+            'assign',
+            'checkIfAlreadyExist'
+        ), array(), '', false);
+        $oTotpMock->method('load')->willReturn(true);
+        $oTotpMock->expects($this->never())->method('save')->willReturn(true);
+        $oTotpMock->expects($this->never())->method('verify')->willThrowException(new Exception());
+        $oTotpMock->method('saveSecret')->willReturn(true);
+        $oTotpMock->method('assign')->willReturn(true);
+        $oTotpMock->method('checkIfAlreadyExist')->willReturn(true);
 
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3user_totp::class, array(
@@ -245,13 +291,15 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'save',
             'verify',
             'saveSecret',
-            'assign'
+            'assign',
+            'checkIfAlreadyExist'
         ), array(), '', false);
         $oTotpMock->expects($this->never())->method('load')->willReturn(true);
         $oTotpMock->expects($this->once())->method('save')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willReturn(true);
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
+        $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
 
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3user_totp::class, array(
@@ -294,13 +342,15 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'save',
             'verify',
             'saveSecret',
-            'assign'
+            'assign',
+            'checkIfAlreadyExist'
         ), array(), '', false);
         $oTotpMock->expects($this->once())->method('load')->willReturn(true);
         $oTotpMock->expects($this->once())->method('save')->willReturn(true);
         $oTotpMock->expects($this->never())->method('verify')->willReturn(true);
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
+        $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
 
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3user_totp::class, array(

@@ -185,6 +185,33 @@ class d3totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      */
+    public function checkIfAlreadyExistPass()
+    {
+        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
+        $oDbMock = $this->getMock(Database::class, array(
+            'getOne',
+            'quote'
+        ), array(), '', false);
+        $oDbMock->expects($this->once())->method('getOne')->willReturn(1);
+        $oDbMock->method('quote')->willReturn(true);
+
+        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
+        $oModelMock = $this->getMock(d3totp::class, array(
+            'd3GetDb'
+        ));
+        $oModelMock->method('d3GetDb')->willReturn($oDbMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->assertTrue(
+            $this->callMethod($this->_oModel, 'checkIfAlreadyExist', array('testUserId'))
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     */
     public function d3GetDbReturnsRightInstance()
     {
         $this->assertInstanceOf(

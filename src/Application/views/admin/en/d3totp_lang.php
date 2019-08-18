@@ -31,14 +31,13 @@ $aLang = [
     'D3_TOTP_QRCODE_HELP'                             => 'Scan this QR code with your authentication app to deposit this user account.',
     'D3_TOTP_SECRET'                                  => 'Can not scan QR code?',
     'D3_TOTP_SECRET_HELP'                             => 'If you do not use an app that can scan the QR code, you can also copy this string into your authentication tool. Please also set the password length to 6 characters and the time interval to 30 seconds.',
-    'D3_TOTP_CURRPWD'                                 => 'Login password of the user account',
-    'D3_TOTP_CURRPWD_HELP'                            => 'This ensures that only authorized users can make changes to these settings.',
     'D3_TOTP_CURROTP'                                 => 'Confirmation with one-time password',
     'D3_TOTP_CURROTP_HELP'                            => 'If you have registered this customer account in your authentication app, you generate a one-time password, enter it here and send the form out immediately.',
 
     'D3_TOTP_REGISTEREXIST'                           => 'existing registration',
     'D3_TOTP_REGISTERDELETE'                          => 'Delete registration',
     'D3_TOTP_REGISTERDELETE_DESC'                     => 'To change the registration, please delete it. You can then immediately create a new registration. <br> If you delete the registration, the account is no longer protected by the two-factor authentication.',
+    'D3_TOTP_REGISTERDELETED'                         => 'The registration has been deleted.',
 
     'D3_TOTP_BACKUPCODES'                             => 'backup codes',
     'D3_TOTP_BACKUPCODES_DESC'                        => 'You can use these backup codes to log on if it is not possible to generate the one-time password (e.g. device lost or newly installed). You can then change the settings to use 2-factor authentication or create a new 2FA login. Please save these codes safely at this moment. After leaving this page, these codes cannot be displayed again.',
@@ -48,5 +47,5 @@ $aLang = [
     'D3_TOTP_SAVE'                                    => 'Save',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',
-    'D3_TOTP_ERROR_PWDONTPASS'                        => 'The password does not match the selected user account.',
+    'D3_TOTP_ALREADY_EXIST'                           => 'The registration has already been saved.',
 ];

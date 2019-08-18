@@ -187,49 +187,6 @@ class d3user_totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      */
-    public function cantSaveBecauseOfWrongPassword()
-    {
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
-            'save',
-        ));
-        $oBackupCodeListMock->expects($this->never())->method('save')->willReturn(true);
-
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'save',
-        ), array(), '', false);
-        $oTotpMock->expects($this->never())->method('save')->willReturn(true);
-
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'load',
-            'isSamePassword',
-        ));
-        $oUserMock->expects($this->atLeast(1))->method('load')->willReturn(true);
-        $oUserMock->expects($this->atLeast(1))->method('isSamePassword')->willReturn(false);
-
-        /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3user_totp::class, array(
-            'getEditObjectId',
-            'getUserObject',
-            'getTotpObject',
-            'getBackupcodeListObject'
-        ));
-        $oControllerMock->method('getEditObjectId')->willReturn('foobar');
-        $oControllerMock->expects($this->once())->method('getUserObject')->willReturn($oUserMock);
-        $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
-
-        $this->_oController = $oControllerMock;
-
-        $this->callMethod($this->_oController, 'save');
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     */
     public function cantSaveBecauseOfNotVerifiable()
     {
         /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
@@ -252,14 +209,6 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
 
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'load',
-            'isSamePassword',
-        ));
-        $oUserMock->expects($this->once())->method('load')->willReturn(true);
-        $oUserMock->expects($this->once())->method('isSamePassword')->willReturn(true);
-
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3user_totp::class, array(
             'getEditObjectId',
@@ -268,7 +217,6 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'getBackupcodeListObject'
         ));
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
-        $oControllerMock->expects($this->once())->method('getUserObject')->willReturn($oUserMock);
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
 
@@ -305,14 +253,6 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
 
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'load',
-            'isSamePassword',
-        ));
-        $oUserMock->expects($this->atLeast(1))->method('load')->willReturn(true);
-        $oUserMock->expects($this->atLeast(1))->method('isSamePassword')->willReturn(true);
-
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3user_totp::class, array(
             'getEditObjectId',
@@ -321,7 +261,6 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'getBackupcodeListObject'
         ));
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
-        $oControllerMock->expects($this->once())->method('getUserObject')->willReturn($oUserMock);
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
 
@@ -363,14 +302,6 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oTotpMock->method('saveSecret')->willReturn(true);
         $oTotpMock->method('assign')->willReturn(true);
 
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'load',
-            'isSamePassword',
-        ));
-        $oUserMock->expects($this->atLeast(1))->method('load')->willReturn(true);
-        $oUserMock->expects($this->atLeast(1))->method('isSamePassword')->willReturn(true);
-
         /** @var d3user_totp|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
         $oControllerMock = $this->getMock(d3user_totp::class, array(
             'getEditObjectId',
@@ -379,7 +310,6 @@ class d3user_totpTest extends d3TotpUnitTestCase
             'getBackupcodeListObject'
         ));
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
-        $oControllerMock->expects($this->once())->method('getUserObject')->willReturn($oUserMock);
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
 

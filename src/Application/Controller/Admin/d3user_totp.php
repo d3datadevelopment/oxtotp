@@ -24,6 +24,7 @@ use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\UtilsView;
 
 class d3user_totp extends AdminDetailsController
 {
@@ -94,19 +95,13 @@ class d3user_totp extends AdminDetailsController
         $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");
 
         try {
-            $pwd = Registry::getRequest()->getRequestEscapedParameter("pwd");
-
-            /** @var d3_totp_user $oUser */
-            $oUser = $this->getUserObject();
-            $oUser->load($this->getEditObjectId());
-
-            if (false == $oUser->isSamePassword($pwd)) {
-                $oException = oxNew(StandardException::class, 'D3_TOTP_ERROR_PWDONTPASS');
-                throw $oException;
-            }
-
             /** @var d3totp $oTotp */
             $oTotp = $this->getTotpObject();
+            if ($oTotp->checkIfAlreadyExist($this->getEditObjectId())) {
+                $oException = oxNew(StandardException::class, 'D3_TOTP_ALREADY_EXIST');
+                throw $oException;
+            };
+
             $oTotpBackupCodes = $this->getBackupcodeListObject();
             if ($aParams['d3totp__oxid']) {
                 $oTotp->load($aParams['d3totp__oxid']);
@@ -140,6 +135,7 @@ class d3user_totp extends AdminDetailsController
         if ($aParams['d3totp__oxid']) {
             $oTotp->load($aParams['d3totp__oxid']);
             $oTotp->delete();
+            Registry::get(UtilsView::class)->addErrorToDisplay('D3_TOTP_REGISTERDELETED');
         }
     }
 

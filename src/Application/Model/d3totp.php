@@ -66,6 +66,18 @@ class d3totp extends BaseModel
     }
 
     /**
+     * @param $userId
+     * @return bool
+     * @throws DatabaseConnectionException
+     */
+    public function checkIfAlreadyExist($userId)
+    {
+        $oDb = $this->d3GetDb();
+        $query = "SELECT 1 FROM ".$this->getViewName().' WHERE oxuserid = '.$oDb->quote($userId).' LIMIT 1';
+        return (bool) $oDb->getOne($query);
+    }
+
+    /**
      * @return DatabaseInterface
      * @throws DatabaseConnectionException
      */

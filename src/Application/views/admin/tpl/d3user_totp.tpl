@@ -103,16 +103,6 @@
 
                                 <tr>
                                     <td class="edittext">
-                                        <label for="pwd">[{oxmultilang ident="D3_TOTP_CURRPWD"}]</label>
-                                    </td>
-                                    <td class="edittext">
-                                        <input type="password" class="editinput" size="15" id="pwd" name="pwd" value="" [{$readonly}]>
-                                        [{oxinputhelp ident="D3_TOTP_CURRPWD_HELP"}]
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="edittext">
                                         <label for="otp">[{oxmultilang ident="D3_TOTP_CURROTP"}]</label>
                                     </td>
                                     <td class="edittext">

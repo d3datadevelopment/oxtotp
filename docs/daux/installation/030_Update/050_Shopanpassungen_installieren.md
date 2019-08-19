@@ -12,6 +12,6 @@ Wird der Assistent nicht gezeigt (Sie sehen wieder die Modulübersicht), waren k
   
 Ob erforderliche Updates ausgeführt werden sollen, können Sie jederzeit im Adminbereich unter [ (D3) Module ] -> [ Modul-Connector ] -> [ Modulverwaltung ] -> [ Modulinstallation ] prüfen.
 
-# ohne installiertem D3 Modul-Connector
+# ohne installierten D3 Modul-Connector
 
 Prüfen Sie bitte, ob in der Datei "update.sql" im docs-Ordner Änderungen hinterlegt sind, die in der Datenbank ausgeführt werden sollten.

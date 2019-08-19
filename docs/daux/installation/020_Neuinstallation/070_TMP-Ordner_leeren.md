@@ -10,6 +10,6 @@ Sofern die Views nicht automatisch aktualisiert werden, führen Sie dies noch du
 
 > [i] Erfordert Ihre Installation eine andere Vorgehensweise zum Leeren des Caches oder zum Aktualisieren der Datenbank-Viewtabellen, führen Sie diese bitte aus.
 
-# ohne installiertem D3 Modul-Connector
+# ohne installierten D3 Modul-Connector
 
 Verbinden Sie sich mit Hilfe Ihres FTP-Programms zu Ihrem Server und löschen Sie alle Dateien bis auf `.htaccess` in den Ordnern `source/tmp` und `source/tmp/smarty` innerhalb Ihrer Shopinstallation.

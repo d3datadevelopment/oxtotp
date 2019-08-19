@@ -12,6 +12,6 @@ Bei tiefgreifenden Änderungen an Ihrem Shop (z.B. Hinzufügen weiterer Sprachen
 
 Möchten Sie die Änderungen manuell installieren, können Sie sich über diesen Assistenten ebenfalls eine Checkliste erstellen.
 
-# ohne installiertem D3 Modul-Connector
+# ohne installierten D3 Modul-Connector
 
 Führen Sie bitte die Anweisungen in der Datei `install.sql` im docs-Ordner in Ihrer Datenbank aus.

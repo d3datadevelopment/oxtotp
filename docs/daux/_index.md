@@ -5,4 +5,4 @@ Die Einrichtung dieses 2. Faktors ist optional und lässt sich für jedes Benutz
 
 Erst dann wird die zusätzliche Sicherheit genutzt. Sofern der Benutzer auch Zugang zum Adminbereich hat, wird das Einmalpasswort dort ebenfalls abgefragt.
 
-Zur Einrichtung wird ein scanbarer QR-Code angeboten. Bei der Einrichtung werden statische Backup-Codes angelegt, die verwendet werden können, wenn ein Anmelden mit den Einmalpasswörtern nicht möglich ist. Die Einrichtung kann jederzeit wieder gelöscht werden.
+Zur Einrichtung wird ein scanbarer QR-Code angeboten. Bei der Aktivierung werden statische Backup-Codes angelegt, die verwendet werden können, wenn ein Anmelden mit den Einmalpasswörtern nicht möglich ist. Die Einrichtung kann jederzeit wieder gelöscht werden.

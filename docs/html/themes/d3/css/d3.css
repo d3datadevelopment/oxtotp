@@ -1,0 +1,210 @@
+.s-content table th{
+    //background-color: #336ed6;
+}
+
+.Brand{
+    color: #fff;
+}
+
+.s-content p {
+    margin-bottom: 1.0em;
+}
+
+body,
+.Homepage {
+    background-color: #f7f7f7;
+}
+
+.HomepageFooter{
+    color : #fff;
+}
+
+.HomepageFooter__links a{
+    color : #fff;
+}
+
+.HomepageFooter__links li{
+    color : #fff;
+}
+
+.SearchResults .SearchResults__url a,
+a{
+    color: #028fe8;
+}
+
+.s-content pre {
+    background : #f5f5f5;
+}
+
+.svg-inline--fa.d3fa-color-blue, .fa.fa-d3color-blue {
+    color: #028fe8;
+}
+
+.Navbar .svg-inline--fa.d3fa-color-blue, .Navbar .fa.fa-d3color-blue,
+.Brand .svg-inline--fa.d3fa-color-blue, .Brand .fa.fa-d3color-blue{
+    color: white;
+}
+
+.HomepageFooter__links li{
+    float: left;
+    min-width: 70px;
+}
+
+.HomepageFooter__links li a {
+    padding-right: 40px;
+}
+
+blockquote.alert a {
+    text-decoration: none !important;
+    font-weight: 700;
+}
+
+blockquote.alert.alert-danger {
+    color: #ce2c2c;
+    background-color: #f2dede;
+    border-color: #ce2c2c;
+
+}
+
+blockquote.alert.alert-danger a {
+    color: #843534;
+}
+
+blockquote.alert.alert-warning {
+    color: #e39c37;
+    background-color: #fcf8e3;
+    border-color: #e39c37;
+}
+
+blockquote.alert.alert-warning a {
+    color: #66512c;
+}
+
+blockquote.alert.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #31708f;
+}
+
+blockquote.alert.alert-info a {
+    color: #245269;
+}
+
+blockquote.alert.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+blockquote.alert.alert-success a {
+    color: #2b542c;
+}
+
+.s-content blockquote.alert svg {
+    float: left;
+    margin: 4px 12px 0 0;
+}
+
+.HomepageTitle .title,
+.HomepageTitle .details {
+    width: 80%;
+    margin: 40px auto;
+    max-width: 500px;
+}
+
+.HomepageTitle h2,
+.HomepageTitle div {
+    width: auto;
+    margin: unset;
+    text-align: left;
+}
+
+.HomepageTitle h2 {
+    font-size: 43px;
+}
+
+.HomepageTitle div {
+    font-size: 24px;
+}
+
+.HomepageTitle .details div {
+    font-size: 15px;
+}
+
+aside .Links a {
+    font-size: 14px;
+}
+
+.Navbar,
+.Brand,
+.Links,
+.Columns__left.Collapsible {
+    background-color: #028fe8;
+}
+
+.Navbar {
+    height: auto;
+    min-height: 50px;
+    display: inline-table;
+    width: 100%;
+}
+
+span.navi_element {
+    border: 1px #c5c5cb;
+    border-style: solid solid none;
+    border-radius: 5px 5px 0 0;
+    padding: 0 5px;
+    background-color: #f7f7f7;
+}
+
+.Nav {
+    background-color: #f7f7f7;
+}
+
+.Links a{
+    color: #f7f7f7;
+}
+
+.Links a:hover {
+    text-decoration: underline;
+}
+
+.Links hr {
+    border-color: #028fe8;
+}
+
+.HomepageFooter,
+.Search {
+    background-color: #028fe8;
+}
+
+.Search {
+    margin: 10px;
+}
+
+li {
+    margin-bottom: 7px;
+}
+
+.Search__field {
+    border-radius: 4px;
+}
+
+.versionselector {
+    padding: 0 20px;
+    font-family: "Roboto Slab",-apple-system,".SFNSText-Regular","San Francisco","Roboto","Segoe UI","Helvetica Neue","Lucida Grande",Arial,sans-serif;
+    font-size: 14px;
+    color: #f7f7f7;
+}
+
+@media (max-width:768px){
+    .HomepageTitle h2 {
+        font-size: 30px;
+    }
+}
+
+@media (max-width:571px){
+    .HomepageTitle h2 {
+        font-size: 24px;
+    }
+}

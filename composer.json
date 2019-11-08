@@ -37,6 +37,9 @@
     "bacon/bacon-qr-code": "^1.0",
     "zendframework/zend-math": "^3.2"
   },
+  "suggest": {
+    "d3/modcfg": "Provides automatic installation routines"
+  },
   "autoload": {
     "psr-4": {
       "D3\\Totp\\": "../../../source/modules/d3/totp"

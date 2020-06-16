@@ -40,8 +40,6 @@ use OxidEsales\Eshop\Application\Model as OxidModel;
  */
 $sMetadataVersion = '2.0';
 
-$logo = (class_exists(d3utils::class) ? d3utils::getInstance()->getD3Logo() : 'D&sup3;');
-
 $sModuleId = 'd3totp';
 /**
  * Module information
@@ -49,8 +47,12 @@ $sModuleId = 'd3totp';
 $aModule = [
     'id'            => $sModuleId,
     'title'         => [
-        'de'        => $logo.' Zwei-Faktor-Authentisierung',
-        'en'        => $logo.' two-factor authentication',
+        'de'        => 
+            '<svg style="height:1em;width:1em"><image xlink:href="https://logos.oxidmodule.com/d3logo.svg" style="height:1em;width:1em" /></svg> '.
+            'Zwei-Faktor-Authentisierung',
+        'en'        => 
+            '<svg style="height:1em;width:1em"><image xlink:href="https://logos.oxidmodule.com/d3logo.svg" style="height:1em;width:1em" /></svg> '.
+            'two-factor authentication',
     ],
     'description'   => [
         'de'        => 'Zwei-Faktor-Authentisierung (TOTP) f&uuml;r OXID eSales Shop',

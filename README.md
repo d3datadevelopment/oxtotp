@@ -1,4 +1,4 @@
-# oxtotp
+# oxtotp (2FA)
 Modul für eine 2-Faktor-Authentisierung (2FA) zum Login in Front- und Backend zusätzlich zu Benutzername und Passwort.
 
 - Authentisierung wird nur bei Benutzerkonten gezeigt, die dieses aktiviert haben - sonst nur Standardanmeldung die Basis der Passwortgenerierung wird für jedes Benutzerkonto individuell angelegt</li>

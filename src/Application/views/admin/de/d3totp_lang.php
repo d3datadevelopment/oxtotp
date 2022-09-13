@@ -34,6 +34,11 @@ $aLang = [
     'D3_TOTP_CURROTP'                                 => 'Bestätigung mit Einmalpasswort',
     'D3_TOTP_CURROTP_HELP'                            => 'Haben Sie dieses Kundenkonto in Ihrer Authentisierungs-App registriert, generieren Sie damit ein Einmalpasswort, tragen Sie es hier ein und senden das Formular direkt darauf hin ab.',
 
+    'D3_TOTP_FORCE2FATITLE'                           => 'Verpflichtet Zwei-Faktor-Authentisierung',
+    'D3_TOTP_FORCE2FASUB'                             => 'Alle Administratoren müssen es aktivieren',
+    'D3_TOTP_ADMINBACKEND'                            => 'Admin-Oberfläche',
+    'D3_TOTP_ADMINCONTINUE'                           => 'weiter',
+
     'D3_TOTP_REGISTEREXIST'                           => 'vorhandene Registrierung',
     'D3_TOTP_REGISTERDELETE'                          => 'Registrierung löschen',
     'D3_TOTP_REGISTERDELETE_DESC'                     => 'Um die Registrierung zu ändern, löschen Sie diese bitte vorerst. Sie können sofort im Anschluss eine neue Registrierung anlegen.<br>Wenn Sie die Registrierung löschen, ist das Konto nicht mehr durch die Zwei-Faktor-Authentisierung geschützt.',
@@ -48,4 +53,6 @@ $aLang = [
 
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
     'D3_TOTP_ALREADY_EXIST'                           => 'Die Registrierung wurde schon gespeichert.',
+
+    'SHOP_MODULE_D3_TOTP_ADMIN_FORCE_2FA'             => 'Administratoren sind verpflichtet 2FA zu aktivieren'
 ];

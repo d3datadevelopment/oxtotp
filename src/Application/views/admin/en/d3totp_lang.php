@@ -34,6 +34,11 @@ $aLang = [
     'D3_TOTP_CURROTP'                                 => 'Confirmation with one-time password',
     'D3_TOTP_CURROTP_HELP'                            => 'If you have registered this customer account in your authentication app, you generate a one-time password, enter it here and send the form out immediately.',
 
+    'D3_TOTP_FORCE2FATITLE'                           => 'Mandates two-factor authentication',
+    'D3_TOTP_FORCE2FASUB'                             => 'All administrators need to activate it',
+    'D3_TOTP_ADMINBACKEND'                            => 'Admin-Backend',
+    'D3_TOTP_ADMINCONTINUE'                           => 'continue',
+
     'D3_TOTP_REGISTEREXIST'                           => 'existing registration',
     'D3_TOTP_REGISTERDELETE'                          => 'Delete registration',
     'D3_TOTP_REGISTERDELETE_DESC'                     => 'To change the registration, please delete it. You can then immediately create a new registration. <br> If you delete the registration, the account is no longer protected by the two-factor authentication.',
@@ -48,4 +53,6 @@ $aLang = [
 
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',
     'D3_TOTP_ALREADY_EXIST'                           => 'The registration has already been saved.',
+
+    'SHOP_MODULE_D3_TOTP_ADMIN_FORCE_2FA'             => 'Administrators are required to activate 2FA'
 ];

@@ -145,28 +145,12 @@ class d3totp extends BaseModel
     public function getTotp($seed = null)
     {
         if (false == $this->totp) {
-
-            $this->totp = oxNew(
-                TOTP::class,
-                $this->getUser()->getFieldData('oxusername')
-                    ? $this->getUser()->getFieldData('oxusername')
-                    : null,
-                $seed
-                    ? $seed
-                    : $this->getSavedSecret()
-            );
+            $this->totp = TOTP::create($seed ?: $this->getSavedSecret());
+            $this->totp->setLabel($this->getUser()->getFieldData('oxusername'));
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
         }
 
         return $this->totp;
-    }
-
-    /**
-     * @return string
-     */
-    public function getQrCodeUri()
-    {
-        return $this->getTotp()->getQrCodeUri();
     }
 
     /**

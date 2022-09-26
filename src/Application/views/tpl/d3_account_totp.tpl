@@ -6,7 +6,7 @@
     [{assign var="userid" value=$user->getId()}]
     [{$totp->loadByUserId($userid)}]
 
-    <style type="text/css">
+    <style>
         .registerNew {
             display: none;
         }

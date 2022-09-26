@@ -10,7 +10,7 @@
     [{assign var="readonly" value=""}]
 [{/if}]
 
-<style type="text/css">
+<style>
     td.edittext {
         white-space: normal;
     }

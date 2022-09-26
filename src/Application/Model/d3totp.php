@@ -17,7 +17,6 @@ use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
-use Doctrine\DBAL\DBALException;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
@@ -89,7 +88,7 @@ class d3totp extends BaseModel
      */
     public function getUser()
     {
-        $userId = $this->userId ? $this->userId : $this->getFieldData('oxuserid');
+        $userId = $this->userId ?: $this->getFieldData('oxuserid');
 
         $user = $this->d3GetUser();
         $user->load($userId);

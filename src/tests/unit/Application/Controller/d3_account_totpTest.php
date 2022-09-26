@@ -30,14 +30,14 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oController = oxNew(d3_account_totp::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

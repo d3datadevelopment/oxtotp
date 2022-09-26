@@ -17,8 +17,8 @@
 
 namespace D3\Totp\tests\unit\Application\Model;
 
-use BaconQrCode\Renderer\Image\Svg;
 use BaconQrCode\Writer;
+use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
@@ -484,7 +484,7 @@ class d3totpTest extends d3TotpUnitTestCase
             'getFieldData',
         ));
         $oUserMock->method('getFieldData')->willReturn('username');
-        
+
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(d3totp::class, array(
             'getUser',
@@ -544,7 +544,7 @@ class d3totpTest extends d3TotpUnitTestCase
             'getQrCodeUri'
         ));
         $oTotpMock->expects($this->once())->method('getQrCodeUri')->willReturn(true);
-        
+
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
         $oModelMock = $this->getMock(d3totp::class, array(
             'getTotp'
@@ -562,7 +562,7 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getQrCodeElement()
     {
-        $renderer = oxNew(Svg::class);
+        $renderer = BaconQrCodeFactory::renderer(200);
 
         /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
         $oTotpMock = $this->getMock(d3totp::class, array(
@@ -595,14 +595,14 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function d3GetWriterReturnsRightInstance()
     {
-        $renderer = oxNew(Svg::class);
+        $renderer = BaconQrCodeFactory::renderer(200);;
 
         $this->assertInstanceOf(
             Writer::class,
             $this->callMethod($this->_oModel, 'd3GetWriter', [$renderer])
         );
     }
-    
+
     /**
      * @test
      * @throws ReflectionException

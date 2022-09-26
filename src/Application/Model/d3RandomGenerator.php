@@ -1,9 +1,8 @@
 <?php
 
-
 namespace D3\Totp\Application\Model;
 
-use Zend\Math\Rand;
+use Laminas\Math\Rand;
 
 class d3RandomGenerator extends Rand
 {

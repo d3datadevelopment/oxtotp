@@ -15,9 +15,9 @@
 
 namespace D3\Totp\Application\Model;
 
-use BaconQrCode\Renderer\Image\Svg;
 use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
+use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use OTPHP\TOTP;
@@ -177,10 +177,7 @@ class d3totp extends BaseModel
      */
     public function getQrCodeElement()
     {
-        $renderer = oxNew(Svg::class);
-        $renderer->setHeight(200);
-        $renderer->setWidth(200);
-
+        $renderer = BaconQrCodeFactory::renderer(200);
         $writer = $this->d3GetWriter($renderer);
         return $writer->writeString($this->getTotp()->getProvisioningUri());
     }

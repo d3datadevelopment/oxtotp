@@ -15,6 +15,12 @@
         "email": "info@shopmodule.com",
         "homepage": "http://www.d3data.de",
         "role": "Owner"
+    },
+    {
+        "name": "Tobi Matthaiou",
+        "email": "tm@loberon.com",
+        "homepage": "http://www.loberon.de",
+        "role": "Contributor"
     }
   ],
   "support": {
@@ -32,9 +38,10 @@
   },
   "require": {
     "php": ">=5.6",
-    "oxid-esales/oxideshop-metapackage-ce": "~6.0.3 || ~6.1.0 || ~6.2.0",
+    "ext-xmlwriter": "*",
+    "oxid-esales/oxideshop-metapackage-ce": "~6.0.3 || ~6.1.0 || ~6.2.0 || ~6.3.0  || ~6.4.0  || ~6.5.0",
     "spomky-labs/otphp": "^8.3",
-    "bacon/bacon-qr-code": "^1.0",
+    "bacon/bacon-qr-code": "^1.0 || ^2.0",
     "zendframework/zend-math": "^3.2"
   },
   "autoload": {

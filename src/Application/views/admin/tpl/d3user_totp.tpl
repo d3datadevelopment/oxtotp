@@ -14,7 +14,24 @@
     td.edittext {
         white-space: normal;
     }
+    .hero {
+        display: inline-block;
+    }
+    .hero > h1 {
+        padding: 0.3em 0;
+    }
+    .hero > div {
+        text-align: right;
+        color: #6c7c98;
+    }
 </style>
+
+[{if $force2FA}]
+    <div class="hero">
+        <h1>[{oxmultilang ident="D3_TOTP_FORCE2FATITLE"}]</h1>
+        <div>[{oxmultilang ident="D3_TOTP_FORCE2FASUB"}]</div>
+    </div>
+[{/if}]
 
 <form name="transfer" id="transfer" action="[{$oViewConf->getSelfLink()}]" method="post">
     [{$oViewConf->getHiddenSid()}]
@@ -58,6 +75,22 @@
                                     <td class="edittext">
                                         [{$totp->getQrCodeElement()}]
                                         [{oxinputhelp ident="D3_TOTP_QRCODE_HELP"}]
+                                    </td>
+                                </tr>
+                            [{elseif $force2FA}]
+                                <tr>
+                                    <td class="edittext" colspan="2">
+                                        <h4>[{oxmultilang ident="D3_TOTP_ADMINBACKEND"}]</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="edittext" colspan="2">
+                                        <input
+                                            type="submit" class="edittext" id="oLockButton" name="delete"
+                                            value="[{oxmultilang ident="D3_TOTP_ADMINCONTINUE"}]"
+                                            onClick="document.myedit.fnc.value='';document.myedit.cl.value='admin_start'"
+                                        >
+
                                     </td>
                                 </tr>
                             [{else}]
@@ -153,5 +186,7 @@
     [{/if}]
 </form>
 
-[{include file="bottomnaviitem.tpl"}]
-[{include file="bottomitem.tpl"}]
+[{if !$force2FA}]
+    [{include file="bottomnaviitem.tpl"}]
+    [{include file="bottomitem.tpl"}]
+[{/if}]

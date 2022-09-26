@@ -16,6 +16,7 @@
  */
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
+use D3\Totp\Application\Controller\Admin\d3force_2fa;
 use D3\Totp\Application\Controller\d3_account_totp;
 use D3\Totp\Application\Controller\d3totplogin;
 use D3\Totp\Modules\Application\Component\d3_totp_UserComponent;
@@ -72,6 +73,7 @@ $aModule = [
     ],
     'controllers'           => [
         'd3user_totp'       =>  d3user_totp::class,
+        'd3force_2fa'       =>  d3force_2fa::class,
         'd3totplogin'       =>  d3totplogin::class,
         'd3_account_totp'   =>  d3_account_totp::class,
     ],
@@ -79,6 +81,14 @@ $aModule = [
         'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
         'd3totplogin.tpl'       => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
         'd3_account_totp.tpl'   => 'd3/totp/Application/views/tpl/d3_account_totp.tpl',
+    ],
+    'settings'                => [
+        [
+            'group' => 'main',
+            'name' => 'D3_TOTP_ADMIN_FORCE_2FA',
+            'type' => 'bool',
+            'value' => false,
+        ]
     ],
     'events'                => [
         'onActivate'        => '\D3\Totp\Setup\Events::onActivate',
@@ -94,6 +104,6 @@ $aModule = [
             'template'      => 'page/account/inc/account_menu.tpl',
             'block'         => 'account_menu',
             'file'          => 'Application/views/blocks/page/account/inc/account_menu.tpl',
-        ]
+        ],
     ]
 ];

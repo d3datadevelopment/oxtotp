@@ -38,6 +38,22 @@ class d3_totp_utils extends d3_totp_utils_parent
         $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($userID);
 
+        //checkt ob alle Admin 2FA aktiviert hat
+        //todo braucht Unit Test
+        if (
+            $this->d3IsAdminForce2FA()
+            && $blAuth
+            && $totp->isActive() === false
+        ) {
+            $this->redirect('index.php?cl=d3force_2fa', true, 302);
+            if (false == defined('OXID_PHP_UNIT')) {
+                // @codeCoverageIgnoreStart
+                exit;
+                // @codeCoverageIgnoreEnd
+            }
+        }
+
+        //staten der prüfung vom einmalpasswort
         if ($blAuth && $totp->isActive() && false === $totpAuth) {
             $this->redirect('index.php?cl=login', true, 302);
             if (false == defined('OXID_PHP_UNIT')) {
@@ -64,5 +80,14 @@ class d3_totp_utils extends d3_totp_utils_parent
     public function d3GetTotpObject()
     {
         return oxNew(d3totp::class);
+    }
+
+    /**
+     * @return bool
+     */
+    private function d3IsAdminForce2FA()
+    {
+        return $this->isAdmin() &&
+            Registry::getConfig()->getConfigParam('D3_TOTP_ADMIN_FORCE_2FA') == true;
     }
 }

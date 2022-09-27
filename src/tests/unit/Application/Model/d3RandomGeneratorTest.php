@@ -25,14 +25,14 @@ class d3RandomGeneratorTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = oxNew(d3RandomGenerator::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

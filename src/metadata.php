@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 use D3\Totp\Application\Controller\Admin\d3user_totp;
 use D3\Totp\Application\Controller\Admin\d3force_2fa;
 use D3\Totp\Application\Controller\d3_account_totp;
@@ -23,7 +25,6 @@ use D3\Totp\Modules\Application\Controller\d3_totp_UserController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\Modules\Core\d3_totp_utils;
 use D3\Totp\Setup as ModuleSetup;
-use D3\ModCfg\Application\Model\d3utils;
 use OxidEsales\Eshop\Application\Component\UserComponent;
 use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
 use OxidEsales\Eshop\Application\Controller\OrderController;
@@ -35,7 +36,7 @@ use OxidEsales\Eshop\Application\Model as OxidModel;
 /**
  * Metadata version
  */
-$sMetadataVersion = '2.0';
+$sMetadataVersion = '2.1';
 
 $sModuleId = 'd3totp';
 $logo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em">';
@@ -46,18 +47,17 @@ $logo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="he
 $aModule = [
     'id'            => $sModuleId,
     'title'         => [
-        'de'        => $logo . 'Zwei-Faktor-Authentisierung',
-        'en'        => $logo . 'two-factor authentication',
+        'de'        => $logo . ' Zwei-Faktor-Authentisierung',
+        'en'        => $logo . ' two-factor authentication',
     ],
     'description'   => [
         'de'        => 'Zwei-Faktor-Authentisierung (TOTP) f&uuml;r OXID eSales Shop',
         'en'        => 'Two-factor authentication (TOTP) for OXID eSales shop',
     ],
-    'thumbnail'     => 'picture.png',
     'version'       => '1.0.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
-    'url'           => 'http://www.oxidmodule.com/',
+    'url'           => 'https://www.oxidmodule.com/',
     'extend'        => [
         UserController::class              => d3_totp_UserController::class,
         PaymentController::class           => d3_totp_PaymentController::class,
@@ -80,15 +80,15 @@ $aModule = [
     ],
     'settings'                => [
         [
-            'group' => 'main',
+            'group' => 'd3totp_main',
             'name' => 'D3_TOTP_ADMIN_FORCE_2FA',
             'type' => 'bool',
             'value' => false,
         ]
     ],
     'events'                => [
-        'onActivate'        => '\D3\Totp\Setup\Events::onActivate',
-        'onDeactivate'      => '\D3\Totp\Setup\Events::onDeactivate',
+        'onActivate'        => ModuleSetup\Events::class.'::onActivate',
+        'onDeactivate'      => ModuleSetup\Events::class.'::onDeactivate',
     ],
     'blocks'                => [
         [

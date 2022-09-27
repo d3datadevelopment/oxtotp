@@ -11,11 +11,11 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Modules\Application\Model;
 
 use D3\Totp\Application\Model\d3totp;
-use Doctrine\DBAL\DBALException;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 

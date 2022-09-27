@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Modules\Application\Controller;
 
 use D3\Totp\Application\Model\d3totp;
@@ -25,7 +27,6 @@ trait d3_totp_getUserTrait
     /**
      * @return bool|object|User
      * @throws DatabaseConnectionException
-     * @throws DBALException
      */
     public function getUser()
     {
@@ -36,7 +37,7 @@ trait d3_totp_getUserTrait
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && false == $this->d3GetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+                && !$this->d3GetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME)
             ) {
                 return false;
             }

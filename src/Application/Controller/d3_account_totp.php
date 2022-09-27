@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Application\Controller;
 
 use D3\Totp\Application\Model\d3backupcodelist;
@@ -45,7 +47,7 @@ class d3_account_totp extends AccountController
     }
 
     /**
-     * @param $aCodes
+     * @param array $aCodes
      */
     public function setBackupCodes(array $aCodes)
     {
@@ -119,7 +121,6 @@ class d3_account_totp extends AccountController
 
     /**
      * @throws DatabaseConnectionException
-     * @throws DBALException
      */
     public function delete()
     {

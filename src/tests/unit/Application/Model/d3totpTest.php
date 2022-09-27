@@ -23,8 +23,9 @@ use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Database\Adapter\Doctrine\Database;
 use OxidEsales\Eshop\Core\Registry;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
+use stdClass;
 
 class d3totpTest extends d3TotpUnitTestCase
 {
@@ -34,14 +35,14 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = oxNew(d3totp::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -54,10 +55,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function constructCallsInit()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'init',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['init'])
+            ->getMock();
         $oModelMock->expects($this->once())->method('init');
 
         $this->_oModel = $oModelMock;
@@ -71,17 +72,20 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function loadByUserIdTableNotExist()
     {
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'getOne'
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getOne'])
+            ->getMock();
         $oDbMock->expects($this->once())->method('getOne')->willReturnOnConsecutiveCalls(false, true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3GetDb',
-            'load'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'd3GetDb',
+                'load'
+            ])
+            ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
         $oModelMock->expects($this->never())->method('load')->willReturn(true);
 
@@ -96,19 +100,23 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function loadByUserIdTableExist()
     {
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'getOne',
-            'quote'
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([
+                'getOne',
+                'quote'
+            ])->getMock();
         $oDbMock->expects($this->exactly(2))->method('getOne')->willReturnOnConsecutiveCalls(true, true);
         $oDbMock->method('quote')->willReturn(true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3GetDb',
-            'load'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'd3GetDb',
+                'load'
+            ])
+            ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
         $oModelMock->expects($this->once())->method('load')->willReturn(true);
 
@@ -123,17 +131,19 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getUserFromMember()
     {
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'load'
-        ));
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['load'])
+            ->getMock();
         $oUserMock->method('load')->with('foobar')->willReturn(true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3GetUser',
-            'getFieldData',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'd3GetUser',
+                'getFieldData',
+            ])
+            ->getMock();
         $oModelMock->method('d3GetUser')->willReturn($oUserMock);
         $oModelMock->expects($this->never())->method('getFieldData')->willReturn(true);
 
@@ -155,17 +165,19 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         $this->setValue($this->_oModel, 'userId', null);
 
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'load'
-        ));
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['load'])
+            ->getMock();
         $oUserMock->method('load')->with('barfoo')->willReturn(true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3GetUser',
-            'getFieldData',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'd3GetUser',
+                'getFieldData',
+            ])
+            ->getMock();
         $oModelMock->method('d3GetUser')->willReturn($oUserMock);
         $oModelMock->expects($this->once())->method('getFieldData')->willReturn('barfoo');
 
@@ -183,18 +195,21 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function checkIfAlreadyExistPass()
     {
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'getOne',
-            'quote'
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->onlyMethods([
+                'getOne',
+                'quote'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oDbMock->expects($this->once())->method('getOne')->willReturn(1);
         $oDbMock->method('quote')->willReturn(true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3GetDb'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['d3GetDb'])
+            ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
 
         $this->_oModel = $oModelMock;
@@ -236,10 +251,10 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         Registry::getConfig()->setConfigParam('blDisableTotpGlobally', false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'UserUseTotp',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['UserUseTotp'])
+            ->getMock();
         $oModelMock->method('UserUseTotp')->willReturn(true);
 
         $this->_oModel = $oModelMock;
@@ -257,10 +272,10 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         Registry::getConfig()->setConfigParam('blDisableTotpGlobally', false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'UserUseTotp',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['UserUseTotp'])
+            ->getMock();
         $oModelMock->method('UserUseTotp')->willReturn(false);
 
         $this->_oModel = $oModelMock;
@@ -278,10 +293,10 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         Registry::getConfig()->setConfigParam('blDisableTotpGlobally', true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'UserUseTotp',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['UserUseTotp'])
+            ->getMock();
         $oModelMock->method('UserUseTotp')->willReturn(true);
 
         $this->_oModel = $oModelMock;
@@ -299,10 +314,10 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         Registry::getConfig()->setConfigParam('blDisableTotpGlobally', true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'UserUseTotp',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['UserUseTotp'])
+            ->getMock();
         $oModelMock->method('UserUseTotp')->willReturn(false);
 
         $this->_oModel = $oModelMock;
@@ -318,10 +333,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function UserUseTotpPass()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getFieldData',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getFieldData'])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturnOnConsecutiveCalls(true, true);
 
         $this->_oModel = $oModelMock;
@@ -337,10 +352,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function UserUseTotpNoTotp()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getFieldData',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getFieldData'])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturnOnConsecutiveCalls(false, true);
 
         $this->_oModel = $oModelMock;
@@ -356,10 +371,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function UserUseTotpNoSeed()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getFieldData',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getFieldData'])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturnOnConsecutiveCalls(true, false);
 
         $this->_oModel = $oModelMock;
@@ -375,10 +390,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function UserUseTotpNoTotpAndNoSeed()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getFieldData',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getFieldData'])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturnOnConsecutiveCalls(false, false);
 
         $this->_oModel = $oModelMock;
@@ -394,11 +409,13 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getSavedSecretExistingSeed()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getFieldData',
-            'decrypt',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getFieldData',
+                'decrypt'
+            ])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturn('seed');
         $oModelMock->method('decrypt')->willReturn('unencseed');
 
@@ -416,11 +433,13 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getSavedSecretNoSeed()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getFieldData',
-            'decrypt',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getFieldData',
+                'decrypt'
+            ])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturn(null);
         $oModelMock->method('decrypt')->willReturn('unencseed');
 
@@ -437,11 +456,13 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getSavedSecretCantDecrypt()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getFieldData',
-            'decrypt',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getFieldData',
+                'decrypt'
+            ])
+            ->getMock();
         $oModelMock->method('getFieldData')->willReturn('seed');
         $oModelMock->method('decrypt')->willReturn(false);
 
@@ -458,8 +479,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getTotpReturnsCachedObject()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(), array(), '', false);
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->setValue($this->_oModel, 'totp', $oTotpMock);
 
@@ -475,17 +498,19 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getTotpReturnsNewObject()
     {
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'getFieldData',
-        ));
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['getFieldData'])
+            ->getMock();
         $oUserMock->method('getFieldData')->willReturn('username');
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getUser',
-            'getSavedSecret'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getUser',
+                'getSavedSecret'
+            ])
+            ->getMock();
         $oModelMock->method('getUser')->willReturn($oUserMock);
         $oModelMock->method('getSavedSecret')->willReturn('savedSecret');
 
@@ -505,17 +530,21 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getTotpReturnsNewObjectNoUserGivenSeed()
     {
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'getFieldData',
-        ));
-        $oUserMock->method('getFieldData')->willReturn(false);
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['getFieldData'])
+            ->getMock();
+        $oUserMock->method('getFieldData')->willReturnMap(
+            [['oxusername', 'oxusername']]
+        );
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getUser',
-            'getSavedSecret'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getUser',
+                'getSavedSecret'
+            ])
+            ->getMock();
         $oModelMock->method('getUser')->willReturn($oUserMock);
         $oModelMock->method('getSavedSecret')->willReturn('savedSecret');
 
@@ -525,31 +554,8 @@ class d3totpTest extends d3TotpUnitTestCase
         $oTotp = $this->callMethod($this->_oModel, 'getTotp', ['givenSeed']);
 
         $this->assertInstanceOf(TOTP::class, $oTotp);
-        $this->assertSame(null, $oTotp->getLabel());
+        $this->assertSame('oxusername', $oTotp->getLabel());
         $this->assertSame('GIVENSEED', $oTotp->getSecret());
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     */
-    public function getQrCodeUriPass()
-    {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'getQrCodeUri'
-        ));
-        $oTotpMock->expects($this->once())->method('getQrCodeUri')->willReturn(true);
-
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getTotp'
-        ));
-        $oModelMock->method('getTotp')->willReturn($oTotpMock);
-
-        $this->_oModel = $oModelMock;
-
-        $this->callMethod($this->_oModel, 'getQrCodeUri');
     }
 
     /**
@@ -560,29 +566,24 @@ class d3totpTest extends d3TotpUnitTestCase
     {
         $renderer = BaconQrCodeFactory::renderer(200);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'getProvisioningUri'
-        ));
-        $oTotpMock->method('getProvisioningUri')->willReturn(true);
+        /** @var stdClass|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(stdClass::class)
+            ->addMethods(['getProvisioningUri'])
+            ->getMock();
+        $oTotpMock->method('getProvisioningUri')->willReturn('uri');
 
-        /** @var Writer|PHPUnit_Framework_MockObject_MockObject $oWriterMock */
-        $oWriterMock = $this->getMock(Writer::class, array(
-            'writeString'
-        ), array($renderer));
-        $oWriterMock->expects($this->once())->method('writeString')->willReturn(true);
-
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3GetWriter',
-            'getTotp'
-        ));
-        $oModelMock->method('d3GetWriter')->willReturn($oWriterMock);
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getTotp'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oModelMock->method('getTotp')->willReturn($oTotpMock);
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'getQrCodeElement');
+        $this->assertIsString(
+            $this->callMethod($this->_oModel, 'getQrCodeElement')
+        );
     }
 
     /**
@@ -591,7 +592,7 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function d3GetWriterReturnsRightInstance()
     {
-        $renderer = BaconQrCodeFactory::renderer(200);;
+        $renderer = BaconQrCodeFactory::renderer(200);
 
         $this->assertInstanceOf(
             Writer::class,
@@ -605,16 +606,16 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getSecretPass()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'getSecret'
-        ));
-        $oTotpMock->expects($this->once())->method('getSecret')->willReturn(true);
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getSecret'])
+            ->getMock();
+        $oTotpMock->expects($this->once())->method('getSecret')->willReturn('fixture');
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getTotp'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getTotp'])
+            ->getMock();
         $oModelMock->method('getTotp')->willReturn($oTotpMock);
 
         $this->_oModel = $oModelMock;
@@ -628,10 +629,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function saveSecretPass()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'encrypt'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['encrypt'])
+            ->getMock();
         $oModelMock->method('encrypt')->willReturn('enc_secret');
 
         $this->_oModel = $oModelMock;
@@ -649,16 +650,16 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function verifyPass()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'verify'
-        ));
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['verify'])
+            ->getMock();
         $oTotpMock->expects($this->once())->method('verify')->willReturn(true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getTotp'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getTotp'])
+            ->getMock();
         $oModelMock->method('getTotp')->willReturn($oTotpMock);
 
         $this->_oModel = $oModelMock;
@@ -674,23 +675,25 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function verifyBackupCodePass()
     {
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oBackupCodeListMock */
-        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
-            'verify'
-        ));
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
+        $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['verify'])
+            ->getMock();
         $oBackupCodeListMock->expects($this->once())->method('verify')->willReturn(true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'verify'
-        ));
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['verify'])
+            ->getMock();
         $oTotpMock->expects($this->once())->method('verify')->willReturn(false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getTotp',
-            'd3GetBackupCodeListObject'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getTotp',
+                'd3GetBackupCodeListObject'
+            ])
+            ->getMock();
         $oModelMock->method('getTotp')->willReturn($oTotpMock);
         $oModelMock->method('d3GetBackupCodeListObject')->willReturn($oBackupCodeListMock);
 
@@ -707,25 +710,27 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function verifyFailed()
     {
-        $this->setExpectedException(d3totp_wrongOtpException::class);
+        $this->expectException(d3totp_wrongOtpException::class);
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oBackupCodeListMock */
-        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
-            'verify'
-        ));
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
+        $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['verify'])
+            ->getMock();
         $oBackupCodeListMock->expects($this->once())->method('verify')->willReturn(false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'verify'
-        ));
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['verify'])
+            ->getMock();
         $oTotpMock->expects($this->once())->method('verify')->willReturn(false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getTotp',
-            'd3GetBackupCodeListObject'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getTotp',
+                'd3GetBackupCodeListObject'
+            ])
+            ->getMock();
         $oModelMock->method('getTotp')->willReturn($oTotpMock);
         $oModelMock->method('d3GetBackupCodeListObject')->willReturn($oBackupCodeListMock);
 
@@ -740,25 +745,27 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function verifyWithSeedFailed()
     {
-        $this->setExpectedException(d3totp_wrongOtpException::class);
+        $this->expectException(d3totp_wrongOtpException::class);
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oBackupCodeListMock */
-        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
-            'verify'
-        ));
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
+        $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['verify'])
+            ->getMock();
         $oBackupCodeListMock->expects($this->never())->method('verify')->willReturn(false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'verify'
-        ));
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['verify'])
+            ->getMock();
         $oTotpMock->expects($this->once())->method('verify')->willReturn(false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'getTotp',
-            'd3GetBackupCodeListObject'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'getTotp',
+                'd3GetBackupCodeListObject'
+            ])
+            ->getMock();
         $oModelMock->method('getTotp')->willReturn($oTotpMock);
         $oModelMock->method('d3GetBackupCodeListObject')->willReturn($oBackupCodeListMock);
 
@@ -788,7 +795,7 @@ class d3totpTest extends d3TotpUnitTestCase
         $sReturn = $this->callMethod($this->_oModel, 'encrypt', ['foobar']);
 
         // indirect tests, because string changes on every call
-        $this->assertInternalType('string', $sReturn);
+        $this->assertIsString($sReturn);
         $this->assertNotSame('foobar', $sReturn);
         $this->assertStringEndsWith('==', $sReturn);
         $this->assertTrue(strlen($sReturn) === 88);
@@ -815,10 +822,10 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function decryptFailed()
     {
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3Base64_decode',
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['d3Base64_decode'])
+            ->getMock();
         $oModelMock->method('d3Base64_decode')->willReturn(
             str_pad('foobar', 16, 0, STR_PAD_LEFT)
         );
@@ -852,18 +859,20 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function deletePass()
     {
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oBackupCodeListMock */
-        $oBackupCodeListMock = $this->getMock(d3backupcodelist::class, array(
-            'deleteAllFromUser'
-        ));
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
+        $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['deleteAllFromUser'])
+            ->getMock();
         $oBackupCodeListMock->expects($this->once())->method('deleteAllFromUser')->willReturn(true);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3totp::class, array(
-            'd3GetBackupCodeListObject',
-            'getFieldData',
-            'canDelete'
-        ));
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'd3GetBackupCodeListObject',
+                'getFieldData',
+                'canDelete'
+            ])
+            ->getMock();
         $oModelMock->method('d3GetBackupCodeListObject')->willReturn($oBackupCodeListMock);
         $oModelMock->method('getFieldData')->willReturn('newId');
         $oModelMock->method('canDelete')->willReturn(false);

@@ -20,7 +20,7 @@ use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Database\Adapter\Doctrine\Database;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3backupcodelistTest extends d3TotpUnitTestCase
@@ -31,14 +31,14 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = oxNew(d3backupcodelist::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -51,31 +51,32 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function generateBackupCodes()
     {
-        /** @var FrontendController|PHPUnit_Framework_MockObject_MockObject $oConfigMock */
-        $oViewMock = $this->getMock(FrontendController::class, array(
-            'setBackupCodes'
-        ));
+        /** @var FrontendController|MockObject $oConfigMock */
+        $oViewMock = $this->getMockBuilder(FrontendController::class)
+            ->addMethods(['setBackupCodes'])
+            ->getMock();
         $oViewMock->expects($this->once())->method('setBackupCodes')->willReturn(true);
 
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oConfigMock */
-        $oConfigMock = $this->getMock(d3backupcode::class, array(
-            'getActiveView'
-        ));
+        /** @var Config|MockObject $oConfigMock */
+        $oConfigMock = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['getActiveView'])
+            ->getMock();
         $oConfigMock->method('getActiveView')->willReturn($oViewMock);
 
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oBackupCodeMock */
-        $oBackupCodeMock = $this->getMock(d3backupcode::class, array(
-            'generateCode'
-        ));
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['generateCode'])
+            ->getMock();
         $oBackupCodeMock->expects($this->exactly(10))->method('generateCode');
-        $oBackupCodeMock->method('getD3BackupCodeObject')->willReturn($oBackupCodeMock);
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcodelist::class, array(
-            'deleteAllFromUser',
-            'getD3BackupCodeObject',
-            'd3GetConfig'
-        ));
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods([
+                'deleteAllFromUser',
+                'getD3BackupCodeObject',
+                'd3GetConfig'
+            ])
+            ->getMock();
         $oModelMock->expects($this->once())->method('deleteAllFromUser')->willReturn(true);
         $oModelMock->method('getD3BackupCodeObject')->willReturn($oBackupCodeMock);
         $oModelMock->method('d3GetConfig')->willReturn($oConfigMock);
@@ -115,20 +116,20 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function savePass()
     {
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oBackupCodeMock */
-        $oBackupCodeMock = $this->getMock(d3backupcode::class, array(
-            'save'
-        ));
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['save'])
+            ->getMock();
         $oBackupCodeMock->expects($this->once())->method('save')->willReturn(true);
 
         $aBackupCodeArray = [
             $oBackupCodeMock
         ];
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcodelist::class, array(
-            'getArray'
-        ));
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['getArray'])
+            ->getMock();
         $oModelMock->expects($this->once())->method('getArray')->willReturn($aBackupCodeArray);
 
         $this->_oModel = $oModelMock;
@@ -144,7 +145,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     {
         $oBaseObject = $this->callMethod($this->_oModel, 'getBaseObject');
 
-        $this->assertInternalType('object', $oBaseObject);
+        $this->assertIsObject($oBaseObject);
         $this->assertInstanceOf(d3backupcode::class, $oBaseObject);
     }
 
@@ -154,34 +155,39 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function verifyFoundTotp()
     {
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'getId'
-        ));
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['getId'])
+            ->getMock();
         $oUserMock->method('getId')->willReturn('foobar');
 
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oBackupCodeMock */
-        $oBackupCodeMock = $this->getMock(d3backupcode::class, array(
-            'delete'
-        ));
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['delete'])
+            ->getMock();
         $oBackupCodeMock->expects($this->once())->method('delete')->willReturn(true);
 
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'getOne',
-            'quoteIdentifier',
-            'quote',
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->onlyMethods([
+                'getOne',
+                'quoteIdentifier',
+                'quote'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oDbMock->expects($this->once())->method('getOne')->willReturn('foobar');
         $oDbMock->method('quoteIdentifier')->willReturn(true);
         $oDbMock->method('quote')->willReturn(true);
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcodelist::class, array(
-            'd3GetDb',
-            'getBaseObject',
-            'd3GetUser'
-        ));
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods([
+                'd3GetDb',
+                'getBaseObject',
+                'd3GetUser'
+            ])
+            ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
         $oModelMock->method('getBaseObject')->willReturn($oBackupCodeMock);
         $oModelMock->method('d3GetUser')->willReturn($oUserMock);
@@ -199,34 +205,39 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function verifyNotFoundTotp()
     {
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(
-            'getId'
-        ));
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['getId'])
+            ->getMock();
         $oUserMock->method('getId')->willReturn('foobar');
         
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oBackupCodeMock */
-        $oBackupCodeMock = $this->getMock(d3backupcode::class, array(
-            'delete'
-        ));
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['delete'])
+            ->getMock();
         $oBackupCodeMock->expects($this->never())->method('delete')->willReturn(true);
 
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'getOne',
-            'quoteIdentifier',
-            'quote',
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->onlyMethods([
+                'getOne',
+                'quoteIdentifier',
+                'quote',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oDbMock->expects($this->once())->method('getOne')->willReturn(null);
         $oDbMock->method('quoteIdentifier')->willReturn(true);
         $oDbMock->method('quote')->willReturn(true);
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcodelist::class, array(
-            'd3GetDb',
-            'getBaseObject',
-            'd3GetUser'
-        ));
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods([
+                'd3GetDb',
+                'getBaseObject',
+                'd3GetUser'
+            ])
+            ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
         $oModelMock->method('getBaseObject')->willReturn($oBackupCodeMock);
         $oModelMock->method('d3GetUser')->willReturn($oUserMock);
@@ -256,30 +267,35 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function deleteAllFromUserCodesFound()
     {
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'quoteIdentifier',
-            'quote',
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([
+                'quoteIdentifier',
+                'quote',
+            ])
+            ->getMock();
         $oDbMock->method('quoteIdentifier')->willReturn(true);
         $oDbMock->method('quote')->willReturn(true);
 
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oBackupCodeMock */
-        $oBackupCodeMock = $this->getMock(d3backupcode::class, array(
-            'delete'
-        ));
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['delete'])
+            ->getMock();
         $oBackupCodeMock->expects($this->once())->method('delete')->willReturn(true);
 
         $aBackupCodeArray = [
             $oBackupCodeMock
         ];
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcodelist::class, array(
-            'getArray',
-            'selectString',
-            'd3GetDb'
-        ));
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods([
+                'getArray',
+                'selectString',
+                'd3GetDb'
+            ])
+            ->getMock();
         $oModelMock->expects($this->once())->method('getArray')->willReturn($aBackupCodeArray);
         $oModelMock->expects($this->once())->method('selectString')->willReturn(true);
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
@@ -295,28 +311,33 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function deleteAllFromUserNoCodesFound()
     {
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'quoteIdentifier',
-            'quote',
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->onlyMethods([
+                'quoteIdentifier',
+                'quote',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oDbMock->method('quoteIdentifier')->willReturn(true);
         $oDbMock->method('quote')->willReturn(true);
 
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oBackupCodeMock */
-        $oBackupCodeMock = $this->getMock(d3backupcode::class, array(
-            'delete'
-        ));
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['delete'])
+            ->getMock();
         $oBackupCodeMock->expects($this->never())->method('delete')->willReturn(true);
 
         $aBackupCodeArray = [];
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcodelist::class, array(
-            'getArray',
-            'selectString',
-            'd3GetDb'
-        ));
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods([
+                'getArray',
+                'selectString',
+                'd3GetDb'
+            ])
+            ->getMock();
         $oModelMock->expects($this->once())->method('getArray')->willReturn($aBackupCodeArray);
         $oModelMock->expects($this->once())->method('selectString')->willReturn(true);
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
@@ -332,20 +353,23 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function getAvailableCodeCountPass()
     {
-        /** @var Database|PHPUnit_Framework_MockObject_MockObject $oDbMock */
-        $oDbMock = $this->getMock(Database::class, array(
-            'getOne',
-            'quoteIdentifier',
-            'quote',
-        ), array(), '', false);
+        /** @var Database|MockObject $oDbMock */
+        $oDbMock = $this->getMockBuilder(Database::class)
+            ->onlyMethods([
+                'getOne',
+                'quoteIdentifier',
+                'quote'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oDbMock->expects($this->once())->method('getOne')->willReturn('25');
         $oDbMock->method('quoteIdentifier')->willReturn(true);
         $oDbMock->method('quote')->willReturn(true);
 
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcodelist::class, array(
-            'd3GetDb',
-        ));
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['d3GetDb'])
+            ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
 
         $this->_oModel = $oModelMock;

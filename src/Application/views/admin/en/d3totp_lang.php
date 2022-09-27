@@ -30,6 +30,7 @@ $aLang = [
     'D3_TOTP_CURROTP'                                 => 'Confirmation with one-time password',
     'D3_TOTP_CURROTP_HELP'                            => 'If you have registered this customer account in your authentication app, you generate a one-time password, enter it here and send the form out immediately.',
 
+    'SHOP_MODULE_GROUP_d3totp_main'                   => 'Basic settings',
     'D3_TOTP_FORCE2FATITLE'                           => 'Mandates two-factor authentication',
     'D3_TOTP_FORCE2FASUB'                             => 'All administrators need to activate it',
     'D3_TOTP_ADMINBACKEND'                            => 'Admin-Backend',

@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Modules\Core;
 
 use D3\Totp\Application\Model\d3totp;
@@ -43,7 +45,7 @@ class d3_totp_utils extends d3_totp_utils_parent
             && $blAuth
             && $totp->isActive() === false
         ) {
-            $this->redirect('index.php?cl=d3force_2fa', true, 302);
+            $this->redirect('index.php?cl=d3force_2fa');
             if (false == defined('OXID_PHP_UNIT')) {
                 // @codeCoverageIgnoreStart
                 exit;
@@ -53,7 +55,7 @@ class d3_totp_utils extends d3_totp_utils_parent
 
         //staten der prüfung vom einmalpasswort
         if ($blAuth && $totp->isActive() && false === $totpAuth) {
-            $this->redirect('index.php?cl=login', true, 302);
+            $this->redirect('index.php?cl=login');
             if (false == defined('OXID_PHP_UNIT')) {
                 // @codeCoverageIgnoreStart
                 exit;

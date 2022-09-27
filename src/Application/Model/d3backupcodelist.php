@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Application\Model;
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
@@ -46,7 +48,7 @@ class d3backupcodelist extends ListModel
         for ($i = 1; $i <= 10; $i++) {
             $oBackupCode = $this->getD3BackupCodeObject();
             $this->_backupCodes[] = $oBackupCode->generateCode($sUserId);
-            $this->offsetSet(md5(rand()), $oBackupCode);
+            $this->offsetSet(md5((string) rand()), $oBackupCode);
         }
 
         /** @var d3user_totp $oActView */

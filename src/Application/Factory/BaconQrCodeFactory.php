@@ -22,12 +22,10 @@ class BaconQrCodeFactory
 
     private static function v200($size)
     {
-        $renderer = oxNew(
+        return oxNew(
             ImageRenderer::class,
             oxNew(RendererStyle::class, $size),
             oxNew(SvgImageBackEnd::class),
         );
-
-        return $renderer;
     }
 }

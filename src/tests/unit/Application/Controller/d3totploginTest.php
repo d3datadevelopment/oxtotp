@@ -19,7 +19,7 @@ use D3\Totp\Application\Model\d3totp;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Utils;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3totploginTest extends d3TotpUnitTestCase
@@ -30,7 +30,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +40,7 @@ class d3totploginTest extends d3TotpUnitTestCase
         Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -53,16 +53,16 @@ class d3totploginTest extends d3TotpUnitTestCase
      */
     public function renderRedirectIfNoTotp()
     {
-        /** @var Utils|PHPUnit_Framework_MockObject_MockObject $oUtilsMock */
-        $oUtilsMock = $this->getMock(Utils::class, array(
-            'redirect'
-        ));
+        /** @var Utils|MockObject $oUtilsMock */
+        $oUtilsMock = $this->getMockBuilder(Utils::class)
+            ->onlyMethods(['redirect'])
+            ->getMock();
         $oUtilsMock->expects($this->once())->method('redirect')->willReturn(true);
 
-        /** @var d3totplogin|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3totplogin::class, array(
-            'getUtils'
-        ));
+        /** @var d3totplogin|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3totplogin::class)
+            ->onlyMethods(['getUtils'])
+            ->getMock();
         $oControllerMock->method('getUtils')->willReturn($oUtilsMock);
 
         $this->_oController = $oControllerMock;
@@ -78,16 +78,16 @@ class d3totploginTest extends d3TotpUnitTestCase
     {
         Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, 'foo');
 
-        /** @var Utils|PHPUnit_Framework_MockObject_MockObject $oUtilsMock */
-        $oUtilsMock = $this->getMock(Utils::class, array(
-            'redirect'
-        ));
+        /** @var Utils|MockObject $oUtilsMock */
+        $oUtilsMock = $this->getMockBuilder(Utils::class)
+            ->onlyMethods(['redirect'])
+            ->getMock();
         $oUtilsMock->expects($this->never())->method('redirect')->willReturn(true);
 
-        /** @var d3totplogin|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3totplogin::class, array(
-            'getUtils'
-        ));
+        /** @var d3totplogin|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3totplogin::class)
+            ->onlyMethods(['getUtils'])
+            ->getMock();
         $oControllerMock->method('getUtils')->willReturn($oUtilsMock);
 
         $this->_oController = $oControllerMock;
@@ -106,7 +106,10 @@ class d3totploginTest extends d3TotpUnitTestCase
     {
         $this->assertInstanceOf(
             Utils::class,
-            $this->callMethod($this->_oController, 'getUtils')
+            $this->callMethod(
+                $this->_oController,
+                'getUtils'
+            )
         );
     }
 
@@ -116,16 +119,16 @@ class d3totploginTest extends d3TotpUnitTestCase
      */
     public function getBackupCodeCountMessageReturnMessage()
     {
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oBackupCodesListMock */
-        $oBackupCodesListMock = $this->getMock(d3backupcodelist::class, array(
-            'getAvailableCodeCount'
-        ));
+        /** @var d3backupcodelist|MockObject $oBackupCodesListMock */
+        $oBackupCodesListMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['getAvailableCodeCount'])
+            ->getMock();
         $oBackupCodesListMock->method('getAvailableCodeCount')->willReturn(1);
         
-        /** @var d3totplogin|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3totplogin::class, array(
-            'getBackupCodeListObject'
-        ));
+        /** @var d3totplogin|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3totplogin::class)
+            ->onlyMethods(['getBackupCodeListObject'])
+            ->getMock();
         $oControllerMock->method('getBackupCodeListObject')->willReturn($oBackupCodesListMock);
 
         $this->_oController = $oControllerMock;
@@ -145,16 +148,16 @@ class d3totploginTest extends d3TotpUnitTestCase
      */
     public function getBackupCodeCountMessageReturnNoMessage()
     {
-        /** @var d3backupcodelist|PHPUnit_Framework_MockObject_MockObject $oBackupCodesListMock */
-        $oBackupCodesListMock = $this->getMock(d3backupcodelist::class, array(
-            'getAvailableCodeCount'
-        ));
+        /** @var d3backupcodelist|MockObject $oBackupCodesListMock */
+        $oBackupCodesListMock = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['getAvailableCodeCount'])
+            ->getMock();
         $oBackupCodesListMock->method('getAvailableCodeCount')->willReturn(1234);
 
-        /** @var d3totplogin|PHPUnit_Framework_MockObject_MockObject $oControllerMock */
-        $oControllerMock = $this->getMock(d3totplogin::class, array(
-            'getBackupCodeListObject'
-        ));
+        /** @var d3totplogin|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3totplogin::class)
+            ->onlyMethods(['getBackupCodeListObject'])
+            ->getMock();
         $oControllerMock->method('getBackupCodeListObject')->willReturn($oBackupCodesListMock);
 
         $this->_oController = $oControllerMock;
@@ -263,9 +266,9 @@ class d3totploginTest extends d3TotpUnitTestCase
     {
         $aBreadCrumb = $this->callMethod($this->_oController, 'getBreadCrumb');
 
-        $this->assertInternalType('string', $aBreadCrumb[0]['title']);
+        $this->assertIsString($aBreadCrumb[0]['title']);
         $this->assertTrue(strlen($aBreadCrumb[0]['title']) > 1);
-        $this->assertInternalType('string', $aBreadCrumb[0]['link']);
+        $this->assertIsString($aBreadCrumb[0]['link']);
         $this->assertTrue(strlen($aBreadCrumb[0]['link']) > 1);
     }
 }

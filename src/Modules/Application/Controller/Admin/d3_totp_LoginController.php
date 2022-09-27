@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Modules\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
@@ -41,7 +43,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
         if ($auth
             && $totp->isActive()
-            && false == $this->d3GetSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+            && !$this->d3GetSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
         ) {
             // set auth as secured parameter;
             $this->d3GetSession()->setVariable("auth", $auth);
@@ -98,7 +100,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         $return = 'login';
 
         try {
-            if ($this->isNoTotpOrNoLogin($totp)) {
+            if ($this->isNoTotpOrNoLogin($totp) && $this->hasLoginCredentials()) {
                 $return = parent::checklogin();
             } elseif ($this->hasValidTotp($sTotp, $totp)) {
                 $this->d3GetSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
@@ -125,9 +127,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
                 Registry::getLang()->translateString('D3_TOTP_AVAILBACKUPCODECOUNT'),
                 $iCount
             );
-        };
-
-        return;
+        }
     }
 
     /**
@@ -138,6 +138,12 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     {
         return false == $this->d3GetSession()->getVariable("auth")
         || false == $totp->isActive();
+    }
+
+    protected function hasLoginCredentials()
+    {
+        return Registry::getRequest()->getRequestEscapedParameter( 'user') &&
+               Registry::getRequest()->getRequestEscapedParameter('pwd');
     }
 
     /**

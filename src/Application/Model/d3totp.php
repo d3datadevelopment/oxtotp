@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Application\Model;
 
 use BaconQrCode\Renderer\RendererInterface;
@@ -201,22 +203,20 @@ class d3totp extends BaseModel
      */
     public function verify($totp, $seed = null)
     {
-        $blVerify = $this->getTotp($seed)->verify($totp, null, $this->timeWindow);
+        $blNotVerified = $this->getTotp($seed)->verify($totp, null, $this->timeWindow) == false;
 
-        if (false == $blVerify && null == $seed) {
+        if ($blNotVerified && null == $seed) {
             $oBC = $this->d3GetBackupCodeListObject();
-            $blVerify = $oBC->verify($totp);
+            $blNotVerified = $oBC->verify($totp) == false;
 
-            if (false == $blVerify) {
-                $oException = oxNew(d3totp_wrongOtpException::class);
-                throw $oException;
+            if ($blNotVerified) {
+                throw oxNew(d3totp_wrongOtpException::class);
             }
-        } elseif (false == $blVerify && $seed) {
-            $oException = oxNew(d3totp_wrongOtpException::class);
-            throw $oException;
+        } elseif ($blNotVerified && $seed) {
+            throw oxNew(d3totp_wrongOtpException::class);
         }
 
-        return $blVerify;
+        return !$blNotVerified;
     }
 
     /**
@@ -282,8 +282,6 @@ class d3totp extends BaseModel
         $oBackupCodeList = $this->d3GetBackupCodeListObject();
         $oBackupCodeList->deleteAllFromUser($this->getFieldData('oxuserid'));
 
-        $blDelete = parent::delete();
-
-        return $blDelete;
+        return parent::delete();
     }
 }

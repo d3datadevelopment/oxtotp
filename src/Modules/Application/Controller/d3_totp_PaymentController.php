@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Modules\Application\Controller;
 
 class d3_totp_PaymentController extends d3_totp_PaymentController_parent

@@ -30,6 +30,7 @@ $aLang = [
     'D3_TOTP_CURROTP'                                 => 'Bestätigung mit Einmalpasswort',
     'D3_TOTP_CURROTP_HELP'                            => 'Haben Sie dieses Kundenkonto in Ihrer Authentisierungs-App registriert, generieren Sie damit ein Einmalpasswort, tragen Sie es hier ein und senden das Formular direkt darauf hin ab.',
 
+    'SHOP_MODULE_GROUP_d3totp_main'                   => 'Grundeinstellungen',
     'D3_TOTP_FORCE2FATITLE'                           => 'Verpflichtet Zwei-Faktor-Authentisierung',
     'D3_TOTP_FORCE2FASUB'                             => 'Alle Administratoren müssen es aktivieren',
     'D3_TOTP_ADMINBACKEND'                            => 'Admin-Oberfläche',

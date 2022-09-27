@@ -11,5 +11,5 @@
  * @link      https://www.oxidmodule.com
  */
 
-define('D3TOTP_REQUIRE_MODCFG', true);
+const D3TOTP_REQUIRE_MODCFG = true;
 

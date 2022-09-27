@@ -18,7 +18,7 @@ use D3\Totp\Application\Model\d3totp;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3backupcodeTest extends d3TotpUnitTestCase
@@ -29,14 +29,14 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = oxNew(d3backupcode::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -52,11 +52,13 @@ class d3backupcodeTest extends d3TotpUnitTestCase
         $sTestUserId = 'testUserId';
         $sBackupCode = '123456';
 
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcode::class, array(
-            'getRandomTotpBackupCode',
-            'd3EncodeBC',
-        ));
+        /** @var d3backupcode|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods([
+                'getRandomTotpBackupCode',
+                'd3EncodeBC'
+            ])
+            ->getMock();
         $oModelMock->method('getRandomTotpBackupCode')->willReturn($sBackupCode);
         $oModelMock->method('d3EncodeBC')->will(
             $this->returnCallback(function ($arg) {
@@ -90,26 +92,29 @@ class d3backupcodeTest extends d3TotpUnitTestCase
      */
     public function d3EncodeBCPass()
     {
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array('load'), array(), '', false);
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oUserMock->method('load')->willReturn(true);
         $oUserMock->assign(
-            array(
-                'oxpasssalt' => 'abcdefghijk'
-            )
+            [
+                'oxpasssalt' => '6162636465666768696A6B'
+            ]
         );
         
-        /** @var d3backupcode|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(d3backupcode::class, array(
-            'd3GetUser',
-        ));
+        /** @var d3backupcode|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['d3GetUserObject'])
+            ->getMock();
         $oModelMock->method('d3GetUserObject')->willReturn($oUserMock);
 
         $this->_oModel = $oModelMock;
 
         $this->assertSame(
-            'e10adc3949ba59abbe56e057f20f883e',
-            $this->callMethod($this->_oModel, 'd3EncodeBC', array('123456', 'userId'))
+            '9f7f502a8148f90732a4aa4d880b8cf5',
+            $this->callMethod($this->_oModel, 'd3EncodeBC', ['123456', 'userId'])
         );
     }
 
@@ -119,12 +124,14 @@ class d3backupcodeTest extends d3TotpUnitTestCase
      */
     public function d3GetUserReturnCachedUser()
     {
-        /** @var User|PHPUnit_Framework_MockObject_MockObject $oUserMock */
-        $oUserMock = $this->getMock(User::class, array(), array(), '', false);
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $oUserMock->assign(
-            array(
+            [
                 'oxid' => 'foobar'
-            )
+            ]
         );
 
         $this->_oModel->setUser($oUserMock);

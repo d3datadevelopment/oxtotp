@@ -15,7 +15,7 @@
                 <input type="hidden" name="cl" value="[{$oView->getPreviousClass()}]">
                 [{$navFormParams}]
 
-                [{if $Errors.default|@count}]
+                [{if !empty($Errors.default)}]
                     [{include file="inc_error.tpl" Errorlist=$Errors.default}]
                 [{/if}]
 

@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
@@ -93,12 +95,10 @@ class d3user_totp extends AdminDetailsController
         $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");
 
         try {
-            /** @var d3totp $oTotp */
             $oTotp = $this->getTotpObject();
             if ($oTotp->checkIfAlreadyExist($this->getEditObjectId())) {
-                $oException = oxNew(StandardException::class, 'D3_TOTP_ALREADY_EXIST');
-                throw $oException;
-            };
+                throw oxNew(StandardException::class, 'D3_TOTP_ALREADY_EXIST');
+            }
 
             $oTotpBackupCodes = $this->getBackupcodeListObject();
             if ($aParams['d3totp__oxid']) {

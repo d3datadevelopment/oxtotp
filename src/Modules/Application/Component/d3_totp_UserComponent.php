@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Modules\Application\Component;
 
 use D3\Totp\Application\Model\d3totp;
@@ -40,7 +42,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+                && !Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
             ) {
                 Registry::getSession()->setVariable(
                     d3totp::TOTP_SESSION_CURRENTCLASS,
@@ -82,7 +84,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
         $totp->loadByUserId($sUserId);
 
         try {
-            if (false == $this->isNoTotpOrNoLogin($totp) && $this->hasValidTotp($sTotp, $totp)) {
+            if (!$this->isNoTotpOrNoLogin($totp) && $this->hasValidTotp($sTotp, $totp)) {
                 $this->d3TotpRelogin($oUser, $sTotp);
                 $this->d3TotpClearSessionVariables();
 

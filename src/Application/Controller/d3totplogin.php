@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Application\Controller;
 
 use D3\Totp\Application\Model\d3backupcodelist;
@@ -29,7 +31,7 @@ class d3totplogin extends FrontendController
         if (Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_VARNAME) ||
             false == Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_CURRENTUSER)
         ) {
-            $this->getUtils()->redirect('index.php?cl=start', true, 302);
+            $this->getUtils()->redirect('index.php?cl=start');
             if (false == defined('OXID_PHP_UNIT')) {
                 // @codeCoverageIgnoreStart
                 exit;
@@ -64,9 +66,7 @@ class d3totplogin extends FrontendController
                 Registry::getLang()->translateString('D3_TOTP_AVAILBACKUPCODECOUNT', null, true),
                 $iCount
             );
-        };
-
-        return;
+        }
     }
 
     /**
@@ -86,7 +86,7 @@ class d3totplogin extends FrontendController
     {
         $sClassKey = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
         $resolvedClass = Registry::getControllerClassNameResolver()->getClassNameById($sClassKey);
-        $resolvedClass = $resolvedClass ? $resolvedClass : 'start';
+        $resolvedClass = $resolvedClass ?: 'start';
 
         /** @var FrontendController $oController */
         $oController = oxNew($resolvedClass);

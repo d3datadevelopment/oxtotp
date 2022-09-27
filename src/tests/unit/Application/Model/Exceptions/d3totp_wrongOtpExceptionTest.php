@@ -25,14 +25,14 @@ class d3totp_wrongOtpExceptionTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = oxNew(d3totp_wrongOtpException::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

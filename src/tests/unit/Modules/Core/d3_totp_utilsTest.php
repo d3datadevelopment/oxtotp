@@ -19,7 +19,7 @@ use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Utils;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3_totp_utilsTest extends d3TotpUnitTestCase
@@ -30,14 +30,14 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oCoreClass = oxNew(Utils::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -52,21 +52,22 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     {
         Registry::getSession()->setVariable("auth", false);
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'loadByUserId',
-            'isActive',
-        ), array(), '', false);
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'loadByUserId',
+                'isActive',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(false);
 
-        /** @var d3_totp_utils|PHPUnit_Framework_MockObject_MockObject $oCoreMock */
-        $oCoreMock = $this->getMock(Utils::class, array(
-            'd3GetTotpObject',
-            'd3GetUtilsObject'
-        ));
+        /** @var d3_totp_utils|MockObject $oCoreMock */
+        $oCoreMock = $this->getMockBuilder(Utils::class)
+            ->onlyMethods(['d3GetTotpObject'])
+            ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oCoreMock->expects($this->never())->method('d3GetUtilsObject');
 
         $this->_oCoreClass = $oCoreMock;
 
@@ -83,22 +84,25 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     {
         Registry::getSession()->setVariable("auth", 'foo');
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'loadByUserId',
-            'isActive',
-        ), array(), '', false);
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'loadByUserId',
+                'isActive'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(false);
 
-        /** @var d3_totp_utils|PHPUnit_Framework_MockObject_MockObject $oCoreMock */
-        $oCoreMock = $this->getMock(Utils::class, array(
-            'd3GetTotpObject',
-            'd3GetUtilsObject',
-            'fetchRightsForUser'
-        ));
+        /** @var d3_totp_utils|MockObject $oCoreMock */
+        $oCoreMock = $this->getMockBuilder(Utils::class)
+            ->onlyMethods([
+                'd3GetTotpObject',
+                'fetchRightsForUser'
+            ])
+            ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oCoreMock->expects($this->never())->method('d3GetUtilsObject');
         $oCoreMock->method('fetchRightsForUser')->willReturn('malladmin');
 
         $this->_oCoreClass = $oCoreMock;
@@ -116,27 +120,32 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     {
         Registry::getSession()->setVariable("auth", 'foo');
 
-        /** @var Session|PHPUnit_Framework_MockObject_MockObject $oSessionMock */
-        $oSessionMock = $this->getMock(Session::class, array(
-            'getVariable',
-        ));
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->onlyMethods(['getVariable'])
+            ->getMock();
         $oSessionMock->method('getVariable')->will($this->onConsecutiveCalls('foo', true));
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'loadByUserId',
-            'isActive',
-        ), array(), '', false);
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'loadByUserId',
+                'isActive'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(true);
 
-        /** @var d3_totp_utils|PHPUnit_Framework_MockObject_MockObject $oCoreMock */
-        $oCoreMock = $this->getMock(Utils::class, array(
-            'd3GetTotpObject',
-            'd3GetSessionObject',
-            'fetchRightsForUser',
-            'redirect'
-        ));
+        /** @var d3_totp_utils|MockObject $oCoreMock */
+        $oCoreMock = $this->getMockBuilder(Utils::class)
+            ->onlyMethods([
+                'd3GetTotpObject',
+                'd3GetSessionObject',
+                'fetchRightsForUser',
+                'redirect'
+            ])
+            ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oCoreMock->method('d3GetSessionObject')->willReturn($oSessionMock);
         $oCoreMock->method('fetchRightsForUser')->willReturn('malladmin');
@@ -157,33 +166,38 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     {
         Registry::getSession()->setVariable("auth", 'foo');
 
-        /** @var Session|PHPUnit_Framework_MockObject_MockObject $oSessionMock */
-        $oSessionMock = $this->getMock(Session::class, array(
-            'getVariable',
-        ));
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->onlyMethods(['getVariable'])
+            ->getMock();
         $oSessionMock->method('getVariable')->will($this->onConsecutiveCalls('foo', false));
 
-        /** @var Session|PHPUnit_Framework_MockObject_MockObject $oSessionMock */
-        $oSessionMock = $this->getMock(Session::class, array(
-            'getVariable',
-        ));
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->onlyMethods(['getVariable'])
+            ->getMock();
         $oSessionMock->method('getVariable')->will($this->onConsecutiveCalls('foo', false));
 
-        /** @var d3totp|PHPUnit_Framework_MockObject_MockObject $oTotpMock */
-        $oTotpMock = $this->getMock(d3totp::class, array(
-            'loadByUserId',
-            'isActive',
-        ), array(), '', false);
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'loadByUserId',
+                'isActive',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $oTotpMock->method('loadByUserId')->willReturn(true);
         $oTotpMock->method('isActive')->willReturn(true);
 
-        /** @var d3_totp_utils|PHPUnit_Framework_MockObject_MockObject $oCoreMock */
-        $oCoreMock = $this->getMock(Utils::class, array(
-            'd3GetTotpObject',
-            'd3GetSessionObject',
-            'fetchRightsForUser',
-            'redirect'
-        ));
+        /** @var d3_totp_utils|MockObject $oCoreMock */
+        $oCoreMock = $this->getMockBuilder(Utils::class)
+            ->onlyMethods([
+                'd3GetTotpObject',
+                'd3GetSessionObject',
+                'fetchRightsForUser',
+                'redirect'
+            ])
+            ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oCoreMock->method('d3GetSessionObject')->willReturn($oSessionMock);
         $oCoreMock->method('fetchRightsForUser')->willReturn('malladmin');

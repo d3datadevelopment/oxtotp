@@ -18,7 +18,7 @@ use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Session;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
 class d3_totp_userTest extends d3TotpUnitTestCase
@@ -29,14 +29,14 @@ class d3_totp_userTest extends d3TotpUnitTestCase
     /**
      * setup basic requirements
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->_oModel = oxNew(User::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -49,16 +49,16 @@ class d3_totp_userTest extends d3TotpUnitTestCase
      */
     public function logout()
     {
-        /** @var Session|PHPUnit_Framework_MockObject_MockObject $oSessionMock */
-        $oSessionMock = $this->getMock(Session::class, array(
-            'deleteVariable'
-        ));
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->onlyMethods(['deleteVariable'])
+            ->getMock();
         $oSessionMock->expects($this->once())->method('deleteVariable')->willReturn(true);
 
-        /** @var d3_totp_user|PHPUnit_Framework_MockObject_MockObject $oModelMock */
-        $oModelMock = $this->getMock(User::class, array(
-            'd3GetSession'
-        ));
+        /** @var d3_totp_user|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['d3GetSession'])
+            ->getMock();
         $oModelMock->method('d3GetSession')->willReturn($oSessionMock);
 
         $this->_oModel = $oModelMock;

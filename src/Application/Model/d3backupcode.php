@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\Application\Model;
 
 use OxidEsales\Eshop\Application\Model\User;
@@ -48,6 +50,7 @@ class d3backupcode extends BaseModel
 
     /**
      * @param $code
+     * @param $sUserId
      * @return false|string
      * @throws DatabaseConnectionException
      */

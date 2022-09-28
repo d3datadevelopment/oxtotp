@@ -47,6 +47,8 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::render
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::getViewDataElement
      */
     public function renderReturnsDefaultTemplate()
     {
@@ -76,6 +78,8 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::render
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::getViewDataElement
      */
     public function renderReturnsLoginTemplateIfNotLoggedIn()
     {
@@ -99,6 +103,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::getBackupCodes
      */
     public function canSetAndGetBackupCodes()
     {
@@ -117,6 +122,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::getBackupCodeListObject
      */
     public function canGetBackupCodeListReturnsRightInstance()
     {
@@ -132,6 +138,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::getAvailableBackupCodeCount
      */
     public function canGetAvailableBackupCodeCount()
     {
@@ -165,6 +172,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::create
      */
     public function cantCreateIfTotpNotActive()
     {
@@ -184,6 +192,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::create
      */
     public function cantCreateIfTotpNotVerfiable()
     {
@@ -237,6 +246,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::create
      */
     public function canCreate()
     {
@@ -293,6 +303,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::delete
      */
     public function cantDeleteIfTotpActive()
     {
@@ -312,6 +323,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::delete
      */
     public function cantDeleteIfNoUser()
     {
@@ -342,6 +354,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::delete
      */
     public function canDelete()
     {
@@ -379,6 +392,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::getTotpObject
      */
     public function getTotpObjectReturnsRightObject()
     {

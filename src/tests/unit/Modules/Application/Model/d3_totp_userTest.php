@@ -46,6 +46,7 @@ class d3_totp_userTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::logout
      */
     public function logout()
     {
@@ -74,6 +75,7 @@ class d3_totp_userTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::d3getTotp
      */
     public function d3getTotpReturnsRightInstance()
     {
@@ -86,6 +88,7 @@ class d3_totp_userTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::d3GetSession
      */
     public function d3GetSessionReturnsRightInstance()
     {

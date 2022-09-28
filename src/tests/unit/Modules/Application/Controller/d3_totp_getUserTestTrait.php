@@ -25,6 +25,9 @@ trait d3_totp_getUserTestTrait
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::getUser
      */
     public function getUserHasNoUser()
     {
@@ -44,6 +47,9 @@ trait d3_totp_getUserTestTrait
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::getUser
      */
     public function getUserTotpNotActive()
     {
@@ -93,6 +99,9 @@ trait d3_totp_getUserTestTrait
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::getUser
      */
     public function getUserTotpFinished()
     {
@@ -141,6 +150,9 @@ trait d3_totp_getUserTestTrait
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::getUser
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::getUser
      */
     public function getUserTotpNotFinished()
     {
@@ -189,6 +201,9 @@ trait d3_totp_getUserTestTrait
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::d3GetTotpObject
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::d3GetTotpObject
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::d3GetTotpObject
      */
     public function d3GetTotpObjectReturnsRightObject()
     {
@@ -201,6 +216,9 @@ trait d3_totp_getUserTestTrait
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::d3GetSessionObject
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::d3GetSessionObject
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::d3GetSessionObject
      */
     public function d3GetSessionObjectReturnsRightObject()
     {

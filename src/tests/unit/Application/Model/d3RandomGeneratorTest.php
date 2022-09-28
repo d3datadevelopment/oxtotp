@@ -42,6 +42,7 @@ class d3RandomGeneratorTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3RandomGenerator::getRandomTotpBackupCode
      */
     public function getRandomTotpBackupCodeReturnsRightCode()
     {

@@ -50,6 +50,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::render
      */
     public function renderRedirectIfNoTotp()
     {
@@ -73,6 +74,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::render
      */
     public function renderDontRedirect()
     {
@@ -101,6 +103,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::getUtils
      */
     public function getUtilsReturnsRightInstance()
     {
@@ -116,6 +119,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::getBackupCodeCountMessage
      */
     public function getBackupCodeCountMessageReturnMessage()
     {
@@ -145,6 +149,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::getBackupCodeCountMessage
      */
     public function getBackupCodeCountMessageReturnNoMessage()
     {
@@ -170,6 +175,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::getBackupCodeListObject
      */
     public function getBackupCodeListObjectReturnsRightInstance()
     {
@@ -182,6 +188,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::getPreviousClass
      */
     public function canGetPreviousClass()
     {
@@ -197,12 +204,15 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::previousClassIsOrderStep
+     * @dataProvider classIsOrderStepDataProvider
      */
-    public function orderClassIsOrderStep()
+    public function classIsOrderStep($className, $expected)
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, 'order');
+        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, $className);
 
-        $this->assertTrue(
+        $this->assertSame(
+            $expected,
             $this->callMethod(
                 $this->_oController,
                 'previousClassIsOrderStep'
@@ -211,30 +221,28 @@ class d3totploginTest extends d3TotpUnitTestCase
     }
 
     /**
-     * @test
-     * @throws ReflectionException
+     * @return array[]
      */
-    public function startClassIsNoOrderStep()
+    public function classIsOrderStepDataProvider(): array
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, 'start');
-
-        $this->assertFalse(
-            $this->callMethod(
-                $this->_oController,
-                'previousClassIsOrderStep'
-            )
-        );
+        return [
+            'order step class'   => ['order', true],
+            'no order step class'   => ['start', false],
+        ];
     }
 
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::previousClassIsOrderStep
+     * @dataProvider classIsOrderStepDataProvider
      */
-    public function getIsOrderStepIsSameLikeOrderClass()
+    public function getIsOrderStepIsSameLikeOrderClass($className, $expected)
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, 'order');
+        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, $className);
 
-        $this->assertTrue(
+        $this->assertSame(
+            $expected,
             $this->callMethod(
                 $this->_oController,
                 'getIsOrderStep'
@@ -245,22 +253,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     */
-    public function getIsOrderStepIsSameLikeStartClass()
-    {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, 'start');
-
-        $this->assertFalse(
-            $this->callMethod(
-                $this->_oController,
-                'getIsOrderStep'
-            )
-        );
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3totplogin::getBreadCrumb
      */
     public function canGetBreadCrumb()
     {

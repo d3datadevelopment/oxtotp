@@ -42,6 +42,7 @@ class d3totp_wrongOtpExceptionTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException::getMessage
      */
     public function constructorHasRightDefaultMessage()
     {

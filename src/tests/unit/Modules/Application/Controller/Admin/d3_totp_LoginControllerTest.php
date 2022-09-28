@@ -50,6 +50,8 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::render
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::getViewDataElement
      */
     public function canRenderNoAuth()
     {
@@ -93,6 +95,8 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::render
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::getViewDataElement
      */
     public function canRenderTotpNotActive()
     {
@@ -136,6 +140,8 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::render
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::getViewDataElement
      */
     public function canRenderInTotpLoginProcess()
     {
@@ -179,6 +185,8 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::render
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::getViewDataElement
      */
     public function canRenderRequestTotp()
     {
@@ -222,6 +230,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3GetTotpObject
      */
     public function d3GetTotpObjectReturnsRightObject()
     {
@@ -234,6 +243,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3GetBackupCodeListObject
      */
     public function d3GetBackupCodeListObjectReturnsRightObject()
     {
@@ -246,6 +256,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3GetUtilsView
      */
     public function d3GetUtilsViewReturnsRightObject()
     {
@@ -258,6 +269,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3GetSession
      */
     public function d3GetSessionReturnsRightObject()
     {
@@ -270,6 +282,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::checklogin
      */
     public function checkloginNoTotp()
     {
@@ -306,6 +319,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::checklogin
      */
     public function checkloginInvalidTotp()
     {
@@ -352,6 +366,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::checklogin
      */
     public function checkloginValidTotp()
     {
@@ -398,6 +413,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::getBackupCodeCountMessage
      */
     public function getBackupCodeCountMessageShowMessage()
     {
@@ -427,6 +443,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::getBackupCodeCountMessage
      */
     public function getBackupCodeCountMessageDontShowMessage()
     {
@@ -452,6 +469,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::isNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginIsAuth()
     {
@@ -484,6 +502,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::isNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginTotpNotActive()
     {
@@ -516,6 +535,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::isNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginPass()
     {
@@ -548,6 +568,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::hasValidTotp
      */
     public function hasValidTotpTrueSessionVarname()
     {
@@ -568,6 +589,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::hasValidTotp
      */
     public function hasValidTotpTrueValidTotp()
     {
@@ -588,6 +610,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::hasValidTotp
      */
     public function hasValidTotpFalseMissingTotp()
     {
@@ -608,6 +631,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::hasValidTotp
      */
     public function hasValidTotpFalseUnverifiedTotp()
     {
@@ -628,6 +652,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3CancelLogin
      */
     public function d3CancelLoginPass()
     {
@@ -651,6 +676,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3GetUserObject
      */
     public function d3GetUserObjectReturnsRightObject()
     {

@@ -48,6 +48,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::generateBackupCodes
      */
     public function generateBackupCodes()
     {
@@ -89,6 +90,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::getD3BackupCodeObject
      */
     public function getD3BackupCodeObjectReturnsRightObject()
     {
@@ -101,6 +103,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::d3GetConfig
      */
     public function d3GetConfigReturnsRightObject()
     {
@@ -113,6 +116,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::save
      */
     public function savePass()
     {
@@ -140,6 +144,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::getBaseObject
      */
     public function getBaseObjectReturnsRightObject()
     {
@@ -152,6 +157,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::verify
      */
     public function verifyFoundTotp()
     {
@@ -202,6 +208,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::verify
      */
     public function verifyNotFoundTotp()
     {
@@ -252,6 +259,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::d3GetDb
      */
     public function d3GetDbReturnsRightInstance()
     {
@@ -264,6 +272,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::deleteAllFromUser
      */
     public function deleteAllFromUserCodesFound()
     {
@@ -308,6 +317,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::deleteAllFromUser
      */
     public function deleteAllFromUserNoCodesFound()
     {
@@ -350,6 +360,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::getAvailableCodeCount
      */
     public function getAvailableCodeCountPass()
     {
@@ -383,6 +394,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::d3GetUser
      */
     public function d3GetUserReturnsRightInstance()
     {

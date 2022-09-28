@@ -53,6 +53,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::login_noredirect
      */
     public function login_noredirectFailsIfNoUserLoggedIn()
     {
@@ -93,6 +94,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::login_noredirect
      */
     public function login_noredirectFailTotpNotActive()
     {
@@ -145,6 +147,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::login_noredirect
      */
     public function login_noredirectPass()
     {
@@ -200,6 +203,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3GetTotpObject
      */
     public function d3GetTotpObjectReturnsRightInstance()
     {
@@ -212,6 +216,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
      */
     public  function checkTotploginNoTotpLogin()
     {
@@ -247,6 +252,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
      */
     public  function checkTotploginUnvalidTotp()
     {
@@ -295,6 +301,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
      */
     public  function checkTotploginValidTotp()
     {
@@ -337,6 +344,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3GetUtilsView
      */
     public function d3GetUtilsViewReturnsRightInstance()
     {
@@ -349,6 +357,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::cancelTotpLogin
      */
     public function canCancelTotpLogin()
     {
@@ -366,6 +375,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::isNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginTrueNoSessionVariable()
     {
@@ -386,6 +396,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::isNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginTrueTotpNotActive()
     {
@@ -406,6 +417,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::isNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginFalse()
     {
@@ -426,6 +438,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
      */
     public function hasValidTotpTrueSessionVarname()
     {
@@ -446,6 +459,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
      */
     public function hasValidTotpTrueValidTotp()
     {
@@ -466,6 +480,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
      */
     public function hasValidTotpFalseMissingTotp()
     {
@@ -486,6 +501,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
      */
     public function hasValidTotpFalseUnverifiedTotp()
     {
@@ -506,6 +522,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpRelogin
      */
     public function d3TotpReloginPass()
     {
@@ -543,6 +560,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpClearSessionVariables
      */
     public function d3TotpClearSessionVariablesPass()
     {
@@ -566,6 +584,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3GetSession
      */
     public function d3GetSessionReturnsRightInstance()
     {

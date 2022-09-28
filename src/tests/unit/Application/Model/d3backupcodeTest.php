@@ -46,6 +46,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcode::generateCode
      */
     public function generateCodePass()
     {
@@ -77,6 +78,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcode::getRandomTotpBackupCode
      */
     public function getRandomTotpBackupCodePass()
     {
@@ -89,6 +91,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcode::d3EncodeBC
      */
     public function d3EncodeBCPass()
     {
@@ -121,6 +124,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcode::d3GetUser
      */
     public function d3GetUserReturnCachedUser()
     {
@@ -145,6 +149,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcode::d3GetUser
      */
     public function d3GetUserReturnCurrentUser()
     {
@@ -164,6 +169,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcode::d3GetUserObject
      */
     public function d3getUserObjectReturnsRightInstance()
     {

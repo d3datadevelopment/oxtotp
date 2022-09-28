@@ -52,6 +52,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::__construct
      */
     public function constructCallsInit()
     {
@@ -69,6 +70,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::loadByUserId
      */
     public function loadByUserIdTableNotExist()
     {
@@ -97,6 +99,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::loadByUserId
      */
     public function loadByUserIdTableExist()
     {
@@ -128,6 +131,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getUser
      */
     public function getUserFromMember()
     {
@@ -160,6 +164,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getUser
      */
     public function getUserFromObject()
     {
@@ -192,6 +197,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::checkIfAlreadyExist
      */
     public function checkIfAlreadyExistPass()
     {
@@ -222,6 +228,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::d3GetDb
      */
     public function d3GetDbReturnsRightInstance()
     {
@@ -234,6 +241,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::d3GetUser
      */
     public function d3GetUserReturnsRightInstance()
     {
@@ -246,6 +254,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::isActive
      */
     public function isActivePass()
     {
@@ -267,6 +276,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::isActive
      */
     public function isActiveFailedBecauseNoTotpUse()
     {
@@ -288,6 +298,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::isActive
      */
     public function isActiveFailedBecauseConfigParam()
     {
@@ -309,6 +320,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::isActive
      */
     public function isActiveFailedBecauseNoTotpUseAndConfigParam()
     {
@@ -330,6 +342,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::UserUseTotp
      */
     public function UserUseTotpPass()
     {
@@ -349,6 +362,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::UserUseTotp
      */
     public function UserUseTotpNoTotp()
     {
@@ -368,6 +382,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::UserUseTotp
      */
     public function UserUseTotpNoSeed()
     {
@@ -387,6 +402,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::UserUseTotp
      */
     public function UserUseTotpNoTotpAndNoSeed()
     {
@@ -406,6 +422,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getSavedSecret
      */
     public function getSavedSecretExistingSeed()
     {
@@ -430,6 +447,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getSavedSecret
      */
     public function getSavedSecretNoSeed()
     {
@@ -453,6 +471,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getSavedSecret
      */
     public function getSavedSecretCantDecrypt()
     {
@@ -476,6 +495,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getTotp
      */
     public function getTotpReturnsCachedObject()
     {
@@ -495,6 +515,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getTotp
      */
     public function getTotpReturnsNewObject()
     {
@@ -527,6 +548,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getTotp
      */
     public function getTotpReturnsNewObjectNoUserGivenSeed()
     {
@@ -561,6 +583,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getQrCodeElement
      */
     public function getQrCodeElement()
     {
@@ -589,6 +612,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::d3GetWriter
      */
     public function d3GetWriterReturnsRightInstance()
     {
@@ -603,6 +627,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getSecret
      */
     public function getSecretPass()
     {
@@ -626,6 +651,8 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::saveSecret
+     * @covers \D3\Totp\Application\Model\d3totp::getFieldData
      */
     public function saveSecretPass()
     {
@@ -647,6 +674,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::verify
      */
     public function verifyPass()
     {
@@ -672,6 +700,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::verify
      */
     public function verifyBackupCodePass()
     {
@@ -707,6 +736,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::verify
      */
     public function verifyFailed()
     {
@@ -742,6 +772,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::verify
      */
     public function verifyWithSeedFailed()
     {
@@ -777,6 +808,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::d3GetBackupCodeListObject
      */
     public function d3GetBackupCodeListObjectReturnsRightInstance()
     {
@@ -789,6 +821,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::encrypt
      */
     public function encryptDecryptPass()
     {
@@ -804,6 +837,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::decrypt
      */
     public function decryptPass()
     {
@@ -819,6 +853,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::decrypt
      */
     public function decryptFailed()
     {
@@ -844,6 +879,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::d3Base64_decode
      */
     public function d3Base64_decodePass()
     {
@@ -856,6 +892,7 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::delete
      */
     public function deletePass()
     {

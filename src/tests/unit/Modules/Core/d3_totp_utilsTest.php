@@ -47,6 +47,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
      */
     public function checkAccessRightsNoAuth()
     {
@@ -79,6 +80,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
      */
     public function checkAccessRightsTotpNotActive()
     {
@@ -115,6 +117,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
      */
     public function checkAccessRightsTotpFinished()
     {
@@ -161,6 +164,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
      */
     public function checkAccessRightsTotpUnfinished()
     {
@@ -211,6 +215,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::d3GetSessionObject
      */
     public function d3GetSessionObjectReturnsRightInstance()
     {
@@ -223,6 +228,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::d3GetTotpObject
      */
     public function d3GetTotpObjectReturnsRightInstance()
     {

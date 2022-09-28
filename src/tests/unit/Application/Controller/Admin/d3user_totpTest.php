@@ -47,6 +47,8 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::render
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getViewDataElement
      */
     public function canRenderNoSelectedUser()
     {
@@ -72,6 +74,8 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::render
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getViewDataElement
      */
     public function canRenderSelectedUser()
     {
@@ -109,6 +113,8 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::render
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getViewDataElement
      */
     public function canRenderUnloadableUser()
     {
@@ -156,6 +162,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getUserObject
      */
     public function getUserObjectReturnsRightInstance()
     {
@@ -171,6 +178,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getTotpObject
      */
     public function getTotpObjectReturnsRightInstance()
     {
@@ -186,6 +194,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getBackupcodeListObject
      */
     public function getBackupCodeListObjectReturnsRightInstance()
     {
@@ -201,6 +210,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::save
      */
     public function cantSaveBecauseOfNotVerifiable()
     {
@@ -250,6 +260,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::save
      */
     public function cantSaveBecauseExistingRegistration()
     {
@@ -299,6 +310,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::save
      */
     public function canSave()
     {
@@ -352,6 +364,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::save
      */
     public function canSaveWithKnownOXID()
     {
@@ -410,6 +423,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getBackupCodes
      */
     public function canSetAndGetBackupCodes()
     {
@@ -428,6 +442,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @te__st
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::delete
      */
     public function cantDeleteIfNotSetOxid()
     {
@@ -455,6 +470,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::delete
      */
     public function canDelete()
     {
@@ -488,6 +504,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getAvailableBackupCodeCount
      */
     public function canGetAvailableBackupCodeCount()
     {

@@ -587,7 +587,7 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function getQrCodeElement()
     {
-        $renderer = BaconQrCodeFactory::renderer(200);
+        BaconQrCodeFactory::renderer(200);
 
         /** @var stdClass|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(stdClass::class)
@@ -862,7 +862,7 @@ class d3totpTest extends d3TotpUnitTestCase
             ->onlyMethods(['d3Base64_decode'])
             ->getMock();
         $oModelMock->method('d3Base64_decode')->willReturn(
-            str_pad('foobar', 16, 0, STR_PAD_LEFT)
+            str_pad('foobar', 50, 0, STR_PAD_LEFT)
         );
 
         $this->_oModel = $oModelMock;

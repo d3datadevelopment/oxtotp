@@ -18,7 +18,6 @@ namespace D3\Totp\Application\Controller;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
-use Doctrine\DBAL\DBALException;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\AccountController;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;

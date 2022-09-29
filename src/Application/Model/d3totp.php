@@ -236,8 +236,8 @@ class d3totp extends BaseModel
         $key = Registry::getConfig()->getConfigParam('sConfigKey');
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = openssl_random_pseudo_bytes($ivlen);
-        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
-        $hmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);
+        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
         return base64_encode($iv.$hmac.$ciphertext_raw);
     }
 
@@ -253,8 +253,8 @@ class d3totp extends BaseModel
         $iv = substr($c, 0, $ivlen);
         $hmac = substr($c, $ivlen, $sha2len=32);
         $ciphertext_raw = substr($c, $ivlen+$sha2len);
-        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
-        $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);
+        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
         if (hash_equals($hmac, $calcmac)) { // PHP 5.6+ compute attack-safe comparison
             return $original_plaintext;
         }

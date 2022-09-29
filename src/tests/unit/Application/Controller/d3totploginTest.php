@@ -234,7 +234,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Controller\d3totplogin::previousClassIsOrderStep
+     * @covers \D3\Totp\Application\Controller\d3totplogin::getIsOrderStep
      * @dataProvider classIsOrderStepDataProvider
      */
     public function getIsOrderStepIsSameLikeOrderClass($className, $expected)

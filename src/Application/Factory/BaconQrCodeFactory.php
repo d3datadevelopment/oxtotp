@@ -9,7 +9,6 @@ use BaconQrCode\Renderer\ImageRenderer;               // v2.0.0
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;       // v2.0.0
 use BaconQrCode\Renderer\RendererStyle\RendererStyle; // v2.0.0
 
-
 class BaconQrCodeFactory
 {
     /**

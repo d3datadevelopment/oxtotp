@@ -423,6 +423,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::setBackupCodes
      * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getBackupCodes
      */
     public function canSetAndGetBackupCodes()

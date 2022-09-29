@@ -17,6 +17,7 @@ namespace D3\Totp\Modules\Core;
 
 use D3\Totp\Application\Model\d3totp;
 use Doctrine\DBAL\DBALException;
+use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
@@ -32,14 +33,14 @@ class d3_totp_utils extends d3_totp_utils_parent
     {
         $blAuth = parent::checkAccessRights();
 
+        $blAuth = $this->d3AuthHook($blAuth);
         $userID = $this->d3GetSessionObject()->getVariable("auth");
         $totpAuth = (bool) $this->d3GetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME);
         /** @var d3totp $totp */
         $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($userID);
 
-        //checkt ob alle Admin 2FA aktiviert hat
-        //todo braucht Unit Test
+        //check forced 2FA for all admin users
         if (
             $this->d3IsAdminForce2FA()
             && $blAuth
@@ -83,11 +84,28 @@ class d3_totp_utils extends d3_totp_utils_parent
     }
 
     /**
+     * @return Config
+     */
+    public function d3GetConfig(): Config
+    {
+        return Registry::getConfig();
+    }
+
+    /**
      * @return bool
      */
-    private function d3IsAdminForce2FA()
+    protected function d3IsAdminForce2FA()
     {
         return $this->isAdmin() &&
-            Registry::getConfig()->getConfigParam('D3_TOTP_ADMIN_FORCE_2FA') == true;
+            $this->d3GetConfig()->getConfigParam('D3_TOTP_ADMIN_FORCE_2FA') === true;
+    }
+
+    /**
+     * @param bool $blAuth
+     * @return bool
+     */
+    protected function d3AuthHook(bool $blAuth): bool
+    {
+        return $blAuth;
     }
 }

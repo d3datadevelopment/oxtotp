@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace D3\Totp\Modules\Application\Controller;
 
 use D3\Totp\Application\Model\d3totp;
-use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;

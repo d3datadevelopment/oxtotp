@@ -18,6 +18,7 @@ use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
+use Exception;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
@@ -283,8 +284,9 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::checklogin
+     * @dataProvider checkloginNoTotpDataProvider
      */
-    public function checkloginNoTotp()
+    public function checkloginNoTotp($hasLoginCredentials)
     {
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -299,13 +301,27 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
                 'd3GetTotpObject',
                 'isNoTotpOrNoLogin',
                 'hasValidTotp',
+                'hasLoginCredentials'
             ])
             ->getMock();
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('isNoTotpOrNoLogin')->willReturn(true);
         $oControllerMock->method('hasValidTotp')->willReturn(false);
+        $oControllerMock->method('hasLoginCredentials')->willReturn($hasLoginCredentials);
 
         $this->_oController = $oControllerMock;
+
+        if ($hasLoginCredentials) {
+            // workaround, because test case runs into parent call, stop execution with exception and check thrown
+            /** @var Session|MockObject $sessionMock */
+            $sessionMock = $this->getMockBuilder(Session::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['initNewSession'])
+                ->getMock();
+            $sessionMock->method('initNewSession')->willThrowException(new Exception('foo'));
+            Registry::set(Session::class, $sessionMock);
+            $this->expectException(Exception::class);
+        }
 
         $this->assertSame(
             'login',
@@ -314,6 +330,17 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
                 'checklogin'
             )
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function checkloginNoTotpDataProvider(): array
+    {
+        return [
+            'no totp, no login credentials' => [false],
+            'no totp, given login credentials' => [true]
+        ];
     }
 
     /**
@@ -684,5 +711,38 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
             User::class,
             $this->callMethod($this->_oController, 'd3GetUserObject')
         );
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @dataProvider hasLoginCredentialsDataProvider
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::hasLoginCredentials
+     */
+    public function hasLoginCredentials($user, $pass, $expected)
+    {
+        $_GET['user'] = $user;
+        $_GET['pwd'] = $pass;
+
+        $this->assertSame(
+            $expected,
+            $this->callMethod(
+                $this->_oController,
+                'hasLoginCredentials'
+            )
+        );
+    }
+
+    /**
+     * @return array[]
+     */
+    public function hasLoginCredentialsDataProvider(): array
+    {
+        return [
+            'user only' => ['user', null, false],
+            'pass only' => [null, 'password', false],
+            'both' => ['user', 'password', true],
+        ];
     }
 }

@@ -18,7 +18,7 @@ namespace D3\Totp\Setup;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-
+// @codeCoverageIgnoreStart
 class Events
 {
     /**
@@ -131,3 +131,4 @@ class Events
         }
     }
 }
+// @codeCoverageIgnoreEnd

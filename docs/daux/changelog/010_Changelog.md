@@ -2,6 +2,11 @@
 title: Changelog
 ---
 
+## 1.1.0.0 (2022-09-30)
+
+###
+- optionale Verpflichtung zur 2FA-Nutzung für Adminbenutzer
+
 ## 1.0.0.0 (2019-08-19)
 
 ### Added

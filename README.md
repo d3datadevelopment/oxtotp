@@ -8,3 +8,5 @@ Modul für eine 2-Faktor-Authentisierung (2FA) zum Login in Front- und Backend z
 - Validierung der Einmalpassworte und Generierung der QR-Codes werden ausschließlich innerhalb des Shops durchgeführt - keine Kommunikation nach außen nötig
 
 - statische Backupcodes ermöglichen auch eine (begrenzte) Anmeldung ohne Zugang zum Generierungstool
+
+- optionale Verpflichtung zur 2FA-Nutzung für Adminuser

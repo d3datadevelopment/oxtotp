@@ -39,7 +39,7 @@
   "require": {
     "php": ">=5.6",
     "ext-xmlwriter": "*",
-    "oxid-esales/oxideshop-ce": "6.2.1 - 6.12",
+    "oxid-esales/oxideshop-ce": "6.2.1 - 6.7",
     "spomky-labs/otphp": "^8.3",
     "bacon/bacon-qr-code": "^1.0 || ^2.0",
     "zendframework/zend-math": "^3.2"

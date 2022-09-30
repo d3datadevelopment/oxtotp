@@ -29,10 +29,10 @@ use OxidEsales\Eshop\Core\Registry;
 
 class d3totp extends BaseModel
 {
-    const TOTP_SESSION_VARNAME          = 'totp_auth';
-    const TOTP_SESSION_CURRENTUSER      = 'd3totpCurrentUser';
-    const TOTP_SESSION_CURRENTCLASS     = 'd3totpCurrentClass';
-    const TOTP_SESSION_NAVFORMPARAMS    = 'd3totpNavFormParams';
+    public const TOTP_SESSION_VARNAME          = 'totp_auth';
+    public const TOTP_SESSION_CURRENTUSER      = 'd3totpCurrentUser';
+    public const TOTP_SESSION_CURRENTCLASS     = 'd3totpCurrentClass';
+    public const TOTP_SESSION_NAVFORMPARAMS    = 'd3totpNavFormParams';
 
     public $tableName = 'd3totp';
     public $userId;
@@ -189,7 +189,7 @@ class d3totp extends BaseModel
     {
         $this->assign(
             [
-                'seed'  => $this->encrypt($seed)
+                'seed'  => $this->encrypt($seed),
             ]
         );
     }

@@ -16,7 +16,9 @@ namespace D3\Totp\Modules\Application\Component
 
     use OxidEsales\Eshop\Application\Component\UserComponent;
 
-    class d3_totp_UserComponent_parent extends UserComponent { }
+    class d3_totp_UserComponent_parent extends UserComponent
+    {
+    }
 }
 
 namespace D3\Totp\Modules\Application\Controller
@@ -26,11 +28,17 @@ namespace D3\Totp\Modules\Application\Controller
     use OxidEsales\Eshop\Application\Controller\PaymentController;
     use OxidEsales\Eshop\Application\Controller\UserController;
 
-    class d3_totp_UserController_parent extends UserController { }
+    class d3_totp_UserController_parent extends UserController
+    {
+    }
 
-    class d3_totp_PaymentController_parent extends PaymentController { }
+    class d3_totp_PaymentController_parent extends PaymentController
+    {
+    }
 
-    class d3_totp_OrderController_parent extends OrderController { }
+    class d3_totp_OrderController_parent extends OrderController
+    {
+    }
 }
 
 namespace D3\Totp\Modules\Application\Controller\Admin
@@ -38,7 +46,9 @@ namespace D3\Totp\Modules\Application\Controller\Admin
 
     use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
 
-    class d3_totp_LoginController_parent extends LoginController { }
+    class d3_totp_LoginController_parent extends LoginController
+    {
+    }
 }
 
 namespace D3\Totp\Modules\Application\Model
@@ -46,7 +56,9 @@ namespace D3\Totp\Modules\Application\Model
 
     use OxidEsales\Eshop\Application\Model\User;
 
-    class d3_totp_user_parent extends User { }
+    class d3_totp_user_parent extends User
+    {
+    }
 }
 
 namespace D3\Totp\Modules\Core
@@ -54,5 +66,7 @@ namespace D3\Totp\Modules\Core
 
     use OxidEsales\Eshop\Core\Utils;
 
-    class d3_totp_utils_parent extends Utils { }
+    class d3_totp_utils_parent extends Utils
+    {
+    }
 }

@@ -84,7 +84,7 @@ class d3force_2faTest extends d3user_totpTest
             'noAdmin'   => [false, false, true, 'userId'],
             'dont force'   => [false, true, false, 'userId'],
             'no user id'   => [false, true, true, null],
-            'passed'   => [true, true, true, 'userId']
+            'passed'   => [true, true, true, 'userId'],
         ];
     }
 

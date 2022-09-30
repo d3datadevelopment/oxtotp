@@ -12,6 +12,7 @@
  */
 
 // Include totp test config
+
 namespace D3\Totp\tests;
 
 use D3\ModCfg\Tests\additional_abstract;

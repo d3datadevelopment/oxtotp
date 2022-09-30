@@ -75,7 +75,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'deleteAllFromUser',
                 'getD3BackupCodeObject',
-                'd3GetConfig'
+                'd3GetConfig',
             ])
             ->getMock();
         $oModelMock->expects($this->once())->method('deleteAllFromUser')->willReturn(true);
@@ -84,7 +84,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'generateBackupCodes', array('123456'));
+        $this->callMethod($this->_oModel, 'generateBackupCodes', ['123456']);
     }
 
     /**
@@ -127,7 +127,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $oBackupCodeMock->expects($this->once())->method('save')->willReturn(true);
 
         $aBackupCodeArray = [
-            $oBackupCodeMock
+            $oBackupCodeMock,
         ];
 
         /** @var d3backupcodelist|MockObject $oModelMock */
@@ -178,7 +178,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getOne',
                 'quoteIdentifier',
-                'quote'
+                'quote',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -191,7 +191,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'd3GetDb',
                 'getBaseObject',
-                'd3GetUser'
+                'd3GetUser',
             ])
             ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
@@ -201,7 +201,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $this->_oModel = $oModelMock;
 
         $this->assertTrue(
-            $this->callMethod($this->_oModel, 'verify', array('123456'))
+            $this->callMethod($this->_oModel, 'verify', ['123456'])
         );
     }
 
@@ -217,7 +217,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods(['getId'])
             ->getMock();
         $oUserMock->method('getId')->willReturn('foobar');
-        
+
         /** @var d3backupcode|MockObject $oBackupCodeMock */
         $oBackupCodeMock = $this->getMockBuilder(d3backupcode::class)
             ->onlyMethods(['delete'])
@@ -242,7 +242,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'd3GetDb',
                 'getBaseObject',
-                'd3GetUser'
+                'd3GetUser',
             ])
             ->getMock();
         $oModelMock->method('d3GetDb')->willReturn($oDbMock);
@@ -252,7 +252,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $this->_oModel = $oModelMock;
 
         $this->assertFalse(
-            $this->callMethod($this->_oModel, 'verify', array('123456'))
+            $this->callMethod($this->_oModel, 'verify', ['123456'])
         );
     }
 
@@ -294,7 +294,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $oBackupCodeMock->expects($this->once())->method('delete')->willReturn(true);
 
         $aBackupCodeArray = [
-            $oBackupCodeMock
+            $oBackupCodeMock,
         ];
 
         /** @var d3backupcodelist|MockObject $oModelMock */
@@ -302,7 +302,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getArray',
                 'selectString',
-                'd3GetDb'
+                'd3GetDb',
             ])
             ->getMock();
         $oModelMock->expects($this->once())->method('getArray')->willReturn($aBackupCodeArray);
@@ -345,7 +345,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getArray',
                 'selectString',
-                'd3GetDb'
+                'd3GetDb',
             ])
             ->getMock();
         $oModelMock->expects($this->once())->method('getArray')->willReturn($aBackupCodeArray);
@@ -369,7 +369,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getOne',
                 'quoteIdentifier',
-                'quote'
+                'quote',
             ])
             ->disableOriginalConstructor()
             ->getMock();

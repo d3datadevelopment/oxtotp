@@ -71,13 +71,13 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $oTotpMock->expects($this->never())->method('isActive')->willReturn(false);
-        
+
         /** @var UserComponent|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
                 'getUser',
                 'd3GetTotpObject',
-                'getParent'
+                'getParent',
             ])
             ->getMock();
         $oControllerMock->method('getUser')->willReturn($oUser);
@@ -102,7 +102,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oUserMock = $this->getMockBuilder(User::class)
             ->onlyMethods([
                 'logout',
-                'getId'
+                'getId',
             ])
             ->getMock();
         $oUserMock->expects($this->never())->method('logout')->willReturn(false);
@@ -118,7 +118,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'isActive',
-                'loadByUserId'
+                'loadByUserId',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -130,7 +130,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getUser',
                 'd3GetTotpObject',
-                'getParent'
+                'getParent',
             ])
             ->getMock();
         $oControllerMock->method('getUser')->willReturn($oUserMock);
@@ -171,7 +171,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'isActive',
-                'loadByUserId'
+                'loadByUserId',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -183,7 +183,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getUser',
                 'd3GetTotpObject',
-                'getParent'
+                'getParent',
             ])
             ->getMock();
         $oControllerMock->method('getUser')->willReturn($oUserMock);
@@ -218,7 +218,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
      */
-    public  function checkTotploginNoTotpLogin()
+    public function checkTotploginNoTotpLogin()
     {
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -233,7 +233,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
                 'isNoTotpOrNoLogin',
                 'hasValidTotp',
                 'd3TotpRelogin',
-                'd3GetTotpObject'
+                'd3GetTotpObject',
             ])
             ->getMock();
         $oControllerMock->method('isNoTotpOrNoLogin')->willReturn(true);
@@ -254,7 +254,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
      */
-    public  function checkTotploginUnvalidTotp()
+    public function checkTotploginUnvalidTotp()
     {
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -273,7 +273,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
             ->onlyMethods(['addErrorToDisplay'])
             ->getMock();
         $oUtilsViewMock->expects($this->atLeast(1))->method('addErrorToDisplay')->willReturn(true);
-        
+
         /** @var UserComponent|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
@@ -281,7 +281,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
                 'hasValidTotp',
                 'd3TotpRelogin',
                 'd3GetUtilsView',
-                'd3GetTotpObject'
+                'd3GetTotpObject',
             ])
             ->getMock();
         $oControllerMock->method('isNoTotpOrNoLogin')->willReturn(false);
@@ -303,7 +303,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
      */
-    public  function checkTotploginValidTotp()
+    public function checkTotploginValidTotp()
     {
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -325,7 +325,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
                 'hasValidTotp',
                 'd3TotpRelogin',
                 'd3GetUtilsView',
-                'd3GetTotpObject'
+                'd3GetTotpObject',
             ])
             ->getMock();
         $oControllerMock->method('isNoTotpOrNoLogin')->willReturn(false);
@@ -389,7 +389,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('isActive')->willReturn(true);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', array($oTotpMock))
+            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', [$oTotpMock])
         );
     }
 
@@ -410,7 +410,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('isActive')->willReturn(false);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', array($oTotpMock))
+            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', [$oTotpMock])
         );
     }
 
@@ -431,7 +431,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('isActive')->willReturn(true);
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', array($oTotpMock))
+            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', [$oTotpMock])
         );
     }
 
@@ -452,7 +452,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(false);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'hasValidTotp', array('123456', $oTotpMock))
+            $this->callMethod($this->_oController, 'hasValidTotp', ['123456', $oTotpMock])
         );
     }
 
@@ -473,7 +473,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(true);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'hasValidTotp', array('123456', $oTotpMock))
+            $this->callMethod($this->_oController, 'hasValidTotp', ['123456', $oTotpMock])
         );
     }
 
@@ -494,7 +494,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(true);
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'hasValidTotp', array(null, $oTotpMock))
+            $this->callMethod($this->_oController, 'hasValidTotp', [null, $oTotpMock])
         );
     }
 
@@ -515,7 +515,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(false);
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'hasValidTotp', array('123456', $oTotpMock))
+            $this->callMethod($this->_oController, 'hasValidTotp', ['123456', $oTotpMock])
         );
     }
 
@@ -531,7 +531,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
             ->onlyMethods(['setVariable'])
             ->getMock();
         $oSessionMock->expects($this->atLeast(2))->method('setVariable')->willReturn(false);
-        
+
         /** @var User|MockObject $oUserMock */
         $oUserMock = $this->getMockBuilder(User::class)
             ->onlyMethods(['getId'])
@@ -544,7 +544,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
                 'd3GetSession',
                 'setUser',
                 'setLoginStatus',
-                '_afterLogin'
+                '_afterLogin',
             ])
             ->getMock();
         $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
@@ -554,7 +554,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
 
         $this->_oController = $oControllerMock;
 
-        $this->callMethod($this->_oController, 'd3TotpRelogin', array($oUserMock, '123456'));
+        $this->callMethod($this->_oController, 'd3TotpRelogin', [$oUserMock, '123456']);
     }
 
     /**

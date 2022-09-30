@@ -19,7 +19,7 @@ use Laminas\Math\Rand;
 
 class d3RandomGenerator extends Rand
 {
-    const CHAR_DIGITS    = '0123456789';
+    public const CHAR_DIGITS    = '0123456789';
 
     /**
      * @return string

@@ -18,6 +18,7 @@ namespace D3\Totp\Setup;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+
 // @codeCoverageIgnoreStart
 class Events
 {
@@ -58,7 +59,7 @@ class Events
             UNIQUE KEY  `OXUSERID` (`OXUSERID`) 
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='totp setting';";
 
-        DatabaseProvider::getDb()->execute( $query );
+        DatabaseProvider::getDb()->execute($query);
     }
 
     /**
@@ -78,7 +79,7 @@ class Events
             KEY  `BACKUPCODE` (`BACKUPCODE`) 
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='totp backup codes';";
 
-        DatabaseProvider::getDb()->execute( $query );
+        DatabaseProvider::getDb()->execute($query);
     }
 
     /**
@@ -102,7 +103,7 @@ class Events
                     '', NOW()
                 );";
 
-            DatabaseProvider::getDb()->execute( $query );
+            DatabaseProvider::getDb()->execute($query);
         }
     }
 
@@ -127,7 +128,7 @@ class Events
                     '', NOW()
                 );";
 
-            DatabaseProvider::getDb()->execute( $query );
+            DatabaseProvider::getDb()->execute($query);
         }
     }
 }

@@ -70,7 +70,7 @@ trait d3_totp_getUserTestTrait
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'isActive',
-                'loadByUserId'
+                'loadByUserId',
             ])
             ->getMock();
         $oTotpMock->method('isActive')->willReturn(false);
@@ -80,7 +80,7 @@ trait d3_totp_getUserTestTrait
         $oControllerMock = $this->getMockBuilder($this->sControllerClass)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject'
+                'd3GetSessionObject',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -121,7 +121,7 @@ trait d3_totp_getUserTestTrait
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'isActive',
-                'loadByUserId'
+                'loadByUserId',
             ])
             ->getMock();
         $oTotpMock->method('isActive')->willReturn(true);
@@ -131,7 +131,7 @@ trait d3_totp_getUserTestTrait
         $oControllerMock = $this->getMockBuilder($this->sControllerClass)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject'
+                'd3GetSessionObject',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -173,7 +173,7 @@ trait d3_totp_getUserTestTrait
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'isActive',
-                'loadByUserId'
+                'loadByUserId',
             ])
             ->getMock();
         $oTotpMock->method('isActive')->willReturn(true);
@@ -183,7 +183,7 @@ trait d3_totp_getUserTestTrait
         $oControllerMock = $this->getMockBuilder($this->sControllerClass)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject'
+                'd3GetSessionObject',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);

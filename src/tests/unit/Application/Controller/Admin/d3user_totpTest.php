@@ -56,7 +56,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3user_totp::class)
             ->onlyMethods([
                 'getEditObjectId',
-                'getUserObject'
+                'getUserObject',
             ])
             ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('-1');
@@ -65,7 +65,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $this->_oController = $oControllerMock;
 
         $sTpl = $this->callMethod($this->_oController, 'render');
-        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', array('edit'));
+        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', ['edit']);
 
         $this->assertSame('d3user_totp.tpl', $sTpl);
         $this->assertSame($tplUser, null);
@@ -93,7 +93,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3user_totp::class)
             ->onlyMethods([
                 'getEditObjectId',
-                'getUserObject'
+                'getUserObject',
             ])
             ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
@@ -102,8 +102,8 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $this->_oController = $oControllerMock;
 
         $sTpl = $this->callMethod($this->_oController, 'render');
-        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', array('edit'));
-        $oxid = $this->callMethod($this->_oController, 'getViewDataElement', array('oxid'));
+        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', ['edit']);
+        $oxid = $this->callMethod($this->_oController, 'getViewDataElement', ['oxid']);
 
         $this->assertSame('d3user_totp.tpl', $sTpl);
         $this->assertSame($tplUser, $oUserMock);
@@ -133,7 +133,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getEditObjectId',
                 'getUserObject',
-                'addTplParam'
+                'addTplParam',
             ])
             ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
@@ -151,8 +151,8 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $this->setValue($this->_oController, '_sSaveError', 'foo');
 
         $sTpl = $this->callMethod($this->_oController, 'render');
-        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', array('edit'));
-        $oxid = $this->callMethod($this->_oController, 'getViewDataElement', array('oxid'));
+        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', ['edit']);
+        $oxid = $this->callMethod($this->_oController, 'getViewDataElement', ['oxid']);
 
         $this->assertSame('d3user_totp.tpl', $sTpl);
         $this->assertNull($tplUser);
@@ -228,7 +228,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'verify',
                 'saveSecret',
                 'assign',
-                'checkIfAlreadyExist'
+                'checkIfAlreadyExist',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -245,7 +245,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'getEditObjectId',
                 'getUserObject',
                 'getTotpObject',
-                'getBackupcodeListObject'
+                'getBackupcodeListObject',
             ])
             ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
@@ -279,7 +279,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'verify',
                 'saveSecret',
                 'assign',
-                'checkIfAlreadyExist'
+                'checkIfAlreadyExist',
             ])
             ->getMock();
         $oTotpMock->method('load')->willReturn(true);
@@ -295,7 +295,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'getEditObjectId',
                 'getUserObject',
                 'getTotpObject',
-                'getBackupcodeListObject'
+                'getBackupcodeListObject',
             ])
             ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
@@ -318,7 +318,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods([
                 'save',
-                'generateBackupCodes'
+                'generateBackupCodes',
             ])
             ->getMock();
         $oBackupCodeListMock->expects($this->once())->method('save')->willReturn(true);
@@ -332,7 +332,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'verify',
                 'saveSecret',
                 'assign',
-                'checkIfAlreadyExist'
+                'checkIfAlreadyExist',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -349,7 +349,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'getEditObjectId',
                 'getUserObject',
                 'getTotpObject',
-                'getBackupcodeListObject'
+                'getBackupcodeListObject',
             ])
             ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
@@ -369,7 +369,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     public function canSaveWithKnownOXID()
     {
         $aEditval = [
-            'd3totp__oxid'  => 'foo'
+            'd3totp__oxid'  => 'foo',
         ];
         $_GET['editval'] = $aEditval;
 
@@ -377,7 +377,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods([
                 'save',
-                'generateBackupCodes'
+                'generateBackupCodes',
             ])
             ->getMock();
         $oBackupCodeListMock->expects($this->once())->method('save')->willReturn(true);
@@ -391,7 +391,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'verify',
                 'saveSecret',
                 'assign',
-                'checkIfAlreadyExist'
+                'checkIfAlreadyExist',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -408,7 +408,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'getEditObjectId',
                 'getUserObject',
                 'getTotpObject',
-                'getBackupcodeListObject'
+                'getBackupcodeListObject',
             ])
             ->getMock();
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
@@ -430,10 +430,10 @@ class d3user_totpTest extends d3TotpUnitTestCase
     {
         $aBackupList = [
             'foo1',
-            'bar2'
+            'bar2',
         ];
 
-        $this->callMethod($this->_oController, 'setBackupCodes', array($aBackupList));
+        $this->callMethod($this->_oController, 'setBackupCodes', [$aBackupList]);
 
         $aReturn = $this->callMethod($this->_oController, 'getBackupCodes');
 
@@ -476,7 +476,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
     public function canDelete()
     {
         $editval = [
-            'd3totp__oxid' => 'foo'
+            'd3totp__oxid' => 'foo',
         ];
         $_GET['editval'] = $editval;
 
@@ -485,7 +485,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'delete',
-                'load'
+                'load',
             ])
             ->getMock();
         $oTotpMock->expects($this->once())->method('delete')->willReturn(true);
@@ -522,7 +522,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3user_totp::class)
             ->onlyMethods([
                 'getBackupCodeListObject',
-                'getUser'
+                'getUser',
             ])
             ->getMock();
         $oControllerMock->method('getBackupCodeListObject')->willReturn($oBackupCodeListMock);

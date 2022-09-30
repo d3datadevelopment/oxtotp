@@ -84,7 +84,7 @@ $aModule = [
             'name' => 'D3_TOTP_ADMIN_FORCE_2FA',
             'type' => 'bool',
             'value' => false,
-        ]
+        ],
     ],
     'events'                => [
         'onActivate'        => ModuleSetup\Events::class.'::onActivate',
@@ -101,5 +101,5 @@ $aModule = [
             'block'         => 'account_menu',
             'file'          => 'Application/views/blocks/page/account/inc/account_menu.tpl',
         ],
-    ]
+    ],
 ];

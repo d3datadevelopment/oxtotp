@@ -57,7 +57,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
         $oModelMock = $this->getMockBuilder(d3backupcode::class)
             ->onlyMethods([
                 'getRandomTotpBackupCode',
-                'd3EncodeBC'
+                'd3EncodeBC',
             ])
             ->getMock();
         $oModelMock->method('getRandomTotpBackupCode')->willReturn($sBackupCode);
@@ -69,7 +69,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'generateCode', array($sTestUserId));
+        $this->callMethod($this->_oModel, 'generateCode', [$sTestUserId]);
 
         $this->assertSame($sTestUserId, $this->_oModel->getFieldData('oxuserid'));
         $this->assertSame($sBackupCode, $this->_oModel->getFieldData('backupcode'));
@@ -103,10 +103,10 @@ class d3backupcodeTest extends d3TotpUnitTestCase
         $oUserMock->method('load')->willReturn(true);
         $oUserMock->assign(
             [
-                'oxpasssalt' => '6162636465666768696A6B'
+                'oxpasssalt' => '6162636465666768696A6B',
             ]
         );
-        
+
         /** @var d3backupcode|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3backupcode::class)
             ->onlyMethods(['d3GetUserObject'])
@@ -134,7 +134,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
             ->getMock();
         $oUserMock->assign(
             [
-                'oxid' => 'foobar'
+                'oxid' => 'foobar',
             ]
         );
 

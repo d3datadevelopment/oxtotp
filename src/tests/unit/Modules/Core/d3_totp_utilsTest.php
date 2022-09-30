@@ -128,7 +128,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'loadByUserId',
-                'isActive'
+                'isActive',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -139,7 +139,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oCoreMock = $this->getMockBuilder(Utils::class)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'fetchRightsForUser'
+                'fetchRightsForUser',
             ])
             ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -171,7 +171,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'loadByUserId',
-                'isActive'
+                'isActive',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,7 +184,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
                 'd3GetTotpObject',
                 'd3GetSessionObject',
                 'fetchRightsForUser',
-                'redirect'
+                'redirect',
             ])
             ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -237,7 +237,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
                 'd3GetTotpObject',
                 'd3GetSessionObject',
                 'fetchRightsForUser',
-                'redirect'
+                'redirect',
             ])
             ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -366,7 +366,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     {
         return [
             [true],
-            [false]
+            [false],
         ];
     }
 }

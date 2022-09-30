@@ -142,7 +142,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
     protected function hasLoginCredentials()
     {
-        return Registry::getRequest()->getRequestEscapedParameter( 'user') &&
+        return Registry::getRequest()->getRequestEscapedParameter('user') &&
                Registry::getRequest()->getRequestEscapedParameter('pwd');
     }
 

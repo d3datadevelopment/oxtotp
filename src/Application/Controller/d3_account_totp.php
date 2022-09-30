@@ -100,7 +100,7 @@ class d3_account_totp extends AccountController
 
                 $aParams = [
                     'd3totp__usetotp' => 1,
-                    'd3totp__oxuserid'  => $oUser->getId()
+                    'd3totp__oxuserid'  => $oUser->getId(),
                 ];
                 $seed = Registry::getRequest()->getRequestEscapedParameter("secret");
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");

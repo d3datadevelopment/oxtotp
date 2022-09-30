@@ -56,7 +56,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oUser->setId('foo');
         $oUser->assign(
             [
-                'oxpassword'    => 'foo'
+                'oxpassword'    => 'foo',
             ]
         );
 
@@ -69,7 +69,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $this->_oController = $oControllerMock;
 
         $sTpl = $this->callMethod($this->_oController, 'render');
-        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', array('user'));
+        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', ['user']);
 
         $this->assertSame('d3_account_totp.tpl', $sTpl);
         $this->assertSame($tplUser, $oUser);
@@ -94,7 +94,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $this->_oController = $oControllerMock;
 
         $sTpl = $this->callMethod($this->_oController, 'render');
-        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', array('user'));
+        $tplUser = $this->callMethod($this->_oController, 'getViewDataElement', ['user']);
 
         $this->assertSame('page/account/login.tpl', $sTpl);
         $this->assertNull($tplUser);
@@ -110,10 +110,10 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     {
         $aBackupList = [
             'foo1',
-            'bar2'
+            'bar2',
         ];
 
-        $this->callMethod($this->_oController, 'setBackupCodes', array($aBackupList));
+        $this->callMethod($this->_oController, 'setBackupCodes', [$aBackupList]);
 
         $aReturn = $this->callMethod($this->_oController, 'getBackupCodes');
 
@@ -156,7 +156,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_account_totp::class)
             ->onlyMethods([
                 'getBackupCodeListObject',
-                'getUser'
+                'getUser',
             ])
             ->getMock();
         $oControllerMock->method('getBackupCodeListObject')->willReturn($oBackupCodeListMock);
@@ -203,7 +203,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods([
                 'generateBackupCodes',
-                'save'
+                'save',
             ])
             ->getMock();
         $oBackupCodeListMock->expects($this->never())->method('generateBackupCodes');
@@ -216,7 +216,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
                 'saveSecret',
                 'assign',
                 'verify',
-                'save'
+                'save',
             ])
             ->getMock();
         $oTotpMock->method('saveSecret')->willReturn(true);
@@ -232,7 +232,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getTotpObject',
                 'getUser',
-                'getBackupCodeListObject'
+                'getBackupCodeListObject',
             ])
             ->getMock();
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
@@ -257,7 +257,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods([
                 'generateBackupCodes',
-                'save'
+                'save',
             ])
             ->getMock();
         $oBackupCodeListMock->method('generateBackupCodes')->willReturn(['0123', '1234']);
@@ -289,7 +289,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getTotpObject',
                 'getUser',
-                'getBackupCodeListObject'
+                'getBackupCodeListObject',
             ])
             ->getMock();
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
@@ -341,7 +341,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_account_totp::class)
             ->onlyMethods([
                 'getTotpObject',
-                'getUser'
+                'getUser',
             ])
             ->getMock();
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
@@ -366,7 +366,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'delete',
-                'loadByUserId'
+                'loadByUserId',
             ])
             ->getMock();
         $oTotpMock->expects($this->once())->method('delete')->willReturn(true);
@@ -379,7 +379,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3_account_totp::class)
             ->onlyMethods([
                 'getTotpObject',
-                'getUser'
+                'getUser',
             ])
             ->getMock();
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);

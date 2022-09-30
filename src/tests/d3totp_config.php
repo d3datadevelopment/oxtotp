@@ -12,4 +12,3 @@
  */
 
 const D3TOTP_REQUIRE_MODCFG = true;
-

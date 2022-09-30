@@ -51,5 +51,5 @@ $aLang = [
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',
     'D3_TOTP_ALREADY_EXIST'                           => 'The registration has already been saved.',
 
-    'SHOP_MODULE_D3_TOTP_ADMIN_FORCE_2FA'             => 'Administrators are required to activate 2FA'
+    'SHOP_MODULE_D3_TOTP_ADMIN_FORCE_2FA'             => 'Administrators are required to activate 2FA',
 ];

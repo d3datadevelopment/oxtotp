@@ -46,7 +46,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
             ) {
                 Registry::getSession()->setVariable(
                     d3totp::TOTP_SESSION_CURRENTCLASS,
-                    $this->getParent()->getClassKey() != 'd3totplogin' ? $this->getParent()->getClassKey() : 'start');
+                    $this->getParent()->getClassKey() != 'd3totplogin' ? $this->getParent()->getClassKey() : 'start'
+                );
                 Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, $oUser->getId());
                 Registry::getSession()->setVariable(
                     d3totp::TOTP_SESSION_NAVFORMPARAMS,

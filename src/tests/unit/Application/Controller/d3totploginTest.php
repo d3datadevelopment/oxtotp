@@ -67,7 +67,7 @@ class d3totploginTest extends d3TotpUnitTestCase
         $oControllerMock->method('getUtils')->willReturn($oUtilsMock);
 
         $this->_oController = $oControllerMock;
-        
+
         $this->callMethod($this->_oController, 'render');
     }
 
@@ -128,7 +128,7 @@ class d3totploginTest extends d3TotpUnitTestCase
             ->onlyMethods(['getAvailableCodeCount'])
             ->getMock();
         $oBackupCodesListMock->method('getAvailableCodeCount')->willReturn(1);
-        
+
         /** @var d3totplogin|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3totplogin::class)
             ->onlyMethods(['getBackupCodeListObject'])

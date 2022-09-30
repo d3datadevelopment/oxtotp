@@ -45,6 +45,9 @@
     "bacon/bacon-qr-code": "^2.0",
     "laminas/laminas-math": "^3.2"
   },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.19"
+  },
   "suggest": {
     "d3/modcfg": "Provides automatic installation routines"
   },

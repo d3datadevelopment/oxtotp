@@ -67,7 +67,10 @@ class d3backupcode extends BaseModel
 
     public function d3GetUser()
     {
-        if ($this->getUser()) {
+        /** @var User|null $user */
+        $user = $this->getUser();
+
+        if ($user instanceof User) {
             return $this->getUser();
         }
 

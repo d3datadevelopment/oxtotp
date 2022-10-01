@@ -20,6 +20,7 @@ use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\AccountController;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
@@ -34,9 +35,9 @@ class d3_account_totp extends AccountController
     {
         $sRet = parent::render();
 
-        // is logged in ?
+        /** @var User|null $oUser */
         $oUser = $this->getUser();
-        if (!$oUser) {
+        if (false === $oUser instanceof User) {
             return $this->_sThisTemplate = $this->_sThisLoginTemplate;
         }
 
@@ -127,7 +128,7 @@ class d3_account_totp extends AccountController
             $oUser = $this->getUser();
             /** @var d3totp $oTotp */
             $oTotp = $this->getTotpObject();
-            if ($oUser && $oUser->getId()) {
+            if ($oUser instanceof User && $oUser->getId()) {
                 $oTotp->loadByUserId($oUser->getId());
                 $oTotp->delete();
             }

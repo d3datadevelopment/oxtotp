@@ -31,7 +31,7 @@ trait d3_totp_getUserTrait
     {
         $oUser = parent::getUser();
 
-        if ($oUser && $oUser->getId()) {
+        if ($oUser instanceof User && $oUser->getId()) {
             $totp = $this->d3GetTotpObject();
             $totp->loadByUserId($oUser->getId());
 

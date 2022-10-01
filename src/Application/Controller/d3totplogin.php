@@ -47,7 +47,7 @@ class d3totplogin extends FrontendController
     /**
      * @return Utils
      */
-    public function getUtils()
+    public function getUtils(): Utils
     {
         return Registry::getUtils();
     }
@@ -72,7 +72,7 @@ class d3totplogin extends FrontendController
     /**
      * @return d3backupcodelist
      */
-    public function getBackupCodeListObject()
+    public function getBackupCodeListObject(): d3backupcodelist
     {
         return oxNew(d3backupcodelist::class);
     }
@@ -82,7 +82,7 @@ class d3totplogin extends FrontendController
         return Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
     }
 
-    public function previousClassIsOrderStep()
+    public function previousClassIsOrderStep(): bool
     {
         $sClassKey = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
         $resolvedClass = Registry::getControllerClassNameResolver()->getClassNameById($sClassKey);
@@ -96,7 +96,7 @@ class d3totplogin extends FrontendController
     /**
      * @return bool
      */
-    public function getIsOrderStep()
+    public function getIsOrderStep(): bool
     {
         return $this->previousClassIsOrderStep();
     }
@@ -106,11 +106,11 @@ class d3totplogin extends FrontendController
      *
      * @return array
      */
-    public function getBreadCrumb()
+    public function getBreadCrumb(): array
     {
         $aPaths = [];
         $aPath = [];
-        $iBaseLanguage = Registry::getLang()->getBaseLanguage();
+        $iBaseLanguage = (int) Registry::getLang()->getBaseLanguage();
         $aPath['title'] = Registry::getLang()->translateString('D3_TOTP_BREADCRUMB', $iBaseLanguage, false);
         $aPath['link'] = $this->getLink();
 

@@ -1,0 +1,8 @@
+parameters:
+    scanFiles:
+        - src/IntelliSenseHelper.php
+        - ../../oxid-esales/oxideshop-ce/source/oxfunctions.php
+    paths:
+        - src
+    level: 5
+    phpVersion: 70300

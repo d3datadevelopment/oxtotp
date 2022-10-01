@@ -37,7 +37,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 
         $oUser = $this->getUser();
 
-        if ($oUser && $oUser->getId()) {
+        if ($oUser instanceof User && $oUser->getId()) {
             $totp = $this->d3GetTotpObject();
             $totp->loadByUserId($oUser->getId());
 

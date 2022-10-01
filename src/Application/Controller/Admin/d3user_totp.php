@@ -43,7 +43,7 @@ class d3user_totp extends AdminDetailsController
 
         $soxId = $this->getEditObjectId();
 
-        if (isset($soxId) && $soxId != "-1") {
+        if ($soxId && $soxId != "-1") {
             /** @var d3_totp_user $oUser */
             $oUser = $this->getUserObject();
             if ($oUser->load($soxId)) {

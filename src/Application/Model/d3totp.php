@@ -46,7 +46,7 @@ class d3totp extends BaseModel
     {
         $this->init($this->tableName);
 
-        return parent::__construct();
+        parent::__construct();
     }
 
     /**
@@ -124,9 +124,9 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSavedSecret()
+    public function getSavedSecret(): ?string
     {
         $seed_enc = $this->getFieldData('seed');
 
@@ -197,7 +197,7 @@ class d3totp extends BaseModel
     /**
      * @param $totp
      * @param $seed
-     * @return string
+     * @return bool
      * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
@@ -212,7 +212,7 @@ class d3totp extends BaseModel
             if ($blNotVerified) {
                 throw oxNew(d3totp_wrongOtpException::class);
             }
-        } elseif ($blNotVerified && $seed) {
+        } elseif ($blNotVerified && $seed !== null) {
             throw oxNew(d3totp_wrongOtpException::class);
         }
 
@@ -282,6 +282,6 @@ class d3totp extends BaseModel
         $oBackupCodeList = $this->d3GetBackupCodeListObject();
         $oBackupCodeList->deleteAllFromUser($this->getFieldData('oxuserid'));
 
-        return parent::delete();
+        return parent::delete($oxid);
     }
 }

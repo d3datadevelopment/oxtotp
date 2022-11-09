@@ -691,9 +691,9 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
 
         /** @var d3_totp_LoginController|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_totp_LoginController::class)
-            ->onlyMethods(['d3GetUserObject'])
+            ->onlyMethods(['d3TotpGetUserObject'])
             ->getMock();
-        $oControllerMock->method('d3GetUserObject')->willReturn($oUserMock);
+        $oControllerMock->method('d3TotpGetUserObject')->willReturn($oUserMock);
 
         $this->_oController = $oControllerMock;
 
@@ -703,13 +703,13 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3GetUserObject
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3TotpGetUserObject
      */
     public function d3GetUserObjectReturnsRightObject()
     {
         $this->assertInstanceOf(
             User::class,
-            $this->callMethod($this->_oController, 'd3GetUserObject')
+            $this->callMethod($this->_oController, 'd3TotpGetUserObject')
         );
     }
 

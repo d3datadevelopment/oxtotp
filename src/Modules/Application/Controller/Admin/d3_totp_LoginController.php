@@ -163,14 +163,14 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
     public function d3CancelLogin()
     {
-        $oUser = $this->d3GetUserObject();
+        $oUser = $this->d3TotpGetUserObject();
         $oUser->logout();
     }
 
     /**
      * @return User
      */
-    public function d3GetUserObject()
+    public function d3TotpGetUserObject()
     {
         return oxNew(User::class);
     }

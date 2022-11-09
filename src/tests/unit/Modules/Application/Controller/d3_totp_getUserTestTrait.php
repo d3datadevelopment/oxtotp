@@ -80,11 +80,11 @@ trait d3_totp_getUserTestTrait
         $oControllerMock = $this->getMockBuilder($this->sControllerClass)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject',
+                'd3TotpGetSessionObject',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSessionObject')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
 
         $this->_oController = $oControllerMock;
 
@@ -131,11 +131,11 @@ trait d3_totp_getUserTestTrait
         $oControllerMock = $this->getMockBuilder($this->sControllerClass)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject',
+                'd3TotpGetSessionObject',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSessionObject')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
 
         $this->_oController = $oControllerMock;
 
@@ -183,11 +183,11 @@ trait d3_totp_getUserTestTrait
         $oControllerMock = $this->getMockBuilder($this->sControllerClass)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject',
+                'd3TotpGetSessionObject',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSessionObject')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
 
         $this->_oController = $oControllerMock;
 
@@ -216,9 +216,9 @@ trait d3_totp_getUserTestTrait
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::d3GetSessionObject
-     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::d3GetSessionObject
-     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::d3GetSessionObject
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::d3TotpGetSessionObject
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::d3TotpGetSessionObject
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::d3TotpGetSessionObject
      */
     public function d3GetSessionObjectReturnsRightObject()
     {
@@ -226,7 +226,7 @@ trait d3_totp_getUserTestTrait
             Session::class,
             $this->callMethod(
                 $this->_oController,
-                'd3GetSessionObject'
+                'd3TotpGetSessionObject'
             )
         );
     }

@@ -36,7 +36,7 @@ trait d3_totp_getUserTrait
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && !$this->d3GetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+                && !$this->d3TotpGetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME)
             ) {
                 return false;
             }
@@ -56,7 +56,7 @@ trait d3_totp_getUserTrait
     /**
      * @return Session
      */
-    public function d3GetSessionObject()
+    public function d3TotpGetSessionObject()
     {
         return Registry::getSession();
     }

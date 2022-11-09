@@ -11,7 +11,7 @@
             <form action="[{$oViewConf->getSelfActionLink()}]" method="post" name="login" id="login">
                 [{$oViewConf->getHiddenSid()}]
 
-                <input type="hidden" name="fnc" value="d3TotpCheckTotpLogin">
+                <input type="hidden" name="fnc" value="checkTotplogin">
                 <input type="hidden" name="cl" value="[{$oView->getPreviousClass()}]">
                 [{$navFormParams}]
 
@@ -34,7 +34,7 @@
             <form action="[{$oViewConf->getSelfActionLink()}]" method="post" name="login" id="login">
                 [{$oViewConf->getHiddenSid()}]
 
-                <input type="hidden" name="fnc" value="d3TotpCancelTotpLogin">
+                <input type="hidden" name="fnc" value="cancelTotplogin">
                 <input type="hidden" name="cl" value="[{$oView->getPreviousClass()}]">
                 [{$navFormParams}]
 

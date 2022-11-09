@@ -25,7 +25,7 @@ class d3_totp_user extends d3_totp_user_parent
     {
         $return = parent::logout();
 
-        $this->d3TotpGetSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
+        $this->d3GetSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
 
         return $return;
     }
@@ -41,7 +41,7 @@ class d3_totp_user extends d3_totp_user_parent
     /**
      * @return Session
      */
-    public function d3TotpGetSession()
+    public function d3GetSession()
     {
         return Registry::getSession();
     }

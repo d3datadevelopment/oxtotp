@@ -57,7 +57,7 @@ class d3backupcode extends BaseModel
     public function d3EncodeBC($code, $sUserId)
     {
         $oDb = DatabaseProvider::getDb();
-        $oUser = $this->d3GetUserObject();
+        $oUser = $this->d3TotpGetUserObject();
         $oUser->load($sUserId);
         $salt = $oUser->getFieldData('oxpasssalt');
         $sSelect = "SELECT BINARY MD5( CONCAT( " . $oDb->quote($code) . ", UNHEX( ".$oDb->quote($salt)." ) ) )";
@@ -83,7 +83,7 @@ class d3backupcode extends BaseModel
     /**
      * @return User
      */
-    public function d3GetUserObject()
+    public function d3TotpGetUserObject()
     {
         return oxNew(User::class);
     }

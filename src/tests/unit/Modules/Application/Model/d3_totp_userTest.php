@@ -58,9 +58,9 @@ class d3_totp_userTest extends d3TotpUnitTestCase
 
         /** @var d3_totp_user|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['d3TotpGetSession'])
+            ->onlyMethods(['d3GetSession'])
             ->getMock();
-        $oModelMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+        $oModelMock->method('d3GetSession')->willReturn($oSessionMock);
 
         $this->_oModel = $oModelMock;
 
@@ -88,13 +88,13 @@ class d3_totp_userTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::d3TotpGetSession
+     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::d3GetSession
      */
     public function d3GetSessionReturnsRightInstance()
     {
         $this->assertInstanceOf(
             Session::class,
-            $this->callMethod($this->_oModel, 'd3TotpGetSession')
+            $this->callMethod($this->_oModel, 'd3GetSession')
         );
     }
 }

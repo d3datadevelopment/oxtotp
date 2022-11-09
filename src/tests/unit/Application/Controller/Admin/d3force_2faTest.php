@@ -92,7 +92,7 @@ class d3force_2faTest extends d3user_totpTest
      * @test
      * @return void
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Controller\Admin\d3force_2fa::d3GetSessionObject
+     * @covers \D3\Totp\Application\Controller\Admin\d3force_2fa::d3TotpGetSessionObject
      */
     public function testD3GetSessionObject()
     {
@@ -100,7 +100,7 @@ class d3force_2faTest extends d3user_totpTest
             Session::class,
             $this->callMethod(
                 $this->_oController,
-                'd3GetSessionObject'
+                'd3TotpGetSessionObject'
             )
         );
     }

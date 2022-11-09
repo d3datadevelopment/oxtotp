@@ -109,9 +109,9 @@ class d3backupcodeTest extends d3TotpUnitTestCase
 
         /** @var d3backupcode|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(d3backupcode::class)
-            ->onlyMethods(['d3GetUserObject'])
+            ->onlyMethods(['d3TotpGetUserObject'])
             ->getMock();
-        $oModelMock->method('d3GetUserObject')->willReturn($oUserMock);
+        $oModelMock->method('d3TotpGetUserObject')->willReturn($oUserMock);
 
         $this->_oModel = $oModelMock;
 
@@ -169,13 +169,13 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\d3backupcode::d3GetUserObject
+     * @covers \D3\Totp\Application\Model\d3backupcode::d3TotpGetUserObject
      */
     public function d3getUserObjectReturnsRightInstance()
     {
         $this->assertInstanceOf(
             User::class,
-            $this->callMethod($this->_oModel, 'd3GetUserObject')
+            $this->callMethod($this->_oModel, 'd3TotpGetUserObject')
         );
     }
 }

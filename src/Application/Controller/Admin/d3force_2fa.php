@@ -13,7 +13,7 @@ class d3force_2fa extends d3user_totp
     {
         $this->addTplParam('force2FA', true);
 
-        $userID = $this->d3GetSessionObject()->getVariable("auth");
+        $userID = $this->d3TotpGetSessionObject()->getVariable("auth");
         $this->_sEditObjectId = $userID;
 
         return parent::render();
@@ -22,7 +22,7 @@ class d3force_2fa extends d3user_totp
 
     protected function _authorize()
     {
-        $userID = $this->d3GetSessionObject()->getVariable("auth");
+        $userID = $this->d3TotpGetSessionObject()->getVariable("auth");
 
         return ($this->d3IsAdminForce2FA() && !empty($userID));
     }
@@ -30,7 +30,7 @@ class d3force_2fa extends d3user_totp
     /**
      * @return Session
      */
-    private function d3GetSessionObject()
+    private function d3TotpGetSessionObject()
     {
         return Registry::getSession();
     }

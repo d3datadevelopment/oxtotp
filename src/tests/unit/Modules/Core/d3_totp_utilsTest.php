@@ -182,13 +182,13 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oCoreMock = $this->getMockBuilder(Utils::class)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject',
+                'd3TotpGetSessionObject',
                 'fetchRightsForUser',
                 'redirect',
             ])
             ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oCoreMock->method('d3GetSessionObject')->willReturn($oSessionMock);
+        $oCoreMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
         $oCoreMock->method('fetchRightsForUser')->willReturn('malladmin');
         $oCoreMock->expects($this->never())->method('redirect')->willReturn(true);
 
@@ -235,13 +235,13 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oCoreMock = $this->getMockBuilder(Utils::class)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSessionObject',
+                'd3TotpGetSessionObject',
                 'fetchRightsForUser',
                 'redirect',
             ])
             ->getMock();
         $oCoreMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oCoreMock->method('d3GetSessionObject')->willReturn($oSessionMock);
+        $oCoreMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
         $oCoreMock->method('fetchRightsForUser')->willReturn('malladmin');
         $oCoreMock->expects($this->once())->method('redirect')->willReturn(true);
 
@@ -253,13 +253,13 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Core\d3_totp_utils::d3GetSessionObject
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::d3TotpGetSessionObject
      */
     public function d3GetSessionObjectReturnsRightInstance()
     {
         $this->assertInstanceOf(
             Session::class,
-            $this->callMethod($this->_oCoreClass, 'd3GetSessionObject')
+            $this->callMethod($this->_oCoreClass, 'd3TotpGetSessionObject')
         );
     }
 

@@ -54,7 +54,7 @@ $aModule = [
         'de'        => 'Zwei-Faktor-Authentisierung (TOTP) f&uuml;r OXID eSales Shop',
         'en'        => 'Two-factor authentication (TOTP) for OXID eSales shop',
     ],
-    'version'       => '2.0.0.0',
+    'version'       => '2.0.0.1',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'https://www.oxidmodule.com/',

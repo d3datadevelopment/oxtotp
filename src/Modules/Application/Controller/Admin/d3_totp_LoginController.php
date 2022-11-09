@@ -34,7 +34,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function render()
     {
-        $auth = $this->d3GetSession()->getVariable("auth");
+        $auth = $this->d3TotpGetSession()->getVariable("auth");
 
         $return = parent::render();
 
@@ -43,10 +43,10 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
         if ($auth
             && $totp->isActive()
-            && !$this->d3GetSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+            && !$this->d3TotpGetSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
         ) {
             // set auth as secured parameter;
-            $this->d3GetSession()->setVariable("auth", $auth);
+            $this->d3TotpGetSession()->setVariable("auth", $auth);
             $this->addTplParam('request_totp', true);
         }
 
@@ -72,7 +72,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     /**
      * @return UtilsView
      */
-    public function d3GetUtilsView()
+    public function d3TotpGetUtilsView()
     {
         return Registry::getUtilsView();
     }
@@ -80,7 +80,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     /**
      * @return Session
      */
-    public function d3GetSession()
+    public function d3TotpGetSession()
     {
         return Registry::getSession();
     }
@@ -100,14 +100,14 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         $return = 'login';
 
         try {
-            if ($this->isNoTotpOrNoLogin($totp) && $this->hasLoginCredentials()) {
+            if ($this->d3TotpIsNoTotpOrNoLogin($totp) && $this->hasLoginCredentials()) {
                 $return = parent::checklogin();
-            } elseif ($this->hasValidTotp($sTotp, $totp)) {
-                $this->d3GetSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
+            } elseif ($this->d3TotpHasValidTotp($sTotp, $totp)) {
+                $this->d3TotpGetSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
                 $return = "admin_start";
             }
         } catch (d3totp_wrongOtpException $oEx) {
-            $this->d3GetUtilsView()->addErrorToDisplay($oEx);
+            $this->d3TotpGetUtilsView()->addErrorToDisplay($oEx);
         }
 
         return $return;
@@ -134,9 +134,9 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      * @param d3totp $totp
      * @return bool
      */
-    public function isNoTotpOrNoLogin($totp)
+    public function d3TotpIsNoTotpOrNoLogin($totp)
     {
-        return false == $this->d3GetSession()->getVariable("auth")
+        return false == $this->d3TotpGetSession()->getVariable("auth")
         || false == $totp->isActive();
     }
 
@@ -153,7 +153,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
-    public function hasValidTotp($sTotp, $totp)
+    public function d3TotpHasValidTotp($sTotp, $totp)
     {
         return Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME) ||
         (

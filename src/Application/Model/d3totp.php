@@ -29,11 +29,6 @@ use OxidEsales\Eshop\Core\Registry;
 
 class d3totp extends BaseModel
 {
-    public const TOTP_SESSION_VARNAME          = 'totp_auth';
-    public const TOTP_SESSION_CURRENTUSER      = 'd3totpCurrentUser';
-    public const TOTP_SESSION_CURRENTCLASS     = 'd3totpCurrentClass';
-    public const TOTP_SESSION_NAVFORMPARAMS    = 'd3totpNavFormParams';
-
     public $tableName = 'd3totp';
     public $userId;
     public $totp;

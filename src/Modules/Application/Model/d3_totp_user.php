@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace D3\Totp\Modules\Application\Model;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 
@@ -25,7 +26,8 @@ class d3_totp_user extends d3_totp_user_parent
     {
         $return = parent::logout();
 
-        $this->d3GetSession()->deleteVariable(d3totp::TOTP_SESSION_VARNAME);
+        $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_AUTH);
+        $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_CURRENTUSER);
 
         return $return;
     }
@@ -41,7 +43,7 @@ class d3_totp_user extends d3_totp_user_parent
     /**
      * @return Session
      */
-    public function d3GetSession()
+    public function d3TotpGetSession()
     {
         return Registry::getSession();
     }

@@ -13,6 +13,7 @@
 
 declare(strict_types=1);
 
+use D3\Totp\Application\Controller\Admin\d3totpadminlogin;
 use D3\Totp\Application\Controller\Admin\d3user_totp;
 use D3\Totp\Application\Controller\Admin\d3force_2fa;
 use D3\Totp\Application\Controller\d3_account_totp;
@@ -72,11 +73,13 @@ $aModule = [
         'd3force_2fa'       =>  d3force_2fa::class,
         'd3totplogin'       =>  d3totplogin::class,
         'd3_account_totp'   =>  d3_account_totp::class,
+        'd3totpadminlogin'  =>  d3totpadminlogin::class
     ],
     'templates'                 => [
         'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
         'd3totplogin.tpl'       => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
         'd3_account_totp.tpl'   => 'd3/totp/Application/views/tpl/d3_account_totp.tpl',
+        'd3totpadminlogin.tpl'  => 'd3/totp/Application/views/admin/tpl/d3totplogin.tpl',
     ],
     'settings'                => [
         [

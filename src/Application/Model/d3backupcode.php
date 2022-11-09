@@ -74,7 +74,7 @@ class d3backupcode extends BaseModel
             return $this->getUser();
         }
 
-        $sUserId = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER);
+        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
         $oUser = oxNew(User::class);
         $oUser->load($sUserId);
         return $oUser;

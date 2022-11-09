@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace D3\Totp\Modules\Core;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -32,10 +33,9 @@ class d3_totp_utils extends d3_totp_utils_parent
     public function checkAccessRights()
     {
         $blAuth = parent::checkAccessRights();
-
         $blAuth = $this->d3AuthHook($blAuth);
         $userID = $this->d3TotpGetSessionObject()->getVariable("auth");
-        $totpAuth = (bool) $this->d3TotpGetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME);
+        $totpAuth = (bool) $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_AUTH);
         /** @var d3totp $totp */
         $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($userID);
@@ -56,7 +56,7 @@ class d3_totp_utils extends d3_totp_utils_parent
 
         //staten der prüfung vom einmalpasswort
         if ($blAuth && $totp->isActive() && false === $totpAuth) {
-            $this->redirect('index.php?cl=login');
+            $this->redirect('index.php?cl=d3totpadminlogin');
             if (false == defined('OXID_PHP_UNIT')) {
                 // @codeCoverageIgnoreStart
                 exit;

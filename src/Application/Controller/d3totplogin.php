@@ -17,6 +17,7 @@ namespace D3\Totp\Application\Controller;
 
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
@@ -28,8 +29,8 @@ class d3totplogin extends FrontendController
 
     public function render()
     {
-        if (Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_VARNAME) ||
-            false == Registry::getSession()->hasVariable(d3totp::TOTP_SESSION_CURRENTUSER)
+        if (Registry::getSession()->hasVariable(d3totp_conf::SESSION_AUTH) ||
+            false == Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)
         ) {
             $this->getUtils()->redirect('index.php?cl=start');
             if (false == defined('OXID_PHP_UNIT')) {
@@ -39,7 +40,7 @@ class d3totplogin extends FrontendController
             }
         }
 
-        $this->addTplParam('navFormParams', Registry::getSession()->getVariable(d3totp::TOTP_SESSION_NAVFORMPARAMS));
+        $this->addTplParam('navFormParams', Registry::getSession()->getVariable(d3totp_conf::SESSION_NAVFORMPARAMS));
 
         return parent::render();
     }
@@ -59,7 +60,7 @@ class d3totplogin extends FrontendController
     public function getBackupCodeCountMessage()
     {
         $oBackupCodeList = $this->getBackupCodeListObject();
-        $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER));
+        $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER));
 
         if ($iCount < 4) {
             return sprintf(
@@ -79,12 +80,12 @@ class d3totplogin extends FrontendController
 
     public function getPreviousClass()
     {
-        return Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
+        return Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTCLASS);
     }
 
     public function previousClassIsOrderStep(): bool
     {
-        $sClassKey = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
+        $sClassKey = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTCLASS);
         $resolvedClass = Registry::getControllerClassNameResolver()->getClassNameById($sClassKey);
         $resolvedClass = $resolvedClass ?: 'start';
 

@@ -15,6 +15,7 @@ namespace D3\Totp\tests\unit\Modules\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
@@ -599,7 +600,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpTrueSessionVarname()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, true);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, true);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -620,7 +621,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpTrueValidTotp()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -641,7 +642,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpFalseMissingTotp()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -662,7 +663,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpFalseUnverifiedTotp()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)

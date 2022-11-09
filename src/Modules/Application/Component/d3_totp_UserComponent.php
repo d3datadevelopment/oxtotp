@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace D3\Totp\Modules\Application\Component;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use Doctrine\DBAL\DBALException;
 use InvalidArgumentException;
@@ -45,23 +46,23 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && !$this->d3GetSession()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+                && !$this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH)
             ) {
-                $this->d3GetSession()->setVariable(
-                    d3totp::TOTP_SESSION_CURRENTCLASS,
+                $this->d3TotpGetSession()->setVariable(
+                    d3totp_conf::SESSION_CURRENTCLASS,
                     $this->getParent()->getClassKey() != 'd3totplogin' ? $this->getParent()->getClassKey() : 'start'
-                );
-
-                $this->d3GetSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, $oUser->getId());
-                $this->d3GetSession()->setVariable(
-                    d3totp::TOTP_SESSION_NAVFORMPARAMS,
-                    $this->getParent()->getViewConfig()->getNavFormParams()
                 );
 
                 $oUser->logout();
 
+                $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, $oUser->getId());
+                $this->d3TotpGetSession()->setVariable(
+                    d3totp_conf::SESSION_NAVFORMPARAMS,
+                    $this->getParent()->getViewConfig()->getNavFormParams()
+                );
+
                 $sUrl = Registry::getConfig()->getShopHomeUrl() . 'cl=d3totplogin';
-                $this->d3GetUtils()->redirect($sUrl, false);
+                $this->d3TotpGetUtils()->redirect($sUrl, false);
             }
         }
 
@@ -80,11 +81,11 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @throws DBALException
      * @throws DatabaseConnectionException
      */
-    public function checkTotplogin()
+    public function d3TotpCheckTotpLogin()
     {
         $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp', true);
 
-        $sUserId = Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER);
+        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
         $oUser = oxNew(User::class);
         $oUser->load($sUserId);
 
@@ -92,10 +93,10 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
         $totp->loadByUserId($sUserId);
 
         try {
-            if (!$this->isNoTotpOrNoLogin($totp) && $this->hasValidTotp($sTotp, $totp)) {
+            if (!$this->d3TotpIsNoTotpOrNoLogin($totp) && $this->d3TotpHasValidTotp($sTotp, $totp)) {
                 // relogin, don't extract from this try block
-                $this->d3GetSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, $sTotp);
-                $this->d3GetSession()->setVariable('usr', $oUser->getId());
+                $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_AUTH, $sTotp);
+                $this->d3TotpGetSession()->setVariable('usr', $oUser->getId());
                 $this->setUser(null);
                 $this->setLoginStatus(USER_LOGIN_SUCCESS);
                 $this->_afterLogin($oUser);
@@ -105,7 +106,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 return false;
             }
         } catch (d3totp_wrongOtpException $oEx) {
-            $this->d3GetUtilsView()->addErrorToDisplay($oEx, false, false, "", 'd3totplogin');
+            $this->d3TotpGetUtilsView()->addErrorToDisplay($oEx, false, false, "", 'd3totplogin');
         }
 
         return 'd3totplogin';
@@ -114,7 +115,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     /**
      * @return UtilsView
      */
-    public function d3GetUtilsView()
+    public function d3TotpGetUtilsView()
     {
         return Registry::getUtilsView();
     }
@@ -122,12 +123,12 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     /**
      * @return Utils
      */
-    public function d3GetUtils()
+    public function d3TotpGetUtils()
     {
         return Registry::getUtils();
     }
 
-    public function cancelTotpLogin()
+    public function d3TotpCancelTotpLogin()
     {
         $this->d3TotpClearSessionVariables();
 
@@ -138,9 +139,9 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @param d3totp $totp
      * @return bool
      */
-    public function isNoTotpOrNoLogin($totp)
+    public function d3TotpIsNoTotpOrNoLogin($totp)
     {
-        return false == Registry::getSession()->getVariable(d3totp::TOTP_SESSION_CURRENTUSER)
+        return false == Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER)
             || false == $totp->isActive();
     }
 
@@ -151,9 +152,9 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
-    public function hasValidTotp($sTotp, $totp)
+    public function d3TotpHasValidTotp($sTotp, $totp)
     {
-        return Registry::getSession()->getVariable(d3totp::TOTP_SESSION_VARNAME) ||
+        return Registry::getSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
             (
                 $sTotp && $totp->verify($sTotp)
             );
@@ -161,15 +162,15 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 
     public function d3TotpClearSessionVariables()
     {
-        $this->d3GetSession()->deleteVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
-        $this->d3GetSession()->deleteVariable(d3totp::TOTP_SESSION_CURRENTUSER);
-        $this->d3GetSession()->deleteVariable(d3totp::TOTP_SESSION_NAVFORMPARAMS);
+        $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_CURRENTCLASS);
+        $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_CURRENTUSER);
+        $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_NAVFORMPARAMS);
     }
 
     /**
      * @return Session
      */
-    public function d3GetSession()
+    public function d3TotpGetSession()
     {
         return Registry::getSession();
     }

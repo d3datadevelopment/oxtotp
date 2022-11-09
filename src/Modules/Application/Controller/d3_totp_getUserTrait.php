@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace D3\Totp\Modules\Application\Controller;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
@@ -36,7 +37,7 @@ trait d3_totp_getUserTrait
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && !$this->d3TotpGetSessionObject()->getVariable(d3totp::TOTP_SESSION_VARNAME)
+                && !$this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_AUTH)
             ) {
                 return false;
             }

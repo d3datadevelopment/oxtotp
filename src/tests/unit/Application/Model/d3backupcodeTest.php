@@ -15,6 +15,7 @@ namespace D3\Totp\tests\unit\Application\Model;
 
 use D3\Totp\Application\Model\d3backupcode;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
@@ -153,7 +154,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
      */
     public function d3GetUserReturnCurrentUser()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, 'foobar');
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, 'foobar');
 
         $oUser = $this->callMethod($this->_oModel, 'd3GetUser');
 

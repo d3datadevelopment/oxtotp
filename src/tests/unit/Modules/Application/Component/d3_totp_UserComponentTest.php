@@ -14,6 +14,7 @@
 namespace D3\Totp\tests\unit\Modules\Application\Component;
 
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\Modules\Application\Component\d3_totp_UserComponent;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
@@ -42,7 +43,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
 
         $this->_oController = oxNew(UserComponent::class);
 
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
     }
 
     public function tearDown(): void
@@ -84,13 +85,13 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSession',
-                'd3GetUtils',
+                'd3TotpGetSession',
+                'd3TotpGetUtils',
             ])
             ->getMock();
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
-        $oControllerMock->method('d3GetUtils')->willReturn($oUtilsMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetUtils')->willReturn($oUtilsMock);
 
         $this->_oController = $oControllerMock;
 
@@ -145,13 +146,13 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSession',
-                'd3GetUtils',
+                'd3TotpGetSession',
+                'd3TotpGetUtils',
             ])
             ->getMock();
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
-        $oControllerMock->method('d3GetUtils')->willReturn($oUtilsMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetUtils')->willReturn($oUtilsMock);
 
         $this->_oController = $oControllerMock;
 
@@ -221,15 +222,15 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
                 'd3GetTotpObject',
-                'd3GetSession',
-                'd3GetUtils',
+                'd3TotpGetSession',
+                'd3TotpGetUtils',
                 'getParent'
             ])
             ->getMock();
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getParent')->willReturn($oParentMock);
-        $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
-        $oControllerMock->method('d3GetUtils')->willReturn($oUtilsMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetUtils')->willReturn($oUtilsMock);
 
         $this->_oController = $oControllerMock;
 
@@ -252,7 +253,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpCheckTotpLogin
      */
     public function checkTotploginNoTotpLogin()
     {
@@ -272,29 +273,29 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         /** @var UserComponent|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
-                'isNoTotpOrNoLogin',
-                'hasValidTotp',
+                'd3TotpIsNoTotpOrNoLogin',
+                'd3TotpHasValidTotp',
                 'd3GetTotpObject',
-                'd3GetSession',
+                'd3TotpGetSession',
             ])
             ->getMock();
-        $oControllerMock->method('isNoTotpOrNoLogin')->willReturn(true);
-        $oControllerMock->expects($this->never())->method('hasValidTotp')->willReturn(false);
+        $oControllerMock->method('d3TotpIsNoTotpOrNoLogin')->willReturn(true);
+        $oControllerMock->expects($this->never())->method('d3TotpHasValidTotp')->willReturn(false);
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
 
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
             'd3totplogin',
-            $this->callMethod($this->_oController, 'checkTotplogin')
+            $this->callMethod($this->_oController, 'd3TotpCheckTotpLogin')
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpCheckTotpLogin
      */
     public function checkTotploginUnvalidTotp()
     {
@@ -325,31 +326,31 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         /** @var UserComponent|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
-                'isNoTotpOrNoLogin',
-                'hasValidTotp',
-                'd3GetUtilsView',
+                'd3TotpIsNoTotpOrNoLogin',
+                'd3TotpHasValidTotp',
+                'd3TotpGetUtilsView',
                 'd3GetTotpObject',
-                'd3GetSession',
+                'd3TotpGetSession',
             ])
             ->getMock();
-        $oControllerMock->method('isNoTotpOrNoLogin')->willReturn(false);
-        $oControllerMock->expects($this->once())->method('hasValidTotp')->willThrowException($oTotpExceptionMock);
-        $oControllerMock->method('d3GetUtilsView')->willReturn($oUtilsViewMock);
+        $oControllerMock->method('d3TotpIsNoTotpOrNoLogin')->willReturn(false);
+        $oControllerMock->expects($this->once())->method('d3TotpHasValidTotp')->willThrowException($oTotpExceptionMock);
+        $oControllerMock->method('d3TotpGetUtilsView')->willReturn($oUtilsViewMock);
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
 
         $this->_oController = $oControllerMock;
 
         $this->assertSame(
             'd3totplogin',
-            $this->callMethod($this->_oController, 'checkTotplogin')
+            $this->callMethod($this->_oController, 'd3TotpCheckTotpLogin')
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::checkTotplogin
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpCheckTotpLogin
      */
     public function checkTotploginValidTotp()
     {
@@ -375,19 +376,19 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         /** @var UserComponent|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
             ->onlyMethods([
-                'isNoTotpOrNoLogin',
-                'hasValidTotp',
-                'd3GetUtilsView',
+                'd3TotpIsNoTotpOrNoLogin',
+                'd3TotpHasValidTotp',
+                'd3TotpGetUtilsView',
                 'd3GetTotpObject',
-                'd3GetSession',
+                'd3TotpGetSession',
                 'setLoginStatus'
             ])
             ->getMock();
-        $oControllerMock->method('isNoTotpOrNoLogin')->willReturn(false);
-        $oControllerMock->expects($this->once())->method('hasValidTotp')->willReturn(true);
-        $oControllerMock->method('d3GetUtilsView')->willReturn($oUtilsViewMock);
+        $oControllerMock->method('d3TotpIsNoTotpOrNoLogin')->willReturn(false);
+        $oControllerMock->expects($this->once())->method('d3TotpHasValidTotp')->willReturn(true);
+        $oControllerMock->method('d3TotpGetUtilsView')->willReturn($oUtilsViewMock);
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
         $oControllerMock->expects($this->once())->method('setLoginStatus')->with(
             $this->identicalTo(USER_LOGIN_SUCCESS)
         );
@@ -395,27 +396,27 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $this->_oController = $oControllerMock;
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'checkTotplogin')
+            $this->callMethod($this->_oController, 'd3TotpCheckTotpLogin')
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3GetUtilsView
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpGetUtilsView
      */
     public function d3GetUtilsViewReturnsRightInstance()
     {
         $this->assertInstanceOf(
             UtilsView::class,
-            $this->callMethod($this->_oController, 'd3GetUtilsView')
+            $this->callMethod($this->_oController, 'd3TotpGetUtilsView')
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::cancelTotpLogin
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpCancelTotpLogin
      */
     public function canCancelTotpLogin()
     {
@@ -427,17 +428,17 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
 
         $this->_oController = $oControllerMock;
 
-        $this->callMethod($this->_oController, 'cancelTotpLogin');
+        $this->callMethod($this->_oController, 'd3TotpCancelTotpLogin');
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::isNoTotpOrNoLogin
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpIsNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginTrueNoSessionVariable()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -447,18 +448,18 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('isActive')->willReturn(true);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', [$oTotpMock])
+            $this->callMethod($this->_oController, 'd3TotpIsNoTotpOrNoLogin', [$oTotpMock])
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::isNoTotpOrNoLogin
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpIsNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginTrueTotpNotActive()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, true);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, true);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -468,18 +469,18 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('isActive')->willReturn(false);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', [$oTotpMock])
+            $this->callMethod($this->_oController, 'd3TotpIsNoTotpOrNoLogin', [$oTotpMock])
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::isNoTotpOrNoLogin
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpIsNoTotpOrNoLogin
      */
     public function isNoTotpOrNoLoginFalse()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, true);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, true);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -489,18 +490,18 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('isActive')->willReturn(true);
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'isNoTotpOrNoLogin', [$oTotpMock])
+            $this->callMethod($this->_oController, 'd3TotpIsNoTotpOrNoLogin', [$oTotpMock])
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpHasValidTotp
      */
     public function hasValidTotpTrueSessionVarname()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, true);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, true);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -510,18 +511,18 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(false);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'hasValidTotp', ['123456', $oTotpMock])
+            $this->callMethod($this->_oController, 'd3TotpHasValidTotp', ['123456', $oTotpMock])
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpHasValidTotp
      */
     public function hasValidTotpTrueValidTotp()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -531,18 +532,18 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(true);
 
         $this->assertTrue(
-            $this->callMethod($this->_oController, 'hasValidTotp', ['123456', $oTotpMock])
+            $this->callMethod($this->_oController, 'd3TotpHasValidTotp', ['123456', $oTotpMock])
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpHasValidTotp
      */
     public function hasValidTotpFalseMissingTotp()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -552,18 +553,18 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(true);
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'hasValidTotp', [null, $oTotpMock])
+            $this->callMethod($this->_oController, 'd3TotpHasValidTotp', [null, $oTotpMock])
         );
     }
 
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::hasValidTotp
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpHasValidTotp
      */
     public function hasValidTotpFalseUnverifiedTotp()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_VARNAME, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -573,7 +574,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oTotpMock->method('verify')->willReturn(false);
 
         $this->assertFalse(
-            $this->callMethod($this->_oController, 'hasValidTotp', ['123456', $oTotpMock])
+            $this->callMethod($this->_oController, 'd3TotpHasValidTotp', ['123456', $oTotpMock])
         );
     }
 
@@ -592,9 +593,9 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
 
         /** @var UserComponent|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(UserComponent::class)
-            ->onlyMethods(['d3GetSession'])
+            ->onlyMethods(['d3TotpGetSession'])
             ->getMock();
-        $oControllerMock->method('d3GetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
 
         $this->_oController = $oControllerMock;
 
@@ -604,13 +605,13 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3GetSession
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpGetSession
      */
     public function d3GetSessionReturnsRightInstance()
     {
         $this->assertInstanceOf(
             Session::class,
-            $this->callMethod($this->_oController, 'd3GetSession')
+            $this->callMethod($this->_oController, 'd3TotpGetSession')
         );
     }
 }

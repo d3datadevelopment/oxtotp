@@ -16,6 +16,7 @@ namespace D3\Totp\tests\unit\Application\Controller;
 use D3\Totp\Application\Controller\d3totplogin;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Utils;
@@ -36,8 +37,8 @@ class d3totploginTest extends d3TotpUnitTestCase
 
         $this->_oController = oxNew(d3totplogin::class);
 
-        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_CURRENTUSER);
-        Registry::getSession()->deleteVariable(d3totp::TOTP_SESSION_CURRENTCLASS);
+        Registry::getSession()->deleteVariable(d3totp_conf::SESSION_CURRENTUSER);
+        Registry::getSession()->deleteVariable(d3totp_conf::SESSION_CURRENTCLASS);
     }
 
     public function tearDown(): void
@@ -78,7 +79,7 @@ class d3totploginTest extends d3TotpUnitTestCase
      */
     public function renderDontRedirect()
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTUSER, 'foo');
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, 'foo');
 
         /** @var Utils|MockObject $oUtilsMock */
         $oUtilsMock = $this->getMockBuilder(Utils::class)
@@ -193,7 +194,7 @@ class d3totploginTest extends d3TotpUnitTestCase
     public function canGetPreviousClass()
     {
         $className = "testClass";
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, $className);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTCLASS, $className);
 
         $this->assertSame(
             $className,
@@ -209,7 +210,7 @@ class d3totploginTest extends d3TotpUnitTestCase
      */
     public function classIsOrderStep($className, $expected)
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, $className);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTCLASS, $className);
 
         $this->assertSame(
             $expected,
@@ -239,7 +240,7 @@ class d3totploginTest extends d3TotpUnitTestCase
      */
     public function getIsOrderStepIsSameLikeOrderClass($className, $expected)
     {
-        Registry::getSession()->setVariable(d3totp::TOTP_SESSION_CURRENTCLASS, $className);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTCLASS, $className);
 
         $this->assertSame(
             $expected,

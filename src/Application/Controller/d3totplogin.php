@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace D3\Totp\Application\Controller;
 
 use D3\Totp\Application\Model\d3backupcodelist;
-use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -29,9 +28,7 @@ class d3totplogin extends FrontendController
 
     public function render()
     {
-        if (Registry::getSession()->hasVariable(d3totp_conf::SESSION_AUTH) ||
-            false == Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)
-        ) {
+        if (false == Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)) {
             $this->getUtils()->redirect('index.php?cl=start');
             if (false == defined('OXID_PHP_UNIT')) {
                 // @codeCoverageIgnoreStart
@@ -60,7 +57,8 @@ class d3totplogin extends FrontendController
     public function getBackupCodeCountMessage()
     {
         $oBackupCodeList = $this->getBackupCodeListObject();
-        $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER));
+        $userId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
+        $iCount = $oBackupCodeList->getAvailableCodeCount($userId);
 
         if ($iCount < 4) {
             return sprintf(

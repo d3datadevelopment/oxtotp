@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Model;
 
+use D3\Totp\Modules\Application\Model\d3_totp_user;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -74,8 +75,9 @@ class d3backupcode extends BaseModel
             return $this->getUser();
         }
 
-        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
+        /** @var d3_totp_user $oUser */
         $oUser = oxNew(User::class);
+        $sUserId = $oUser->d3TotpGetCurrentUser();
         $oUser->load($sUserId);
         return $oUser;
     }

@@ -17,6 +17,8 @@ namespace D3\Totp\Application\Model;
 
 class d3totp_conf
 {
+    public const OXID_ADMIN_AUTH       = 'auth';
+    public const OXID_FRONTEND_AUTH    = 'usr';
     public const SESSION_AUTH          = 'd3TotpAuth';           // has valid totp, user is logged in completly
     public const SESSION_CURRENTUSER   = 'd3TotpCurrentUser';    // oxid assigned to user from entered username
     public const SESSION_CURRENTCLASS  = 'd3TotpCurrentClass';   // oxid assigned to user from entered username

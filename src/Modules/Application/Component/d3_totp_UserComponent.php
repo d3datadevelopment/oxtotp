@@ -18,6 +18,7 @@ namespace D3\Totp\Modules\Application\Component;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\DBALException;
 use InvalidArgumentException;
 use OxidEsales\Eshop\Application\Model\User;
@@ -85,8 +86,9 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     {
         $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp', true);
 
-        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
+        /** @var d3_totp_user $oUser */
         $oUser = oxNew(User::class);
+        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
         $oUser->load($sUserId);
 
         $totp = $this->d3GetTotpObject();
@@ -95,8 +97,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
         try {
             if (!$this->d3TotpIsNoTotpOrNoLogin($totp) && $this->d3TotpHasValidTotp($sTotp, $totp)) {
                 // relogin, don't extract from this try block
-                $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_AUTH, $sTotp);
-                $this->d3TotpGetSession()->setVariable('usr', $oUser->getId());
+                $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_AUTH, $oUser->getId());
+                $this->d3TotpGetSession()->setVariable(d3totp_conf::OXID_FRONTEND_AUTH, $oUser->getId());
                 $this->setUser(null);
                 $this->setLoginStatus(USER_LOGIN_SUCCESS);
                 $this->_afterLogin($oUser);

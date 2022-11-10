@@ -19,6 +19,7 @@ use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Modules\Application\Model\d3_totp_user;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -42,7 +43,7 @@ class d3totpadminlogin extends AdminController
      */
     public function render(): string
     {
-        if (Registry::getSession()->hasVariable(d3totp_conf::SESSION_AUTH) ||
+        if (Registry::getSession()->hasVariable(d3totp_conf::SESSION_AUTH) &&
             !Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)
         ) {
             $this->getUtils()->redirect('index.php?cl=admin_start');
@@ -53,7 +54,9 @@ class d3totpadminlogin extends AdminController
             }
         }
 
-        if (!Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)) {
+        if (!Registry::getSession()->hasVariable(d3totp_conf::OXID_ADMIN_AUTH) &&
+            !Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)
+        ) {
             $this->getUtils()->redirect('index.php?cl=login');
         }
 
@@ -74,8 +77,12 @@ class d3totpadminlogin extends AdminController
      */
     public function getBackupCodeCountMessage()
     {
+        /** @var d3_totp_user $user */
+        $user = oxNew(User::class);
+        $userId = $user->d3TotpGetCurrentUser();
+
         $oBackupCodeList = $this->d3GetBackupCodeListObject();
-        $iCount = $oBackupCodeList->getAvailableCodeCount(Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER));
+        $iCount = $oBackupCodeList->getAvailableCodeCount($userId);
 
         if ($iCount < 4) {
             return sprintf(
@@ -108,10 +115,16 @@ class d3totpadminlogin extends AdminController
         return oxNew(User::class);
     }
 
+    /**
+     * @return string|void
+     * @throws DatabaseConnectionException
+     */
     public function checklogin()
     {
         $session = Registry::getSession();
-        $userId = $session->getVariable(d3totp_conf::SESSION_CURRENTUSER);
+        /** @var d3_totp_user $user */
+        $user = oxNew(User::class);
+        $userId = $user->d3TotpGetCurrentUser();
 
         try {
             $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp');
@@ -125,8 +138,9 @@ class d3totpadminlogin extends AdminController
 
             $session->initNewSession();
             $session->setVariable("aAdminProfiles", $adminProfiles);
-            $session->setVariable('auth', $userId);
-            $session->setVariable(d3totp_conf::SESSION_AUTH, true);
+            $session->setVariable(d3totp_conf::OXID_ADMIN_AUTH, $userId);
+            $session->setVariable(d3totp_conf::SESSION_AUTH, $userId);
+            $session->deleteVariable(d3totp_conf::SESSION_CURRENTUSER);
 
             return "admin_start";
         } catch (d3totp_wrongOtpException $e) {

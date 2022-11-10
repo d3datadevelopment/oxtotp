@@ -25,7 +25,7 @@ class d3_totp_OrderControllerTest extends d3TotpUnitTestCase
     /** @var d3_totp_OrderController|MockObject */
     protected $_oController;
 
-    protected $sControllerClass = OrderController::class;
+    protected $sControllerClass = d3_totp_OrderController::class;
 
     /**
      * setup basic requirements

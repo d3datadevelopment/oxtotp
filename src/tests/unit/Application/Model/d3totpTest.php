@@ -14,6 +14,7 @@
 namespace D3\Totp\tests\unit\Application\Model;
 
 use BaconQrCode\Writer;
+use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
@@ -29,6 +30,8 @@ use stdClass;
 
 class d3totpTest extends d3TotpUnitTestCase
 {
+    use CanAccessRestricted;
+
     /** @var d3totp */
     protected $_oModel;
 

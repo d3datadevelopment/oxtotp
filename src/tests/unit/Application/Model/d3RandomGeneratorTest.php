@@ -13,12 +13,15 @@
 
 namespace D3\Totp\tests\unit\Application\Model;
 
+use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3RandomGenerator;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use ReflectionException;
 
 class d3RandomGeneratorTest extends d3TotpUnitTestCase
 {
+    use CanAccessRestricted;
+
     /** @var d3RandomGenerator */
     protected $_oModel;
 

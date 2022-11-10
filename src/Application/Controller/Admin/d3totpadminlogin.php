@@ -24,7 +24,9 @@ use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Utils;
+use Psr\Log\LoggerInterface;
 
 class d3totpadminlogin extends AdminController
 {
@@ -39,25 +41,48 @@ class d3totpadminlogin extends AdminController
     }
 
     /**
+     * @return d3totp|mixed
+     */
+    public function d3TotpGetTotpObject()
+    {
+        return oxNew(d3totp::class);
+    }
+
+    /**
+     * @return bool
+     * @throws DatabaseConnectionException
+     */
+    protected function isTotpIsNotRequired(): bool
+    {
+        $user = $this->d3TotpGetUserObject();
+        $userId = $user->d3TotpGetCurrentUser();
+
+        $totp = $this->d3TotpGetTotpObject();
+        $totp->loadByUserId($userId);
+
+        return $this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_AUTH) ||
+            !$totp->isActive();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTotpLoginNotPossible(): bool
+    {
+        return !$this->d3TotpGetSession()->hasVariable(d3totp_conf::OXID_ADMIN_AUTH) &&
+            !$this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER);
+    }
+
+    /**
      * @return string
+     * @throws DatabaseConnectionException
      */
     public function render(): string
     {
-        if (Registry::getSession()->hasVariable(d3totp_conf::SESSION_AUTH) &&
-            !Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)
-        ) {
-            $this->getUtils()->redirect('index.php?cl=admin_start');
-            if (!defined('OXID_PHP_UNIT')) {
-                // @codeCoverageIgnoreStart
-                exit;
-                // @codeCoverageIgnoreEnd
-            }
-        }
-
-        if (!Registry::getSession()->hasVariable(d3totp_conf::OXID_ADMIN_AUTH) &&
-            !Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)
-        ) {
-            $this->getUtils()->redirect('index.php?cl=login');
+        if ($this->isTotpIsNotRequired()) {
+            $this->d3TotpGetUtils()->redirect('index.php?cl=admin_start');
+        } elseif ($this->isTotpLoginNotPossible()) {
+            $this->d3TotpGetUtils()->redirect('index.php?cl=login');
         }
 
         return parent::render();
@@ -66,7 +91,7 @@ class d3totpadminlogin extends AdminController
     /**
      * @return d3backupcodelist
      */
-    public function d3GetBackupCodeListObject()
+    public function d3GetBackupCodeListObject(): d3backupcodelist
     {
         return oxNew(d3backupcodelist::class);
     }
@@ -92,25 +117,20 @@ class d3totpadminlogin extends AdminController
         }
     }
 
-    public function d3CancelLogin()
+    /**
+     * @return string
+     */
+    public function d3CancelLogin(): string
     {
-        $oUser = $this->d3GetUserObject();
+        $oUser = $this->d3TotpGetUserObject();
         $oUser->logout();
         return "login";
     }
 
     /**
-     * @return d3totp
+     * @return d3_totp_user
      */
-    public function d3GetTotpObject()
-    {
-        return oxNew(d3totp::class);
-    }
-
-    /**
-     * @return User
-     */
-    public function d3GetUserObject()
+    public function d3TotpGetUserObject(): d3_totp_user
     {
         return oxNew(User::class);
     }
@@ -121,7 +141,7 @@ class d3totpadminlogin extends AdminController
      */
     public function checklogin()
     {
-        $session = Registry::getSession();
+        $session = $this->d3TotpGetSession();
         /** @var d3_totp_user $user */
         $user = oxNew(User::class);
         $userId = $user->d3TotpGetCurrentUser();
@@ -129,7 +149,7 @@ class d3totpadminlogin extends AdminController
         try {
             $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp');
 
-            $totp = $this->d3GetTotpObject();
+            $totp = $this->d3TotpGetTotpObject();
             $totp->loadByUserId($userId);
 
             $this->d3TotpHasValidTotp($sTotp, $totp);
@@ -145,21 +165,21 @@ class d3totpadminlogin extends AdminController
             return "admin_start";
         } catch (d3totp_wrongOtpException $e) {
             Registry::getUtilsView()->addErrorToDisplay($e);
-            Registry::getLogger()->error($e->getMessage(), ['UserId'   => $userId]);
-            Registry::getLogger()->debug($e->getTraceAsString());
+            $this->getLogger()->error($e->getMessage(), ['UserId'   => $userId]);
+            $this->getLogger()->debug($e->getTraceAsString());
         }
     }
 
     /**
-     * @param string $sTotp
+     * @param string|null $sTotp
      * @param d3totp $totp
      * @return bool
      * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
-    public function d3TotpHasValidTotp($sTotp, $totp)
+    public function d3TotpHasValidTotp(string $sTotp = null, d3totp $totp): bool
     {
-        return Registry::getSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
+        return $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
             (
                 $sTotp && $totp->verify($sTotp)
             );
@@ -168,26 +188,24 @@ class d3totpadminlogin extends AdminController
     /**
      * @return Utils
      */
-    public function getUtils(): Utils
+    public function d3TotpGetUtils(): Utils
     {
         return Registry::getUtils();
     }
 
     /**
-     * Returns Bread Crumb - you are here page1/page2/page3...
-     *
-     * @return array
+     * @return Session
      */
-    public function getBreadCrumb(): array
+    public function d3TotpGetSession(): Session
     {
-        $aPaths = [];
-        $aPath = [];
-        $iBaseLanguage = Registry::getLang()->getBaseLanguage();
-        $aPath['title'] = Registry::getLang()->translateString('D3_WEBAUTHN_BREADCRUMB', $iBaseLanguage, false);
-        $aPath['link'] = $this->getLink();
+        return Registry::getSession();
+    }
 
-        $aPaths[] = $aPath;
-
-        return $aPaths;
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return Registry::getLogger();
     }
 }

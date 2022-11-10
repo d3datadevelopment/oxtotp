@@ -12,8 +12,8 @@
 
 namespace D3\Totp\tests\unit;
 
-use D3\ModCfg\Tests\unit\d3ModCfgUnitTestCase;
+use OxidEsales\TestingLibrary\UnitTestCase;
 
-abstract class d3TotpUnitTestCase extends d3ModCfgUnitTestCase
+abstract class d3TotpUnitTestCase extends UnitTestCase
 {
 }

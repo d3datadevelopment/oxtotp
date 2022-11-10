@@ -13,6 +13,7 @@
 
 namespace D3\Totp\tests\unit\Application\Model;
 
+use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3backupcode;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
@@ -25,6 +26,8 @@ use ReflectionException;
 
 class d3backupcodelistTest extends d3TotpUnitTestCase
 {
+    use CanAccessRestricted;
+
     /** @var d3backupcodelist */
     protected $_oModel;
 

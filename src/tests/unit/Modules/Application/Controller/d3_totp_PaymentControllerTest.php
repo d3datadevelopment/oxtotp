@@ -24,7 +24,7 @@ class d3_totp_PaymentControllerTest extends d3TotpUnitTestCase
     /** @var d3_totp_PaymentController */
     protected $_oController;
 
-    protected $sControllerClass = PaymentController::class;
+    protected $sControllerClass = d3_totp_PaymentController::class;
 
     /**
      * setup basic requirements

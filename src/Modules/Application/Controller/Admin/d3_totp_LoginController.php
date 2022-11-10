@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Modules\Application\Controller\Admin;
 
+use D3\TestingTools\Production\IsMockable;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
@@ -25,6 +26,8 @@ use OxidEsales\Eshop\Core\Session;
 
 class d3_totp_LoginController extends d3_totp_LoginController_parent
 {
+    use IsMockable;
+
     /**
      * @return d3totp
      */
@@ -47,7 +50,8 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function checklogin()
     {
-        $return = parent::checklogin();
+        // parent::checklogin();
+        $return = $this->d3CallMockableParent('checklogin');
 
         $totp = $this->d3GetTotpObject();
         $totp->loadByUserId(Registry::getSession()->getVariable("auth"));
@@ -56,11 +60,10 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             $userId = $this->d3TotpGetSession()->getVariable('auth');
 
             /** @var d3_totp_user $user */
-            $user = oxNew(User::class);
+            $user = $this->d3TotpGetUserObject();
             $user->logout();
 
             $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, $userId);
-
             return "d3totpadminlogin";
         }
 
@@ -75,5 +78,13 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     {
         return $totp->isActive()
             && false == $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH);
+    }
+
+    /**
+     * @return d3_totp_user
+     */
+    protected function d3TotpGetUserObject(): d3_totp_user
+    {
+        return oxNew( User::class );
     }
 }

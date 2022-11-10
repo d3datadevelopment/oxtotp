@@ -13,6 +13,7 @@
 
 namespace D3\Totp\tests\unit\Modules\Application\Model;
 
+use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
@@ -23,6 +24,8 @@ use ReflectionException;
 
 class d3_totp_userTest extends d3TotpUnitTestCase
 {
+    use CanAccessRestricted;
+
     /** @var d3_totp_user */
     protected $_oModel;
 
@@ -54,7 +57,7 @@ class d3_totp_userTest extends d3TotpUnitTestCase
         $oSessionMock = $this->getMockBuilder(Session::class)
             ->onlyMethods(['deleteVariable'])
             ->getMock();
-        $oSessionMock->expects($this->once())->method('deleteVariable')->willReturn(true);
+        $oSessionMock->expects($this->atLeast(2))->method('deleteVariable')->willReturn(true);
 
         /** @var d3_totp_user|MockObject $oModelMock */
         $oModelMock = $this->getMockBuilder(User::class)

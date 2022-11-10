@@ -13,6 +13,8 @@
 
 namespace D3\Totp\tests\unit\Modules\Application\Controller;
 
+use D3\TestingTools\Development\IsMockable;
+use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Controller\d3_totp_OrderController;
 use OxidEsales\Eshop\Application\Model\User;
@@ -22,6 +24,8 @@ use ReflectionException;
 
 trait d3_totp_getUserTestTrait
 {
+    use CanAccessRestricted;
+
     /**
      * @test
      * @throws ReflectionException
@@ -81,14 +85,14 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
+                'd3CallMockableParent'
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
+        $oControllerMock->method('d3CallMockableParent')->willReturn($oUserMock);
 
         $this->_oController = $oControllerMock;
-
-        $this->setValue($this->_oController, '_oActUser', $oUserMock);
 
         $this->assertSame(
             $oUserMock,
@@ -132,14 +136,14 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
+                'd3CallMockableParent'
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
+        $oControllerMock->method('d3CallMockableParent')->willReturn($oUserMock);
 
         $this->_oController = $oControllerMock;
-
-        $this->setValue($this->_oController, '_oActUser', $oUserMock);
 
         $this->assertSame(
             $oUserMock,
@@ -184,14 +188,14 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
+                'd3CallMockableParent'
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
+        $oControllerMock->method('d3CallMockableParent')->willReturn($oUserMock);
 
         $this->_oController = $oControllerMock;
-
-        $this->setValue($this->_oController, '_oActUser', $oUserMock);
 
         $this->assertFalse(
             $this->callMethod($this->_oController, 'getUser')
@@ -229,5 +233,17 @@ trait d3_totp_getUserTestTrait
                 'd3TotpGetSessionObject'
             )
         );
+    }
+
+    /**
+     * @te__st
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_OrderController::d3CallMockableParent
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_PaymentController::d3CallMockableParent
+     * @covers \D3\Totp\Modules\Application\Controller\d3_totp_UserController::d3CallMockableParent
+     */
+    public function d3callMockableParentTest()
+    {
+        $this->callMockableParentTest($this->_oController);
     }
 }

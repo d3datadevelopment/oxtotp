@@ -13,6 +13,7 @@
 
 namespace D3\Totp\tests\unit\Modules\Application\Component;
 
+use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
@@ -31,6 +32,8 @@ use ReflectionException;
 
 class d3_totp_UserComponentTest extends d3TotpUnitTestCase
 {
+    use CanAccessRestricted;
+
     /** @var d3_totp_UserComponent */
     protected $_oController;
 

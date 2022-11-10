@@ -24,7 +24,7 @@ class d3_totp_UserControllerTest extends d3TotpUnitTestCase
     /** @var d3_totp_UserController */
     protected $_oController;
 
-    protected $sControllerClass = UserController::class;
+    protected $sControllerClass = d3_totp_UserController::class;
 
     /**
      * setup basic requirements

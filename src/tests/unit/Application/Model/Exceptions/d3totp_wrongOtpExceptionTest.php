@@ -13,12 +13,15 @@
 
 namespace D3\Totp\tests\unit\Application\Model\Exceptions;
 
+use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use ReflectionException;
 
 class d3totp_wrongOtpExceptionTest extends d3TotpUnitTestCase
 {
+    use CanAccessRestricted;
+
     /** @var d3totp_wrongOtpException */
     protected $_oModel;
 

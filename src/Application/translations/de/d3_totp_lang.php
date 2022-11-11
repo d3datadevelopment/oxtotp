@@ -25,6 +25,7 @@ $aLang = [
     'D3_TOTP_BREADCRUMB'                              => 'Einmalpasswort-Anmeldung',
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
     'D3_TOTP_ACCOUNT'                                 => '2-Faktor-Authentisierung',
+    'D3_TOTP_ACCOUNT_DESC'                            => 'Sichern Sie Ihre Kontoanmeldung mit einem zweiten Faktor.',
 
     'D3_TOTP_ACCOUNT_USE'                             => '2-Faktor-Authentisierung verwenden',
 

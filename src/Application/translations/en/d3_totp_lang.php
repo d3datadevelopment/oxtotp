@@ -25,6 +25,7 @@ $aLang = [
     'D3_TOTP_BREADCRUMB'                              => 'one-time password login',
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',
     'D3_TOTP_ACCOUNT'                                 => '2-factor authentication',
+    'D3_TOTP_ACCOUNT_DESC'                            => 'Secure your account login with a second factor.',
 
     'D3_TOTP_ACCOUNT_USE'                             => 'Use 2-factor authentication',
 

@@ -15,6 +15,7 @@ namespace D3\Totp\tests\unit\Modules\Application\Model;
 
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Model\User;
@@ -99,5 +100,61 @@ class d3_totp_userTest extends d3TotpUnitTestCase
             Session::class,
             $this->callMethod($this->_oModel, 'd3TotpGetSession')
         );
+    }
+
+    /**
+     * @test
+     * @param $currentUser
+     * @param $isAdmin
+     * @param $adminAuth
+     * @param $frontendAuth
+     * @param $expected
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::d3TotpGetCurrentUser
+     * @dataProvider d3TotpGetCurrentUserTestDataProvider
+     */
+    public function d3TotpGetCurrentUserTest($currentUser, $isAdmin, $adminAuth, $frontendAuth, $expected)
+    {
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->onlyMethods(['hasVariable', 'getVariable'])
+            ->getMock();
+        $oSessionMock->expects($this->once())->method('hasVariable')->willReturn((bool) $currentUser);
+        $getVariableMap = [
+            [d3totp_conf::SESSION_CURRENTUSER, $currentUser],
+            [d3totp_conf::OXID_ADMIN_AUTH, $adminAuth],
+            [d3totp_conf::OXID_FRONTEND_AUTH, $frontendAuth],
+        ];
+        $oSessionMock->method('getVariable')->willReturnMap($getVariableMap);
+
+        /** @var d3_totp_user|MockObject $oModelMock */
+        $oModelMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['d3TotpGetSession', 'isAdmin'])
+            ->getMock();
+        $oModelMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+        $oModelMock->method('isAdmin')->willReturn($isAdmin);
+
+        $this->_oModel = $oModelMock;
+
+        $this->assertSame(
+            $expected,
+            $this->callMethod(
+                $this->_oModel,
+                'd3TotpGetCurrentUser'
+            )
+        );
+    }
+
+    /**
+     * @return array[]
+     */
+    public function d3TotpGetCurrentUserTestDataProvider(): array
+    {
+        return [
+            'login request' => ['currentFixture', true, 'adminFixture', 'frontendFixture', 'currentFixture'],
+            'admin auth'    => [null, true, 'adminFixture', 'frontendFixture', 'adminFixture'],
+            'frontend auth' => [null, false, 'adminFixture', 'frontendFixture', 'frontendFixture'],
+        ];
     }
 }

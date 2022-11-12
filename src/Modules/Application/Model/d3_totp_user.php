@@ -55,7 +55,7 @@ class d3_totp_user extends d3_totp_user_parent
     {
         return $this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER) ?
             $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER) :
-            (isAdmin() ?
+            ($this->isAdmin() ?
                 $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH) :
                 $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_FRONTEND_AUTH));
     }

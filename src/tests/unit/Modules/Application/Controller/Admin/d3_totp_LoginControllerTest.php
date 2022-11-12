@@ -13,10 +13,10 @@
 
 namespace D3\Totp\tests\unit\Modules\Application\Controller\Admin;
 
-use D3\TestingTools\Development\Constants;
 use D3\TestingTools\Development\IsMockable;
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
@@ -174,6 +174,64 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
 
     /**
      * @test
+     * @param $totpActive
+     * @param $loggedin
+     * @param $expected
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3TotpLoginMissing
+     * @dataProvider d3TotpLoginMissingTestDataProvider
+     */
+    public function d3TotpLoginMissingTest($totpActive, $loggedin, $expected)
+    {
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->getMockBuilder(d3totp::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isActive'])
+            ->getMock();
+        $oTotpMock->method('isActive')->willReturn($totpActive);
+
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->getMockBuilder(Session::class)
+            ->onlyMethods(['getVariable'])
+            ->getMock();
+        $oSessionMock->method('getVariable')->with(d3totp_conf::SESSION_AUTH)->willReturn($loggedin);
+
+        /** @var d3_totp_LoginController|MockObject $oControllerMock */
+        $oControllerMock = $this->getMockBuilder(d3_totp_LoginController::class)
+            ->onlyMethods([
+                'd3TotpGetSession'
+            ])
+            ->getMock();
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertSame(
+            $expected,
+            $this->callMethod(
+                $this->_oController,
+                'd3TotpLoginMissing',
+                [$oTotpMock]
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function d3TotpLoginMissingTestDataProvider(): array
+    {
+        return [
+            'totp not active, not logged in'=> [false, false, false],
+            'totp active, logged in'        => [true , true, false],
+            'totp active, not logged in'    => [true , false, true],
+            'totp not active, logged in'    => [false, true, false],
+        ];
+    }
+
+    /**
+     * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3TotpGetUserObject
      */
@@ -183,15 +241,5 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
             User::class,
             $this->callMethod($this->_oController, 'd3TotpGetUserObject')
         );
-    }
-
-    /**
-     * @te__st
-     * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3CallMockableParent
-     */
-    public function canCallMockableParent()
-    {
-        $this->callMockableParentTest($this->_oController);
     }
 }

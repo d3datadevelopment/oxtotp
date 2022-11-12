@@ -419,6 +419,19 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpGetUtils
+     */
+    public function d3GetUtilsReturnsRightInstance()
+    {
+        $this->assertInstanceOf(
+            Utils::class,
+            $this->callMethod($this->_oController, 'd3TotpGetUtils')
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3TotpCancelTotpLogin
      */
     public function canCancelTotpLogin()

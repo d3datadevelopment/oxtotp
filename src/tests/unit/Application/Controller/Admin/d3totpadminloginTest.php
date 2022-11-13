@@ -537,11 +537,10 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
             ->onlyMethods(['verify'])
             ->disableOriginalConstructor()
             ->getMock();
-        $oTotpMock->method('verify')->willReturn(true);
+        $oTotpMock->method('verify')->willThrowException(oxNew(d3totp_wrongOtpException::class));
 
-        $this->assertFalse(
-            $this->callMethod($this->_oController, 'd3TotpHasValidTotp', [null, $oTotpMock])
-        );
+        $this->expectException(d3totp_wrongOtpException::class);
+        $this->callMethod($this->_oController, 'd3TotpHasValidTotp', [null, $oTotpMock]);
     }
 
     /**

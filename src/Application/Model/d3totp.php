@@ -143,7 +143,7 @@ class d3totp extends BaseModel
     {
         if (false == $this->totp) {
             $this->totp = TOTP::create($seed ?: $this->getSavedSecret());
-            $this->totp->setLabel($this->getUser()->getFieldData('oxusername'));
+            $this->totp->setLabel($this->getUser()->getFieldData('oxusername')?: '');
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
         }
 

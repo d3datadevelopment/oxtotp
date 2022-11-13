@@ -157,9 +157,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     public function d3TotpHasValidTotp($sTotp, $totp)
     {
         return Registry::getSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
-            (
-                $sTotp && $totp->verify($sTotp)
-            );
+            $totp->verify($sTotp);
     }
 
     public function d3TotpClearSessionVariables()

@@ -147,7 +147,7 @@ class d3totpadminlogin extends AdminController
         $userId = $user->d3TotpGetCurrentUser();
 
         try {
-            $sTotp = Registry::getRequest()->getRequestEscapedParameter('d3totp');
+            $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp'));
 
             $totp = $this->d3TotpGetTotpObject();
             $totp->loadByUserId($userId);

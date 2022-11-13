@@ -15,3 +15,32 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+
+#login label {
+    position: absolute;
+    left: -2000px;
+}
+
+#login label.show {
+    position: relative;
+    display: block;
+    left: 0;
+}
+
+#login .container {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0;
+}
+
+#login .digit {
+    width: 3em;
+    margin: 0 2px;
+    text-align: center;
+    height: 4em;
+}
+
+#login .digit:nth-of-type(4) {
+    margin-left: 15px;
+}

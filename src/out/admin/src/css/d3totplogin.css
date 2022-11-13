@@ -10,3 +10,30 @@
     background: silver;
     color: black;
 }
+#login label {
+    position: absolute;
+    left: -2000px;
+}
+
+#login label.show {
+    position: relative;
+    display: block;
+    left: 0;
+}
+
+#login .container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+#login .digit {
+    height: 3em;
+    width: 14%;
+    margin: 0 2px;
+    text-align: center;
+}
+
+#login .digit:nth-of-type(4) {
+    margin-left: 7px;
+}

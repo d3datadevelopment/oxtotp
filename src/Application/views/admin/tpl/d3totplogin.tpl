@@ -22,16 +22,49 @@
             <input type="hidden" name="fnc" value="checklogin">
             <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
 
+            <h3>[{oxmultilang ident="TOTP_INPUT"}]</h3>
+
             [{if !empty($Errors.default)}]
                 [{include file="inc_error.tpl" Errorlist=$Errors.default}]
             [{/if}]
 
             [{$oView->getBackupCodeCountMessage()}]
 
-            <label for="d3totp">[{oxmultilang ident="TOTP_INPUT"}]</label>
-            <input type="text" name="d3totp" id="d3totp" value="" size="49" autofocus autocomplete="off"><br>
+            <div class="container">
+                <label for="1st">erste TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id='1st' inputmode="numeric" pattern="[0-9]*" maxlength="1" required onkeyup="clickEvent('2nd')" autofocus autocomplete="off">
+                <label for="2nd">zweite TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="2nd" inputmode="numeric" pattern="[0-9]*" maxlength="1" required onkeyup="clickEvent('3rd')" autocomplete="off">
+                <label for="3rd">dritte TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="3rd" inputmode="numeric" pattern="[0-9]*" maxlength="1" required onkeyup="clickEvent('4th')" autocomplete="off">
+                <label for="4th">vierte TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="4th" inputmode="numeric" pattern="[0-9]*" maxlength="1" required onkeyup="clickEvent('5th')" autocomplete="off">
+                <label for="5th">fünfte TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="5th" inputmode="numeric" pattern="[0-9]*" maxlength="1" required onkeyup="clickEvent('6th')" autocomplete="off">
+                <label for="6th">sechste TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="6th" inputmode="numeric" pattern="[0-9]*" maxlength="1" required autocomplete="off">
+            </div>
 
-            [{oxmultilang ident="TOTP_INPUT_HELP"}]
+            [{capture name="d3js"}]
+                function clickEvent(next){
+                    const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                    if(digits.includes(event.key)){
+                        document.getElementById(next).focus();
+                    }
+                }
+                document.addEventListener("paste", function(e) {
+                    if (e.target.type === "text") {
+                        var data = e.clipboardData.getData('Text');
+                        data = data.split('');
+                        [].forEach.call(document.querySelectorAll("#login input[type=text]"), (node, index) => {
+                            node.value = data[index];
+                        });
+                    }
+                });
+            [{/capture}]
+            [{oxscript add=$smarty.capture.d3js}]
+
+            <div>[{oxmultilang ident="TOTP_INPUT_HELP"}]</div>
 
             <input type="submit" value="[{oxmultilang ident="LOGIN_START"}]" class="btn"><br>
 

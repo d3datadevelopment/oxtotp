@@ -84,7 +84,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      */
     public function d3TotpCheckTotpLogin()
     {
-        $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp'));
+        $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp', []));
 
         /** @var d3_totp_user $oUser */
         $oUser = oxNew(User::class);

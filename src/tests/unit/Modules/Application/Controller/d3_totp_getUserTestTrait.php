@@ -13,7 +13,6 @@
 
 namespace D3\Totp\tests\unit\Modules\Application\Controller;
 
-use D3\TestingTools\Development\IsMockable;
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Controller\d3_totp_OrderController;

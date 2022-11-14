@@ -13,7 +13,6 @@
 
 namespace D3\Totp\tests\unit\Modules\Application\Controller\Admin;
 
-use D3\TestingTools\Development\IsMockable;
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
@@ -28,7 +27,6 @@ use ReflectionException;
 class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
 {
     use CanAccessRestricted;
-    use IsMockable;
 
     /** @var d3_totp_LoginController */
     protected $_oController;

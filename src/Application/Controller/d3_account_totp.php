@@ -35,12 +35,6 @@ class d3_account_totp extends AccountController
     {
         $sRet = parent::render();
 
-        /** @var User|null $oUser */
-        $oUser = $this->getUser();
-        if (false === $oUser instanceof User) {
-            return $this->_sThisTemplate = $this->_sThisLoginTemplate;
-        }
-
         $this->addTplParam('user', $this->getUser());
 
         return $sRet;

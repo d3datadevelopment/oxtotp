@@ -86,7 +86,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
      */
     public function renderReturnsLoginTemplateIfNotLoggedIn()
     {
-        $oUser = false;
+        $oUser = null;
 
         /** @var d3_account_totp|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_account_totp::class)

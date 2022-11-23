@@ -35,7 +35,7 @@ class d3_totp_utils extends d3_totp_utils_parent
         $blAuth = parent::checkAccessRights();
         $blAuth = $this->d3AuthHook($blAuth);
         $userID = $this->d3TotpGetSessionObject()->getVariable("auth");
-        $totpAuth = (bool) $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_AUTH);
+        $totpAuth = (bool) $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH);
         /** @var d3totp $totp */
         $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($userID);

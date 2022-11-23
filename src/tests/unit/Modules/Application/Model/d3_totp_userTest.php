@@ -123,6 +123,7 @@ class d3_totp_userTest extends d3TotpUnitTestCase
         $oSessionMock->expects($this->once())->method('hasVariable')->willReturn((bool) $currentUser);
         $getVariableMap = [
             [d3totp_conf::SESSION_CURRENTUSER, $currentUser],
+            [d3totp_conf::SESSION_ADMIN_CURRENTUSER, $currentUser],
             [d3totp_conf::OXID_ADMIN_AUTH, $adminAuth],
             [d3totp_conf::OXID_FRONTEND_AUTH, $frontendAuth],
         ];
@@ -152,9 +153,10 @@ class d3_totp_userTest extends d3TotpUnitTestCase
     public function d3TotpGetCurrentUserTestDataProvider(): array
     {
         return [
-            'login request' => ['currentFixture', true, 'adminFixture', 'frontendFixture', 'currentFixture'],
-            'admin auth'    => [null, true, 'adminFixture', 'frontendFixture', 'adminFixture'],
-            'frontend auth' => [null, false, 'adminFixture', 'frontendFixture', 'frontendFixture'],
+            'adm login request'     => ['currentFixture', true, 'adminFixture', 'frontendFixture', 'currentFixture'],
+            'frnt login request'    => ['currentFixture', false, 'adminFixture', 'frontendFixture', 'currentFixture'],
+            'admin auth'            => [null, true, 'adminFixture', 'frontendFixture', 'adminFixture'],
+            'frontend auth'         => [null, false, 'adminFixture', 'frontendFixture', 'frontendFixture'],
         ];
     }
 }

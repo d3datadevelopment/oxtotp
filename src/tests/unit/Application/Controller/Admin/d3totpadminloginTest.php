@@ -117,7 +117,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
             ])
             ->getMock();
         $hasVariableMap = [
-            [d3totp_conf::SESSION_AUTH, $hasAuthAlready]
+            [d3totp_conf::SESSION_ADMIN_AUTH, $hasAuthAlready]
         ];
         $oSessionMock->method('hasVariable')->willReturnMap($hasVariableMap);
 
@@ -174,7 +174,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
             ->getMock();
         $hasVariableMap = [
             [d3totp_conf::OXID_ADMIN_AUTH, $hasAdminAuth],
-            [d3totp_conf::SESSION_CURRENTUSER, $hasCurrentUser],
+            [d3totp_conf::SESSION_ADMIN_CURRENTUSER, $hasCurrentUser],
         ];
         $oSessionMock->method('hasVariable')->willReturnMap($hasVariableMap);
 
@@ -488,7 +488,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpTrueSessionVarname()
     {
-        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, true);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_ADMIN_AUTH, true);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -509,7 +509,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpTrueValidTotp()
     {
-        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_ADMIN_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -530,7 +530,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpFalseMissingTotp()
     {
-        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_ADMIN_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -550,7 +550,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
      */
     public function hasValidTotpFalseUnverifiedTotp()
     {
-        Registry::getSession()->setVariable(d3totp_conf::SESSION_AUTH, false);
+        Registry::getSession()->setVariable(d3totp_conf::SESSION_ADMIN_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)

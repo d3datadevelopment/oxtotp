@@ -41,7 +41,8 @@ trait d3_totp_getUserTrait
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && !$this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_AUTH)
+                && !$this->d3TotpGetSessionObject()->getVariable(
+                    isAdmin() ? d3totp_conf::SESSION_ADMIN_AUTH : d3totp_conf::SESSION_AUTH)
             ) {
                 return false;
             }

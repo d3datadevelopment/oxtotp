@@ -17,7 +17,6 @@ namespace D3\Totp\Application\Controller\Admin;
 
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3backupcodelist;
-use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;

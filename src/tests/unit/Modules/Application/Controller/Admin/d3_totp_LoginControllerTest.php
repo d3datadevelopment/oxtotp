@@ -193,7 +193,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
         $oSessionMock = $this->getMockBuilder(Session::class)
             ->onlyMethods(['getVariable'])
             ->getMock();
-        $oSessionMock->method('getVariable')->with(d3totp_conf::SESSION_AUTH)->willReturn($loggedin);
+        $oSessionMock->method('getVariable')->with(d3totp_conf::SESSION_ADMIN_AUTH)->willReturn($loggedin);
 
         /** @var d3_totp_LoginController|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_totp_LoginController::class)

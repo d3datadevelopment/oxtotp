@@ -60,7 +60,7 @@ class d3totpadminlogin extends AdminController
         $totp = $this->d3TotpGetTotpObject();
         $totp->loadByUserId($userId);
 
-        return $this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_AUTH) ||
+        return $this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_ADMIN_AUTH) ||
             !$totp->isActive();
     }
 
@@ -70,7 +70,7 @@ class d3totpadminlogin extends AdminController
     protected function isTotpLoginNotPossible(): bool
     {
         return !$this->d3TotpGetSession()->hasVariable(d3totp_conf::OXID_ADMIN_AUTH) &&
-            !$this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER);
+            !$this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_ADMIN_CURRENTUSER);
     }
 
     /**
@@ -159,8 +159,8 @@ class d3totpadminlogin extends AdminController
             $session->initNewSession();
             $session->setVariable("aAdminProfiles", $adminProfiles);
             $session->setVariable(d3totp_conf::OXID_ADMIN_AUTH, $userId);
-            $session->setVariable(d3totp_conf::SESSION_AUTH, $userId);
-            $session->deleteVariable(d3totp_conf::SESSION_CURRENTUSER);
+            $session->setVariable(d3totp_conf::SESSION_ADMIN_AUTH, $userId);
+            $session->deleteVariable(d3totp_conf::SESSION_ADMIN_CURRENTUSER);
 
             return "admin_start";
         } catch (d3totp_wrongOtpException $e) {
@@ -179,7 +179,7 @@ class d3totpadminlogin extends AdminController
      */
     public function d3TotpHasValidTotp(string $sTotp = null, d3totp $totp): bool
     {
-        return $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH)
+        return $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH)
             || $totp->verify($sTotp);
     }
 

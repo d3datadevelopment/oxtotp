@@ -16,7 +16,6 @@ namespace D3\Totp\tests\unit\Application\Controller;
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Controller\d3totplogin;
 use D3\Totp\Application\Model\d3backupcodelist;
-use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Core\Registry;

@@ -63,7 +63,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             $user = $this->d3TotpGetUserObject();
             $user->logout();
 
-            $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, $userId);
+            $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_ADMIN_CURRENTUSER, $userId);
             return "d3totpadminlogin";
         }
 
@@ -77,7 +77,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     public function d3TotpLoginMissing($totp)
     {
         return $totp->isActive()
-            && false == $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH);
+            && false == $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH);
     }
 
     /**

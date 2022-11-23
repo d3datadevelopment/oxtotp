@@ -25,13 +25,15 @@
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
+    justify-content: center;
 }
 
 #login .digit {
     height: 3em;
-    width: 14%;
+    width: 2em;
     margin: 0 2px;
     text-align: center;
+    font-size: 1.5em;
 }
 
 #login .digit:nth-of-type(4) {

@@ -21,6 +21,8 @@
 
             <input type="hidden" name="fnc" value="checklogin">
             <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
+            <input type="hidden" name="profile" value="[{$selectedProfile}]">
+            <input type="hidden" name="chlanguage" value="[{$selectedChLanguage}]">
 
             <h3>[{oxmultilang ident="TOTP_INPUT"}]</h3>
 

@@ -65,8 +65,13 @@ namespace D3\Totp\Modules\Core
 {
 
     use OxidEsales\Eshop\Core\Utils;
+    use OxidEsales\EshopCommunity\Core\SystemEventHandler;
 
     class d3_totp_utils_parent extends Utils
+    {
+    }
+
+    class totpSystemEventHandler_parent extends SystemEventHandler
     {
     }
 }

@@ -50,24 +50,49 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function checklogin()
     {
+        Registry::getSession()->setVariable(
+            d3totp_conf::SESSION_ADMIN_PROFILE,
+            Registry::getRequest()->getRequestEscapedParameter('profile')
+        );
+        Registry::getSession()->setVariable(
+            d3totp_conf::SESSION_ADMIN_CHLANGUAGE,
+            Registry::getRequest()->getRequestEscapedParameter('chlanguage')
+        );
+
         // parent::checklogin();
-        $return = $this->d3CallMockableParent('checklogin');
+        return $this->d3CallMockableParent('checklogin');
+    }
 
-        $totp = $this->d3GetTotpObject();
-        $totp->loadByUserId(Registry::getSession()->getVariable("auth"));
+    public function d3totpAfterLogin()
+    {
+        $myUtilsServer = Registry::getUtilsServer();
+        $sProfile = Registry::getSession()->getVariable(d3totp_conf::SESSION_ADMIN_PROFILE);
 
-        if ($this->d3TotpLoginMissing($totp)) {
-            $userId = $this->d3TotpGetSession()->getVariable('auth');
-
-            /** @var d3_totp_user $user */
-            $user = $this->d3TotpGetUserObject();
-            $user->logout();
-
-            $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_ADMIN_CURRENTUSER, $userId);
-            return "d3totpadminlogin";
+        // #533
+        if (isset($sProfile)) {
+            $aProfiles = Registry::getSession()->getVariable("aAdminProfiles");
+            if ($aProfiles && isset($aProfiles[$sProfile])) {
+                // setting cookie to store last locally used profile
+                $myUtilsServer->setOxCookie("oxidadminprofile", $sProfile . "@" . implode("@", $aProfiles[$sProfile]), time() + 31536000, "/");
+                Registry::getSession()->setVariable("profile", $aProfiles[$sProfile]);
+                Registry::getSession()->deleteVariable(d3totp_conf::SESSION_ADMIN_PROFILE);
+            }
+        } else {
+            //deleting cookie info, as setting profile to default
+            $myUtilsServer->setOxCookie("oxidadminprofile", "", time() - 3600, "/");
         }
 
-        return $return;
+        // languages
+        $iLang = Registry::getSession()->getVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE);
+
+        $aLanguages = Registry::getLang()->getAdminTplLanguageArray();
+        if (!isset($aLanguages[$iLang])) {
+            $iLang = key($aLanguages);
+        }
+
+        $myUtilsServer->setOxCookie("oxidadminlanguage", $aLanguages[$iLang]->abbr, time() + 31536000, "/");
+        Registry::getLang()->setTplLanguage($iLang);
+        Registry::getSession()->deleteVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE);
     }
 
     /**

@@ -25,12 +25,14 @@ use D3\Totp\Modules\Application\Controller\d3_totp_PaymentController;
 use D3\Totp\Modules\Application\Controller\d3_totp_UserController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\Modules\Core\d3_totp_utils;
+use D3\Totp\Modules\Core\totpSystemEventHandler;
 use D3\Totp\Setup as ModuleSetup;
 use OxidEsales\Eshop\Application\Component\UserComponent;
 use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
 use OxidEsales\Eshop\Application\Controller\OrderController;
 use OxidEsales\Eshop\Application\Controller\PaymentController;
 use OxidEsales\Eshop\Application\Controller\UserController;
+use OxidEsales\Eshop\Core\SystemEventHandler;
 use OxidEsales\Eshop\Core\Utils;
 use OxidEsales\Eshop\Application\Model as OxidModel;
 
@@ -67,6 +69,7 @@ $aModule = [
         LoginController::class             => d3_totp_LoginController::class,
         Utils::class                       => d3_totp_utils::class,
         UserComponent::class               => d3_totp_UserComponent::class,
+        SystemEventHandler::class          => totpSystemEventHandler::class
     ],
     'controllers'           => [
         'd3user_totp'       =>  d3user_totp::class,

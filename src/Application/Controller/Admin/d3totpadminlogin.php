@@ -19,8 +19,10 @@ use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
+use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
@@ -84,6 +86,9 @@ class d3totpadminlogin extends AdminController
         } elseif ($this->isTotpLoginNotPossible()) {
             $this->d3TotpGetUtils()->redirect('index.php?cl=login');
         }
+
+        $this->addTplParam('selectedProfile', Registry::getRequest()->getRequestEscapedParameter('profile'));
+        $this->addTplParam('selectedChLanguage', Registry::getRequest()->getRequestEscapedParameter('chlanguage'));
 
         return parent::render();
     }
@@ -154,13 +159,19 @@ class d3totpadminlogin extends AdminController
 
             $this->d3TotpHasValidTotp($sTotp, $totp);
 
-            $adminProfiles = $session->getVariable("aAdminProfiles");
+            $selectedProfile = Registry::getRequest()->getRequestEscapedParameter('profile');
+            $selectedLanguage = Registry::getRequest()->getRequestEscapedParameter('chlanguage');
 
             $session->initNewSession();
-            $session->setVariable("aAdminProfiles", $adminProfiles);
+            $session->setVariable(d3totp_conf::SESSION_ADMIN_PROFILE, $selectedProfile);
+            $session->setVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE, $selectedLanguage);
             $session->setVariable(d3totp_conf::OXID_ADMIN_AUTH, $userId);
             $session->setVariable(d3totp_conf::SESSION_ADMIN_AUTH, $userId);
             $session->deleteVariable(d3totp_conf::SESSION_ADMIN_CURRENTUSER);
+
+            /** @var d3_totp_LoginController $loginController */
+            $loginController = oxNew(LoginController::class);
+            $loginController->d3totpAfterLogin();
 
             return "admin_start";
         } catch (d3totp_wrongOtpException $e) {

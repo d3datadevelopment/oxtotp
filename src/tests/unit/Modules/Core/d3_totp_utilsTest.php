@@ -15,6 +15,7 @@ namespace D3\Totp\tests\unit\Modules\Core;
 
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Core\d3_totp_utils;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Core\Config;
@@ -55,7 +56,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      */
     public function checkAccessRightsNoAuth()
     {
-        Registry::getSession()->setVariable("auth", false);
+        Registry::getSession()->setVariable(d3totp_conf::OXID_ADMIN_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -88,7 +89,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      */
     public function checkAccessRightsForce2FA()
     {
-        Registry::getSession()->setVariable("auth", false);
+        Registry::getSession()->setVariable(d3totp_conf::OXID_ADMIN_AUTH, false);
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -125,7 +126,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      */
     public function checkAccessRightsTotpNotActive()
     {
-        Registry::getSession()->setVariable("auth", 'foo');
+        Registry::getSession()->setVariable(d3totp_conf::OXID_ADMIN_AUTH, 'foo');
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
@@ -162,7 +163,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      */
     public function checkAccessRightsTotpFinished()
     {
-        Registry::getSession()->setVariable("auth", 'foo');
+        Registry::getSession()->setVariable(d3totp_conf::OXID_ADMIN_AUTH, 'foo');
 
         /** @var Session|MockObject $oSessionMock */
         $oSessionMock = $this->getMockBuilder(Session::class)
@@ -209,7 +210,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      */
     public function checkAccessRightsTotpUnfinished()
     {
-        Registry::getSession()->setVariable("auth", 'foo');
+        Registry::getSession()->setVariable(d3totp_conf::OXID_ADMIN_AUTH, 'foo');
 
         /** @var Session|MockObject $oSessionMock */
         $oSessionMock = $this->getMockBuilder(Session::class)

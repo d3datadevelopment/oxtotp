@@ -3,6 +3,7 @@
 namespace D3\Totp\tests\unit\Application\Controller\Admin;
 
 use D3\Totp\Application\Controller\Admin\d3force_2fa;
+use D3\Totp\Application\Model\d3totp_conf;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,7 +28,7 @@ class d3force_2faTest extends d3user_totpTest
     {
         $expected = 'fixture';
 
-        Registry::getSession()->setVariable('auth', $expected);
+        Registry::getSession()->setVariable(d3totp_conf::OXID_ADMIN_AUTH, $expected);
 
         $this->callMethod(
             $this->_oController,
@@ -64,7 +65,7 @@ class d3force_2faTest extends d3user_totpTest
 
         Registry::getConfig()->setConfigParam('D3_TOTP_ADMIN_FORCE_2FA', $force2FA);
 
-        Registry::getSession()->setVariable('auth', $givenUserId);
+        Registry::getSession()->setVariable(d3totp_conf::OXID_ADMIN_AUTH, $givenUserId);
 
         $this->assertSame(
             $expected,

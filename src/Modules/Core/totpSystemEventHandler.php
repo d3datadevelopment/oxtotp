@@ -34,7 +34,7 @@ class totpSystemEventHandler extends totpSystemEventHandler_parent
     protected function d3requestTotp()
     {
         $totp = $this->d3GetTotpObject();
-        $userId = $this->d3TotpGetSession()->getVariable('auth');
+        $userId = $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH);
         $totp->loadByUserId($userId);
 
         if ($this->d3TotpLoginMissing($totp)) {

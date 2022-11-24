@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\tests\unit\Modules\Application\Component;
 
 use D3\TestingTools\Development\CanAccessRestricted;
@@ -92,6 +94,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
                 'd3TotpGetUtils',
             ])
             ->getMock();
+
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
         $oControllerMock->method('d3TotpGetUtils')->willReturn($oUtilsMock);

@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\tests\unit\Application\Model;
 
 use BaconQrCode\Writer;
@@ -865,7 +867,7 @@ class d3totpTest extends d3TotpUnitTestCase
             ->onlyMethods(['d3Base64_decode'])
             ->getMock();
         $oModelMock->method('d3Base64_decode')->willReturn(
-            str_pad('foobar', 50, 0, STR_PAD_LEFT)
+            str_pad('foobar', 50, '0', STR_PAD_LEFT)
         );
 
         $this->_oModel = $oModelMock;

@@ -11,6 +11,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\Totp\tests\unit\Modules\Application\Controller\Admin;
 
 use D3\TestingTools\Development\CanAccessRestricted;
@@ -19,8 +21,11 @@ use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
+use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Session;
+use OxidEsales\Eshop\Core\UtilsServer;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
@@ -79,84 +84,14 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::checklogin
      */
-    public function checkloginMissingTotp()
+    public function canChecklogin()
     {
         $fixture = 'returnString';
 
-        /** @var d3totp|MockObject $oTotpMock */
-        $oTotpMock = $this->getMockBuilder(d3totp::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['loadByUserId'])
-            ->getMock();
-        $oTotpMock->method('loadByUserId')->willReturn(true);
-
-        /** @var d3_totp_user|MockObject $userMock */
-        $userMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['logout'])
-            ->getMock();
-        $userMock->expects($this->once())->method('logout')->willReturn(true);
-
         /** @var d3_totp_LoginController|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_totp_LoginController::class)
-            ->onlyMethods([
-                'd3GetTotpObject',
-                'd3TotpGetUserObject',
-                'd3TotpLoginMissing',
-                'd3CallMockableParent'
-            ])
+            ->onlyMethods(['d3CallMockableParent'])
             ->getMock();
-        $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3TotpGetUserObject')->willReturn($userMock);
-        $oControllerMock->method('d3TotpLoginMissing')->with($this->identicalTo($oTotpMock))
-                                                      ->willReturn(true);
-        $oControllerMock->method('d3CallMockableParent')->willReturn($fixture);
-
-        $this->_oController = $oControllerMock;
-
-        $this->assertSame(
-            'd3totpadminlogin',
-            $this->callMethod(
-                $this->_oController,
-                'checklogin'
-            )
-        );
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::checklogin
-     */
-    public function checkloginNotMissingTotp()
-    {
-        $fixture = 'returnString';
-
-        /** @var d3totp|MockObject $oTotpMock */
-        $oTotpMock = $this->getMockBuilder(d3totp::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['loadByUserId'])
-            ->getMock();
-        $oTotpMock->method('loadByUserId')->willReturn(true);
-
-        /** @var d3_totp_user|MockObject $userMock */
-        $userMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['logout'])
-            ->getMock();
-        $userMock->expects($this->never())->method('logout')->willReturn(true);
-
-        /** @var d3_totp_LoginController|MockObject $oControllerMock */
-        $oControllerMock = $this->getMockBuilder(d3_totp_LoginController::class)
-            ->onlyMethods([
-                'd3GetTotpObject',
-                'd3TotpGetUserObject',
-                'd3TotpLoginMissing',
-                'd3CallMockableParent'
-            ])
-            ->getMock();
-        $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
-        $oControllerMock->method('d3TotpGetUserObject')->willReturn($userMock);
-        $oControllerMock->method('d3TotpLoginMissing')->with($this->identicalTo($oTotpMock))
-                                                      ->willReturn(false);
         $oControllerMock->method('d3CallMockableParent')->willReturn($fixture);
 
         $this->_oController = $oControllerMock;
@@ -167,6 +102,109 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
                 $this->_oController,
                 'checklogin'
             )
+        );
+    }
+
+    /**
+     * @test
+     *
+     * @param $selectedProfile
+     * @param $setCookie
+     * @param $expectedCookie
+     * @param $setSession
+     *
+     * @throws ReflectionException
+     * @dataProvider canRunTotpAfterLoginDataProvider
+     * @covers       \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3totpAfterLogin
+     */
+    public function canRunTotpAfterLogin($selectedProfile, $setCookie, $expectedCookie, $setSession)
+    {
+        /** @var Session|MockObject $sessionMock */
+        $sessionMock = $this->getMockBuilder(Session::class)
+            ->onlyMethods(['getVariable', 'setVariable'])
+            ->getMock();
+        $variableMap = [
+            [d3totp_conf::SESSION_ADMIN_PROFILE, $selectedProfile],
+            ['aAdminProfiles', [
+                0   => ['abc', 0],
+                1   => ['def', 1],
+                2   => ['geh', 2],
+            ]],
+        ];
+        $sessionMock->method('getVariable')->willReturnMap($variableMap);
+        $sessionMock->expects($setSession)->method('setVariable')->willReturnMap($variableMap);
+
+        /** @var UtilsServer|MockObject $utilsServerMock */
+        $utilsServerMock = $this->getMockBuilder(UtilsServer::class)
+            ->onlyMethods(['setOxCookie'])
+            ->getMock();
+        $utilsServerMock->expects($setCookie)->method('setOxCookie')->with(
+            $this->anything(),
+            $expectedCookie
+        );
+
+        /** @var d3_totp_LoginController|MockObject $sut */
+        $sut = $this->getMockBuilder(LoginController::class)
+            ->onlyMethods(['d3TotpGetUtilsServer', 'd3TotpGetSession', 'd3totpAfterLoginSetLanguage'])
+            ->getMock();
+        $sut->method('d3TotpGetUtilsServer')->willReturn($utilsServerMock);
+        $sut->method('d3TotpGetSession')->willReturn($sessionMock);
+        $sut->expects($this->once())->method('d3totpAfterLoginSetLanguage')->willReturn($sessionMock);
+
+        $this->callMethod(
+            $sut,
+            'd3totpAfterLogin'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function canRunTotpAfterLoginDataProvider(): array
+    {
+        return [
+            'no profile selected'       => [null, $this->once(), '', $this->never()],
+            'valid profile selected'    => [2, $this->once(), '2@geh@2', $this->once()],
+            'invalid profile selected'  => [5, $this->never(), false, $this->never()]
+        ];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers       \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3totpAfterLoginSetLanguage
+     */
+    public function canRunTotpAfterLoginSetLanguage()
+    {
+        /** @var Session|MockObject $sessionMock */
+        $sessionMock = $this->getMockBuilder(Session::class)
+                            ->onlyMethods(['getVariable'])
+                            ->getMock();
+        $sessionMock->method('getVariable')->willReturn(0);
+
+        /** @var UtilsServer|MockObject $utilsServerMock */
+        $utilsServerMock = $this->getMockBuilder(UtilsServer::class)
+            ->onlyMethods(['setOxCookie'])
+            ->getMock();
+        $utilsServerMock->expects($this->once())->method('setOxCookie');
+
+        /** @var Language|MockObject $langMock */
+        $langMock = $this->getMockBuilder(Language::class)
+            ->onlyMethods(['setTplLanguage'])
+            ->getMock();
+        $langMock->expects($this->once())->method('setTplLanguage');
+
+        /** @var d3_totp_LoginController|MockObject $sut */
+        $sut = $this->getMockBuilder(LoginController::class)
+                    ->onlyMethods(['d3TotpGetUtilsServer', 'd3TotpGetSession', 'd3TotpGetLangObject'])
+                    ->getMock();
+        $sut->method('d3TotpGetUtilsServer')->willReturn($utilsServerMock);
+        $sut->method('d3TotpGetSession')->willReturn($sessionMock);
+        $sut->method('d3TotpGetLangObject')->willReturn($langMock);
+
+        $this->callMethod(
+            $sut,
+            'd3totpAfterLoginSetlanguage'
         );
     }
 
@@ -238,6 +276,32 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
         $this->assertInstanceOf(
             User::class,
             $this->callMethod($this->_oController, 'd3TotpGetUserObject')
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3TotpGetUtilsServer
+     */
+    public function d3GetUtilsServerObjectReturnsRightObject()
+    {
+        $this->assertInstanceOf(
+            UtilsServer::class,
+            $this->callMethod($this->_oController, 'd3TotpGetUtilsServer')
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3TotpGetLangObject
+     */
+    public function d3GetLangObjectReturnsRightObject()
+    {
+        $this->assertInstanceOf(
+            Language::class,
+            $this->callMethod($this->_oController, 'd3TotpGetLangObject')
         );
     }
 }

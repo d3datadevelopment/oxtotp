@@ -91,7 +91,7 @@ class d3totpadminlogin extends AdminController
         $this->addTplParam('selectedChLanguage', Registry::getRequest()->getRequestEscapedParameter('chlanguage'));
 
         /** @var d3_totp_LoginController $loginController */
-        $loginController = oxNew(LoginController::class);
+        $loginController = $this->d3GetLoginController();
         $loginController->d3totpAfterLoginSetLanguage();
 
         return parent::render();
@@ -174,7 +174,7 @@ class d3totpadminlogin extends AdminController
             $session->deleteVariable(d3totp_conf::SESSION_ADMIN_CURRENTUSER);
 
             /** @var d3_totp_LoginController $loginController */
-            $loginController = oxNew(LoginController::class);
+            $loginController = $this->d3GetLoginController();
             $loginController->d3totpAfterLogin();
 
             return "admin_start";
@@ -220,5 +220,13 @@ class d3totpadminlogin extends AdminController
     public function getLogger(): LoggerInterface
     {
         return Registry::getLogger();
+    }
+
+    /**
+     * @return d3_totp_LoginController
+     */
+    public function d3GetLoginController(): LoginController
+    {
+        return oxNew(LoginController::class);
     }
 }

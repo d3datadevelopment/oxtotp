@@ -47,21 +47,11 @@ class d3_totp_utils extends d3_totp_utils_parent
             && $totp->isActive() === false
         ) {
             $this->redirect('index.php?cl=d3force_2fa');
-            if (false == defined('OXID_PHP_UNIT')) {
-                // @codeCoverageIgnoreStart
-                exit;
-                // @codeCoverageIgnoreEnd
-            }
         }
 
         //staten der prüfung vom einmalpasswort
         if ($blAuth && $totp->isActive() && false === $totpAuth) {
             $this->redirect('index.php?cl=d3totpadminlogin');
-            if (false == defined('OXID_PHP_UNIT')) {
-                // @codeCoverageIgnoreStart
-                exit;
-                // @codeCoverageIgnoreEnd
-            }
         }
 
         return $blAuth;

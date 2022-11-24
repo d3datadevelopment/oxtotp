@@ -90,6 +90,10 @@ class d3totpadminlogin extends AdminController
         $this->addTplParam('selectedProfile', Registry::getRequest()->getRequestEscapedParameter('profile'));
         $this->addTplParam('selectedChLanguage', Registry::getRequest()->getRequestEscapedParameter('chlanguage'));
 
+        /** @var d3_totp_LoginController $loginController */
+        $loginController = oxNew(LoginController::class);
+        $loginController->d3totpAfterLoginSetLanguage();
+
         return parent::render();
     }
 

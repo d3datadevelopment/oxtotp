@@ -82,7 +82,13 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             $myUtilsServer->setOxCookie("oxidadminprofile", "", time() - 3600, "/");
         }
 
-        // languages
+        $this->d3totpAfterLoginSetLanguage();
+        Registry::getSession()->deleteVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE);
+    }
+
+    public function d3totpAfterLoginSetLanguage()
+    {
+        $myUtilsServer = Registry::getUtilsServer();
         $iLang = Registry::getSession()->getVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE);
 
         $aLanguages = Registry::getLang()->getAdminTplLanguageArray();
@@ -92,7 +98,6 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
         $myUtilsServer->setOxCookie("oxidadminlanguage", $aLanguages[$iLang]->abbr, time() + 31536000, "/");
         Registry::getLang()->setTplLanguage($iLang);
-        Registry::getSession()->deleteVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE);
     }
 
     /**

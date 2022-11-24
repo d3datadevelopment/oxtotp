@@ -28,13 +28,8 @@ class d3totplogin extends FrontendController
 
     public function render()
     {
-        if (false == Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)) {
+        if (!Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)) {
             $this->getUtils()->redirect('index.php?cl=start');
-            if (false == defined('OXID_PHP_UNIT')) {
-                // @codeCoverageIgnoreStart
-                exit;
-                // @codeCoverageIgnoreEnd
-            }
         }
 
         $this->addTplParam('navFormParams', Registry::getSession()->getVariable(d3totp_conf::SESSION_NAVFORMPARAMS));

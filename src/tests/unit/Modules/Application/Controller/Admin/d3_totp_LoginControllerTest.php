@@ -173,14 +173,15 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers       \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3totpAfterLoginSetLanguage
+     * @dataProvider canRunTotpAfterLoginSetLanguageDataProvider
      */
-    public function canRunTotpAfterLoginSetLanguage()
+    public function canRunTotpAfterLoginSetLanguage($languageId)
     {
         /** @var Session|MockObject $sessionMock */
         $sessionMock = $this->getMockBuilder(Session::class)
                             ->onlyMethods(['getVariable'])
                             ->getMock();
-        $sessionMock->method('getVariable')->willReturn(0);
+        $sessionMock->method('getVariable')->willReturn($languageId);
 
         /** @var UtilsServer|MockObject $utilsServerMock */
         $utilsServerMock = $this->getMockBuilder(UtilsServer::class)
@@ -206,6 +207,17 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
             $sut,
             'd3totpAfterLoginSetlanguage'
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function canRunTotpAfterLoginSetLanguageDataProvider(): array
+    {
+        return [
+            'existing language'     => [0],
+            'not existing language' => [50],
+        ];
     }
 
     /**
@@ -264,19 +276,6 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
             'totp active, not logged in'    => [true , false, true],
             'totp not active, logged in'    => [false, true, false],
         ];
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     * @covers \D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController::d3TotpGetUserObject
-     */
-    public function d3GetUserObjectReturnsRightObject()
-    {
-        $this->assertInstanceOf(
-            User::class,
-            $this->callMethod($this->_oController, 'd3TotpGetUserObject')
-        );
     }
 
     /**

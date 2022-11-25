@@ -645,7 +645,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Controller\Admin\d3totpadminlogin::d3GetLoginControllert
+     * @covers \D3\Totp\Application\Controller\Admin\d3totpadminlogin::d3GetLoginController
      */
     public function d3GetLoginControllerReturnsRightObject()
     {

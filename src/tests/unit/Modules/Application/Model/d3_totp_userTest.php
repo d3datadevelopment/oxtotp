@@ -29,26 +29,6 @@ class d3_totp_userTest extends d3TotpUnitTestCase
 {
     use CanAccessRestricted;
 
-    /** @var d3_totp_user */
-    protected $_oModel;
-
-    /**
-     * setup basic requirements
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->_oModel = oxNew(User::class);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->_oModel);
-    }
-
     /**
      * @test
      * @throws ReflectionException
@@ -68,11 +48,11 @@ class d3_totp_userTest extends d3TotpUnitTestCase
             ->getMock();
         $oModelMock->method('d3TotpGetSession')->willReturn($oSessionMock);
 
-        $this->_oModel = $oModelMock;
+        $sut = $oModelMock;
 
         $this->assertTrue(
             $this->callMethod(
-                $this->_oModel,
+                $sut,
                 'logout'
             )
         );
@@ -85,9 +65,14 @@ class d3_totp_userTest extends d3TotpUnitTestCase
      */
     public function d3getTotpReturnsRightInstance()
     {
+        $sut = oxNew(User::class);
+
         $this->assertInstanceOf(
             d3totp::class,
-            $this->callMethod($this->_oModel, 'd3getTotp')
+            $this->callMethod(
+                $sut,
+                'd3getTotp'
+            )
         );
     }
 
@@ -98,9 +83,14 @@ class d3_totp_userTest extends d3TotpUnitTestCase
      */
     public function d3GetSessionReturnsRightInstance()
     {
+        $sut = oxNew(User::class);
+
         $this->assertInstanceOf(
             Session::class,
-            $this->callMethod($this->_oModel, 'd3TotpGetSession')
+            $this->callMethod(
+                $sut,
+                'd3TotpGetSession'
+            )
         );
     }
 
@@ -138,12 +128,12 @@ class d3_totp_userTest extends d3TotpUnitTestCase
         $oModelMock->method('d3TotpGetSession')->willReturn($oSessionMock);
         $oModelMock->method('isAdmin')->willReturn($isAdmin);
 
-        $this->_oModel = $oModelMock;
+        $sut = $oModelMock;
 
         $this->assertSame(
             $expected,
             $this->callMethod(
-                $this->_oModel,
+                $sut,
                 'd3TotpGetCurrentUser'
             )
         );

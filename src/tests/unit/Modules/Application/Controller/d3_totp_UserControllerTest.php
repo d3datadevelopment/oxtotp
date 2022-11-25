@@ -23,25 +23,5 @@ class d3_totp_UserControllerTest extends d3TotpUnitTestCase
 {
     use d3_totp_getUserTestTrait;
 
-    /** @var d3_totp_UserController */
-    protected $_oController;
-
-    protected $sControllerClass = d3_totp_UserController::class;
-
-    /**
-     * setup basic requirements
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->_oController = oxNew(UserController::class);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->_oController);
-    }
+    protected $sControllerClass = UserController::class;
 }

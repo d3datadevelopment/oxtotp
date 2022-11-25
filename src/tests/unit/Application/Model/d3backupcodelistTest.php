@@ -57,7 +57,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      */
     public function generateBackupCodes()
     {
-        /** @var FrontendController|MockObject $oConfigMock */
+        /** @var FrontendController|MockObject $oViewMock */
         $oViewMock = $this->getMockBuilder(FrontendController::class)
             ->addMethods(['setBackupCodes'])
             ->getMock();

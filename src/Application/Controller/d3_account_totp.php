@@ -108,7 +108,7 @@ class d3_account_totp extends AccountController
                 $oTotp->save();
                 $oTotpBackupCodes->save();
             } catch (Exception $oExcp) {
-                Registry::get(UtilsView::class)->addErrorToDisplay($oExcp);
+                Registry::get(UtilsView::class)->addErrorToDisplay($oExcp->getMessage());
             }
         }
     }

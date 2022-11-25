@@ -91,10 +91,10 @@ class totpSystemEventHandler extends totpSystemEventHandler_parent
     }
 
     /**
-     * @return d3_totp_user
+     * @return User
      */
-    protected function d3TotpGetUserObject(): d3_totp_user
+    protected function d3TotpGetUserObject(): User
     {
-        return oxNew( User::class );
+        return oxNew(User::class);
     }
 }

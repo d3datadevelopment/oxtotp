@@ -56,6 +56,7 @@ class d3totpadminlogin extends AdminController
      */
     protected function isTotpIsNotRequired(): bool
     {
+        /** @var d3_totp_user $user */
         $user = $this->d3TotpGetUserObject();
         $userId = $user->d3TotpGetCurrentUser();
 
@@ -131,15 +132,16 @@ class d3totpadminlogin extends AdminController
      */
     public function d3CancelLogin(): string
     {
+        /** @var d3_totp_user $oUser */
         $oUser = $this->d3TotpGetUserObject();
         $oUser->logout();
         return "login";
     }
 
     /**
-     * @return d3_totp_user
+     * @return User
      */
-    public function d3TotpGetUserObject(): d3_totp_user
+    public function d3TotpGetUserObject(): User
     {
         return oxNew(User::class);
     }
@@ -156,7 +158,7 @@ class d3totpadminlogin extends AdminController
         $userId = $user->d3TotpGetCurrentUser();
 
         try {
-            $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp', []));
+            $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
 
             $totp = $this->d3TotpGetTotpObject();
             $totp->loadByUserId($userId);
@@ -223,7 +225,7 @@ class d3totpadminlogin extends AdminController
     }
 
     /**
-     * @return d3_totp_LoginController
+     * @return LoginController
      */
     public function d3GetLoginController(): LoginController
     {

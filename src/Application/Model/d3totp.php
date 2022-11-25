@@ -268,7 +268,7 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param null $oxid
+     * @param null|string $oxid
      * @return bool
      * @throws DatabaseConnectionException
      */

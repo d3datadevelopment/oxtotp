@@ -84,7 +84,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      */
     public function d3TotpCheckTotpLogin()
     {
-        $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp', []));
+        $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
 
         /** @var d3_totp_user $oUser */
         $oUser = oxNew(User::class);
@@ -99,7 +99,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 // relogin, don't extract from this try block
                 $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_AUTH, $oUser->getId());
                 $this->d3TotpGetSession()->setVariable(d3totp_conf::OXID_FRONTEND_AUTH, $oUser->getId());
-                $this->setUser(null);
+                $this->setUser(oxNew(User::class));
                 $this->setLoginStatus(USER_LOGIN_SUCCESS);
                 $this->_afterLogin($oUser);
 

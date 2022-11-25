@@ -100,7 +100,7 @@ class d3totplogin extends FrontendController
      *
      * @return array
      */
-    public function getBreadCrumb(): array
+    public function getBreadCrumb()
     {
         $aPaths = [];
         $aPath = [];

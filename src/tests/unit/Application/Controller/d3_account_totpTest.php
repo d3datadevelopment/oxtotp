@@ -148,7 +148,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
      */
     public function canGetAvailableBackupCodeCount()
     {
-        /** @var d3backupcodelist|MockObject $oControllerMock */
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods(['getAvailableCodeCount'])
             ->getMock();

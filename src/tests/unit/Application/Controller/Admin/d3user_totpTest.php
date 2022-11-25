@@ -84,7 +84,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
      */
     public function canRenderSelectedUser()
     {
-        /** @var User|MockObject $oControllerMock */
+        /** @var User|MockObject $oUserMock */
         $oUserMock = $this->getMockBuilder(User::class)
             ->onlyMethods([
                 'getId',
@@ -123,7 +123,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
      */
     public function canRenderUnloadableUser()
     {
-        /** @var User|MockObject $oControllerMock */
+        /** @var User|MockObject $oUserMock */
         $oUserMock = $this->getMockBuilder(User::class)
             ->onlyMethods([
                 'getId',
@@ -219,13 +219,13 @@ class d3user_totpTest extends d3TotpUnitTestCase
      */
     public function cantSaveBecauseOfNotVerifiable()
     {
-        /** @var d3backupcodelist|MockObject $oControllerMock */
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods(['save'])
             ->getMock();
         $oBackupCodeListMock->expects($this->never())->method('save')->willReturn(true);
 
-        /** @var d3totp|MockObject $oControllerMock */
+        /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'load',
@@ -269,13 +269,13 @@ class d3user_totpTest extends d3TotpUnitTestCase
      */
     public function cantSaveBecauseExistingRegistration()
     {
-        /** @var d3backupcodelist|MockObject $oControllerMock */
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods(['save'])
             ->getMock();
         $oBackupCodeListMock->expects($this->never())->method('save')->willReturn(true);
 
-        /** @var d3totp|MockObject $oControllerMock */
+        /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
@@ -319,7 +319,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
      */
     public function canSave()
     {
-        /** @var d3backupcodelist|MockObject $oControllerMock */
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods([
                 'save',
@@ -329,7 +329,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oBackupCodeListMock->expects($this->once())->method('save')->willReturn(true);
         $oBackupCodeListMock->method('generateBackupCodes')->willReturn(true);
 
-        /** @var d3totp|MockObject $oControllerMock */
+        /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'load',
@@ -378,7 +378,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         ];
         $_GET['editval'] = $aEditval;
 
-        /** @var d3backupcodelist|MockObject $oControllerMock */
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods([
                 'save',
@@ -388,7 +388,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oBackupCodeListMock->expects($this->once())->method('save')->willReturn(true);
         $oBackupCodeListMock->method('generateBackupCodes')->willReturn(true);
 
-        /** @var d3totp|MockObject $oControllerMock */
+        /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->getMockBuilder(d3totp::class)
             ->onlyMethods([
                 'load',
@@ -514,7 +514,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
      */
     public function canGetAvailableBackupCodeCount()
     {
-        /** @var d3backupcodelist|MockObject $oControllerMock */
+        /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->getMockBuilder(d3backupcodelist::class)
             ->onlyMethods(['getAvailableCodeCount'])
             ->getMock();

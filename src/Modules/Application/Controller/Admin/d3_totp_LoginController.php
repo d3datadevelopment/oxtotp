@@ -21,8 +21,10 @@ use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
+use OxidEsales\Eshop\Core\UtilsServer;
 
 class d3_totp_LoginController extends d3_totp_LoginController_parent
 {
@@ -31,7 +33,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     /**
      * @return d3totp
      */
-    public function d3GetTotpObject()
+    public function d3GetTotpObject(): d3totp
     {
         return oxNew(d3totp::class);
     }
@@ -39,7 +41,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     /**
      * @return Session
      */
-    public function d3TotpGetSession()
+    public function d3TotpGetSession(): Session
     {
         return Registry::getSession();
     }
@@ -111,25 +113,17 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
     }
 
     /**
-     * @return d3_totp_user
+     * @return UtilsServer
      */
-    protected function d3TotpGetUserObject(): d3_totp_user
-    {
-        return oxNew( User::class );
-    }
-
-    /**
-     * @return object|\OxidEsales\Eshop\Core\UtilsServer
-     */
-    protected function d3TotpGetUtilsServer()
+    protected function d3TotpGetUtilsServer(): UtilsServer
     {
         return Registry::getUtilsServer();
     }
 
     /**
-     * @return object|\OxidEsales\Eshop\Core\Language
+     * @return Language
      */
-    protected function d3TotpGetLangObject()
+    protected function d3TotpGetLangObject(): Language
     {
         return Registry::getLang();
     }

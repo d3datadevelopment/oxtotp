@@ -6,3 +6,9 @@ parameters:
         - src
     level: 5
     phpVersion: 70300
+    ignoreErrors:
+        - '#Call to method getFieldData\(\) on an unknown class oxShop.#'
+        - '#Return type \(array\) of method D3\\Totp\\Application\\Controller\\d3totplogin::getBreadCrumb\(\) should be compatible with return type \(null\) of method OxidEsales\\EshopCommunity\\Application\\Controller\\FrontendController::getBreadCrumb\(\)#'
+        - '#Parameter \#\d+ \$value of method OxidEsales\\EshopCommunity\\Core\\Config::setConfigParam\(\) expects string, (true|false) given.#'
+    parallel:
+        processTimeout: 900.0

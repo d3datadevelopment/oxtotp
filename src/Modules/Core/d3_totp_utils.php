@@ -51,7 +51,7 @@ class d3_totp_utils extends d3_totp_utils_parent
 
         //staten der prüfung vom einmalpasswort
         if ($blAuth && $totp->isActive() && false === $totpAuth) {
-            $this->redirect('index.php?cl=d3totpadminlogin');
+            $this->redirect('index.php?cl=d3totpadminlogin', false);
         }
 
         return $blAuth;

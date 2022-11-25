@@ -160,35 +160,26 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
 
     /**
      * @test
-     * @param $hasAdminAuth
-     * @param $hasCurrentUser
+     * @param $userId
      * @param $expected
      * @return void
      * @throws ReflectionException
      * @covers       \D3\Totp\Application\Controller\Admin\d3totpadminlogin::isTotpLoginNotPossible
      * @dataProvider isTotpLoginNotPossiblePassedDataProvider
      */
-    public function isTotpLoginNotPossiblePassed($hasAdminAuth, $hasCurrentUser, $expected)
+    public function isTotpLoginNotPossiblePassed($userId, $expected)
     {
-        /** @var Session|MockObject $oSessionMock */
-        $oSessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods([
-                'hasVariable',
-            ])
+        /** @var d3_totp_user|MockObject $oUserMock */
+        $oUserMock = $this->getMockBuilder(User::class)
+            ->onlyMethods(['d3TotpGetCurrentUser'])
             ->getMock();
-        $hasVariableMap = [
-            [d3totp_conf::OXID_ADMIN_AUTH, $hasAdminAuth],
-            [d3totp_conf::SESSION_ADMIN_CURRENTUSER, $hasCurrentUser],
-        ];
-        $oSessionMock->method('hasVariable')->willReturnMap($hasVariableMap);
+        $oUserMock->method('d3TotpGetCurrentUser')->willReturn($userId);
 
         /** @var d3totpadminlogin|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3totpadminlogin::class)
-            ->onlyMethods([
-                'd3TotpGetSession',
-            ])
+            ->onlyMethods(['d3TotpGetUserObject'])
             ->getMock();
-        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetUserObject')->willReturn($oUserMock);
 
         $this->_oController = $oControllerMock;
 
@@ -207,19 +198,22 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
     public function isTotpLoginNotPossiblePassedDataProvider(): array
     {
         return [
-            'no admin auth, no user'    => [false, false, true],
-            'has admin auth'            => [true, false, false],
-            'has current user'          => [false, true, false],
+            'no user'    => [null, true],
+            'has user'   => ['userId', false],
         ];
     }
 
     /**
      * @test
+     * @param $totpNotRequired
+     * @param $totpNotPossible
+     * @param $redirect
+     * @return void
      * @throws ReflectionException
      * @covers \D3\Totp\Application\Controller\Admin\d3totpadminlogin::render
      * @dataProvider canRenderDataProvider
      */
-    public function canRender($totpRequired, $totpNotPossible, $redirect)
+    public function canRender($totpNotRequired, $totpNotPossible, $redirect)
     {
         /** @var Utils|MockObject $oUtilsMock */
         $oUtilsMock = $this->getMockBuilder(Utils::class)
@@ -247,7 +241,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
                 'd3GetLoginController',
             ])
             ->getMock();
-        $oControllerMock->method('isTotpIsNotRequired')->willReturn($totpRequired);
+        $oControllerMock->method('isTotpIsNotRequired')->willReturn($totpNotRequired);
         $oControllerMock->method('isTotpLoginNotPossible')->willReturn($totpNotPossible);
         $oControllerMock->method('d3TotpGetUtils')->willReturn($oUtilsMock);
         $oControllerMock->method('d3GetLoginController')->willReturn($loginControllerMock);
@@ -266,7 +260,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
     public function canRenderDataProvider(): array
     {
         return [
-            'not required'  => [true, true, 'admin_start'],
+            'not required'  => [true, false, 'admin_start'],
             'not possible'  => [false, true, 'login'],
             'do auth'       => [false, false, null],
         ];

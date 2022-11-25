@@ -72,8 +72,8 @@ class d3totpadminlogin extends AdminController
      */
     protected function isTotpLoginNotPossible(): bool
     {
-        return !$this->d3TotpGetSession()->hasVariable(d3totp_conf::OXID_ADMIN_AUTH) &&
-            !$this->d3TotpGetSession()->hasVariable(d3totp_conf::SESSION_ADMIN_CURRENTUSER);
+        $user = $this->d3TotpGetUserObject();
+        return !$user->d3TotpGetCurrentUser();
     }
 
     /**
@@ -82,10 +82,10 @@ class d3totpadminlogin extends AdminController
      */
     public function render(): string
     {
-        if ($this->isTotpIsNotRequired()) {
-            $this->d3TotpGetUtils()->redirect('index.php?cl=admin_start');
-        } elseif ($this->isTotpLoginNotPossible()) {
-            $this->d3TotpGetUtils()->redirect('index.php?cl=login');
+        if ($this->isTotpLoginNotPossible()) {
+            $this->d3TotpGetUtils()->redirect('index.php?cl=login', false);
+        } elseif ($this->isTotpIsNotRequired()) {
+            $this->d3TotpGetUtils()->redirect('index.php?cl=admin_start', false);
         }
 
         $this->addTplParam('selectedProfile', Registry::getRequest()->getRequestEscapedParameter('profile'));

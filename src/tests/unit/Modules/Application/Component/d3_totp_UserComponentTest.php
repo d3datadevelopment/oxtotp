@@ -77,7 +77,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
         $oControllerMock->method('d3TotpGetUtils')->willReturn($oUtilsMock);
 
-        $this->expectException( InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->callMethod($oControllerMock, '_afterLogin', [$oUser]);
     }
@@ -204,7 +204,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
                 'd3GetTotpObject',
                 'd3TotpGetSession',
                 'd3TotpGetUtils',
-                'getParent'
+                'getParent',
             ])
             ->getMock();
         $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -358,7 +358,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
                 'd3TotpGetUtilsView',
                 'd3GetTotpObject',
                 'd3TotpGetSession',
-                'setLoginStatus'
+                'setLoginStatus',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpIsNoTotpOrNoLogin')->willReturn(false);

@@ -94,7 +94,7 @@ class totpSystemEventHandlerTest extends UnitTestCase
         /** @var totpSystemEventHandler|MockObject $sut */
         $sut = $this->getMockBuilder(SystemEventHandler::class)
             ->onlyMethods(['d3GetTotpObject', 'd3TotpGetSession', 'd3TotpLoginMissing',
-                'd3TotpGetUserObject', 'getUtilsObject'])
+                'd3TotpGetUserObject', 'getUtilsObject', ])
             ->getMock();
         $sut->method('d3GetTotpObject')->willReturn($totpMock);
         $sut->method('d3TotpGetSession')->willReturn($sessionMock);
@@ -115,7 +115,7 @@ class totpSystemEventHandlerTest extends UnitTestCase
     {
         return [
             'no totp missing'   => [false, $this->never(), $this->never()],
-            'totp missing'      => [true, $this->once(), $this->once()]
+            'totp missing'      => [true, $this->once(), $this->once()],
         ];
     }
 

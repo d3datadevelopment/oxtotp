@@ -117,11 +117,11 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
         /** @var Session|MockObject $oSessionMock */
         $oSessionMock = $this->getMockBuilder(Session::class)
             ->onlyMethods([
-                'hasVariable'
+                'hasVariable',
             ])
             ->getMock();
         $hasVariableMap = [
-            [d3totp_conf::SESSION_ADMIN_AUTH, $hasAuthAlready]
+            [d3totp_conf::SESSION_ADMIN_AUTH, $hasAuthAlready],
         ];
         $oSessionMock->method('hasVariable')->willReturnMap($hasVariableMap);
 
@@ -129,7 +129,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
         $oControllerMock = $this->getMockBuilder(d3totpadminlogin::class)
             ->onlyMethods([
                 'd3TotpGetSession',
-                'd3TotpGetTotpObject'
+                'd3TotpGetTotpObject',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
@@ -173,7 +173,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
         /** @var Session|MockObject $oSessionMock */
         $oSessionMock = $this->getMockBuilder(Session::class)
             ->onlyMethods([
-                'hasVariable'
+                'hasVariable',
             ])
             ->getMock();
         $hasVariableMap = [
@@ -185,7 +185,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
         /** @var d3totpadminlogin|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3totpadminlogin::class)
             ->onlyMethods([
-                'd3TotpGetSession'
+                'd3TotpGetSession',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
@@ -244,7 +244,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
                 'isTotpIsNotRequired',
                 'isTotpLoginNotPossible',
                 'd3TotpGetUtils',
-                'd3GetLoginController'
+                'd3GetLoginController',
             ])
             ->getMock();
         $oControllerMock->method('isTotpIsNotRequired')->willReturn($totpRequired);
@@ -431,7 +431,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
                 'getLogger',
                 'd3TotpHasValidTotp',
                 'd3TotpGetSession',
-                'd3GetLoginController'
+                'd3GetLoginController',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpHasValidTotp')
@@ -494,7 +494,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
                 'getLogger',
                 'd3TotpHasValidTotp',
                 'd3TotpGetSession',
-                'd3GetLoginController'
+                'd3GetLoginController',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpHasValidTotp')->willReturn(true);

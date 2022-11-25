@@ -39,7 +39,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     protected function _afterLogin($oUser)
     {
         if (!$oUser instanceof User) {
-            throw oxNew( InvalidArgumentException::class, 'user argument must an instance of User class');
+            throw oxNew(InvalidArgumentException::class, 'user argument must an instance of User class');
         }
 
         if ($oUser->getId()) {

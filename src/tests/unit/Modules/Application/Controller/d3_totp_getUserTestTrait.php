@@ -86,7 +86,7 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
-                'd3CallMockableParent'
+                'd3CallMockableParent',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -135,7 +135,7 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
-                'd3CallMockableParent'
+                'd3CallMockableParent',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
@@ -185,7 +185,7 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
-                'd3CallMockableParent'
+                'd3CallMockableParent',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);

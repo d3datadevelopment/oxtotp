@@ -165,7 +165,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
         return [
             'no profile selected'       => [null, $this->once(), '', $this->never()],
             'valid profile selected'    => [2, $this->once(), '2@geh@2', $this->once()],
-            'invalid profile selected'  => [5, $this->never(), false, $this->never()]
+            'invalid profile selected'  => [5, $this->never(), false, $this->never()],
         ];
     }
 
@@ -248,7 +248,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
         /** @var d3_totp_LoginController|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_totp_LoginController::class)
             ->onlyMethods([
-                'd3TotpGetSession'
+                'd3TotpGetSession',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
@@ -272,8 +272,8 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     {
         return [
             'totp not active, not logged in'=> [false, false, false],
-            'totp active, logged in'        => [true , true, false],
-            'totp active, not logged in'    => [true , false, true],
+            'totp active, logged in'        => [true, true, false],
+            'totp active, not logged in'    => [true, false, true],
             'totp not active, logged in'    => [false, true, false],
         ];
     }

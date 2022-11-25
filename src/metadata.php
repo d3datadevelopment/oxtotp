@@ -69,14 +69,14 @@ $aModule = [
         LoginController::class             => d3_totp_LoginController::class,
         Utils::class                       => d3_totp_utils::class,
         UserComponent::class               => d3_totp_UserComponent::class,
-        SystemEventHandler::class          => totpSystemEventHandler::class
+        SystemEventHandler::class          => totpSystemEventHandler::class,
     ],
     'controllers'           => [
         'd3user_totp'       =>  d3user_totp::class,
         'd3force_2fa'       =>  d3force_2fa::class,
         'd3totplogin'       =>  d3totplogin::class,
         'd3_account_totp'   =>  d3_account_totp::class,
-        'd3totpadminlogin'  =>  d3totpadminlogin::class
+        'd3totpadminlogin'  =>  d3totpadminlogin::class,
     ],
     'templates'                 => [
         'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',

@@ -99,7 +99,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         }
 
         $myUtilsServer->setOxCookie("oxidadminlanguage", $aLanguages[$iLang]->abbr, time() + 31536000, "/");
-        $this->d3TotpGetLangObject()->setTplLanguage( $iLang);
+        $this->d3TotpGetLangObject()->setTplLanguage($iLang);
     }
 
     /**

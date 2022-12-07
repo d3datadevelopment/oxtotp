@@ -90,9 +90,9 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
 
         /** @var d3_totp_LoginController|MockObject $oControllerMock */
         $oControllerMock = $this->getMockBuilder(d3_totp_LoginController::class)
-            ->onlyMethods(['d3CallMockableParent'])
+            ->onlyMethods(['d3CallMockableFunction'])
             ->getMock();
-        $oControllerMock->method('d3CallMockableParent')->willReturn($fixture);
+        $oControllerMock->method('d3CallMockableFunction')->willReturn($fixture);
 
         $this->_oController = $oControllerMock;
 

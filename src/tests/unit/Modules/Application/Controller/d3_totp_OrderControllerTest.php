@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace D3\Totp\tests\unit\Modules\Application\Controller;
 
 use D3\Totp\Modules\Application\Controller\d3_totp_OrderController;
+use D3\Totp\Modules\Application\Controller\d3_totp_OrderController_parent;
 use D3\Totp\tests\unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Controller\OrderController;
 use PHPUnit\Framework\MockObject\MockObject;

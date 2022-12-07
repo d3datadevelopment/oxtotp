@@ -33,12 +33,12 @@ trait d3_totp_getUserTrait
      */
     public function getUser()
     {
-        // $oUser = parent::getUser();
-        $oUser = $this->d3CallMockableParent('getUser');
+        /** @var User|null $user */
+        $user = $this->d3CallMockableFunction([$this->parentClass, 'getUser']);
 
-        if ($oUser instanceof User && $oUser->getId()) {
+        if ($user && $user->isLoaded() && $user->getId()) {
             $totp = $this->d3GetTotpObject();
-            $totp->loadByUserId($oUser->getId());
+            $totp->loadByUserId($user->getId());
 
             if ($totp->isActive()
                 && !$this->d3TotpGetSessionObject()->getVariable(
@@ -49,7 +49,7 @@ trait d3_totp_getUserTrait
             }
         }
 
-        return $oUser;
+        return $user;
     }
 
     /**

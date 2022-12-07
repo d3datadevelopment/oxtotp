@@ -32,7 +32,7 @@ class totpSystemEventHandler extends totpSystemEventHandler_parent
     {
         $this->d3RequestTotp();
 
-        $this->d3CallMockableParent('onAdminLogin');
+        $this->d3CallMockableFunction([totpSystemEventHandler_parent::class, 'onAdminLogin']);
     }
 
     protected function d3requestTotp()

@@ -61,8 +61,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             Registry::getRequest()->getRequestEscapedParameter('chlanguage')
         );
 
-        // parent::checklogin();
-        return $this->d3CallMockableParent('checklogin');
+        return $this->d3CallMockableFunction([d3_totp_LoginController_parent::class, 'checklogin']);
     }
 
     public function d3totpAfterLogin()

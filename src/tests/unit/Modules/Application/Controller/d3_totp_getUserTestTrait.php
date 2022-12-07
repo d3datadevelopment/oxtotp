@@ -29,6 +29,25 @@ trait d3_totp_getUserTestTrait
 {
     use CanAccessRestricted;
 
+    protected $userFixtureId = 'userIdFixture1';
+
+    /** @var User */
+    protected $userFixture;
+
+    public function setUp(): void
+    {
+        $this->userFixture = oxNew(User::class);
+        $this->userFixture->setId($this->userFixtureId);
+        $this->userFixture->assign(['oxlname'    => __METHOD__]);
+        $this->userFixture->save();
+        $this->userFixture->load($this->userFixtureId);
+    }
+
+    public function tearDown(): void
+    {
+        $this->userFixture->delete($this->userFixtureId);
+    }
+
     /**
      * @test
      * @throws ReflectionException
@@ -58,12 +77,6 @@ trait d3_totp_getUserTestTrait
      */
     public function getUserTotpNotActive()
     {
-        /** @var User|MockObject $oUserMock */
-        $oUserMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $oUserMock->method('getId')->willReturn('foo');
-
         /** @var Session|MockObject $oSessionMock */
         $oSessionMock = $this->getMockBuilder(Session::class)
             ->onlyMethods(['getVariable'])
@@ -86,17 +99,18 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
-                'd3CallMockableParent',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
-        $oControllerMock->method('d3CallMockableParent')->willReturn($oUserMock);
+        $oControllerMock->setUser($this->userFixture);
 
         $this->assertSame(
-            $oUserMock,
+            $this->userFixture,
             $this->callMethod($oControllerMock, 'getUser')
         );
+
+        $oControllerMock->setUser(null);
     }
 
     /**
@@ -108,12 +122,6 @@ trait d3_totp_getUserTestTrait
      */
     public function getUserTotpFinished()
     {
-        /** @var User|MockObject $oUserMock */
-        $oUserMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $oUserMock->method('getId')->willReturn('foo');
-
         /** @var Session|MockObject $oSessionMock */
         $oSessionMock = $this->getMockBuilder(Session::class)
             ->onlyMethods(['getVariable'])
@@ -135,17 +143,18 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
-                'd3CallMockableParent',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
-        $oControllerMock->method('d3CallMockableParent')->willReturn($oUserMock);
+        $oControllerMock->setUser($this->userFixture);
 
         $this->assertSame(
-            $oUserMock,
+            $this->userFixture,
             $this->callMethod($oControllerMock, 'getUser')
         );
+
+        $oControllerMock->setUser(null);
     }
 
     /**
@@ -157,12 +166,6 @@ trait d3_totp_getUserTestTrait
      */
     public function getUserTotpNotFinished()
     {
-        /** @var User|MockObject $oUserMock */
-        $oUserMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $oUserMock->method('getId')->willReturn('foo');
-
         /** @var Session|MockObject $oSessionMock */
         $oSessionMock = $this->getMockBuilder(Session::class)
             ->onlyMethods(['getVariable'])
@@ -185,16 +188,17 @@ trait d3_totp_getUserTestTrait
             ->onlyMethods([
                 'd3GetTotpObject',
                 'd3TotpGetSessionObject',
-                'd3CallMockableParent',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('d3GetTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('d3TotpGetSessionObject')->willReturn($oSessionMock);
-        $oControllerMock->method('d3CallMockableParent')->willReturn($oUserMock);
+        $oControllerMock->setUser($this->userFixture);
 
         $this->assertFalse(
             $this->callMethod($oControllerMock, 'getUser')
         );
+
+        $oControllerMock->setUser(null);
     }
 
     /**

@@ -18,4 +18,6 @@ namespace D3\Totp\Modules\Application\Controller;
 class d3_totp_UserController extends d3_totp_UserController_parent
 {
     use d3_totp_getUserTrait;
+
+    private $parentClass = d3_totp_UserController_parent::class;
 }

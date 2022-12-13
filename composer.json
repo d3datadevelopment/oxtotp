@@ -40,7 +40,7 @@
     "php": ">=7.2",
     "ext-xmlwriter": "*",
     "ext-openssl": "*",
-    "oxid-esales/oxideshop-ce": "6.8.0 - 6.12",
+    "oxid-esales/oxideshop-ce": "6.8.0 - 6.13",
     "spomky-labs/otphp": "^10.0 || ^11.0",
     "bacon/bacon-qr-code": "^2.0",
     "laminas/laminas-math": "^3.2",

@@ -1,5 +1,5 @@
 {
-  "name": "d3/oxtotp",
+  "name": "d3/oxid-twofactor-onetimepassword",
   "description": "Two-factor authentication via time-based one-time password for OXID eSales shop",
   "type": "oxideshop-module",
   "keywords": [
@@ -7,7 +7,13 @@
     "modules",
     "eShop",
     "d3",
-    "2FA"
+    "2FA",
+    "two factor",
+    "second factor",
+    "TOTP",
+    "OTP",
+    "one-time password",
+    "authenticator"
   ],
   "authors": [
     {
@@ -57,5 +63,11 @@
   },
   "scripts": {
       "totp_phpstan": "./vendor/bin/phpstan -c./vendor/d3/oxtotp/phpstan.neon"
+  },
+  "suggest": {
+    "d3/oxid-twofactor-passwordless": "Passwordless login with FIDO2 hardware token."
+  },
+  "replace": {
+    "d3/oxtotp": "*"
   }
 }

@@ -50,12 +50,12 @@ $logo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="he
 $aModule = [
     'id'            => $sModuleId,
     'title'         => [
-        'de'        => $logo . ' Zwei-Faktor-Authentisierung',
-        'en'        => $logo . ' two-factor authentication',
+        'de'        => $logo . ' zweiter Faktor - Einmalpasswort',
+        'en'        => $logo . ' second factor - one-time password',
     ],
     'description'   => [
-        'de'        => 'Zwei-Faktor-Authentisierung (TOTP) f&uuml;r OXID eSales Shop',
-        'en'        => 'Two-factor authentication (TOTP) for OXID eSales shop',
+        'de'        => 'Einmalpasswort (TOTP) als zweiter Faktor bei der Anmeldung im OXID eSales Shop',
+        'en'        => 'One-time password (TOTP) as second factor for login in OXID eSales shop',
     ],
     'version'       => '2.0.0.1',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',

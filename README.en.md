@@ -1,9 +1,9 @@
 [![deutsche Version](https://logos.oxidmodule.com/de2_xs.svg)](README.md)
 [![english version](https://logos.oxidmodule.com/en2_xs.svg)](README.en.md)
 
-# 2-factor authentication (TOTP) for OXID eShop
+# 2-factor authentication (one-time password) for OXID eShop
 
-This module provides a 2-factor authentication (time-dependent one-time password) for login in front- and backend in addition to user name and password.
+This module provides a 2-factor authentication (time-dependent one-time password / TOTP) for login in front- and backend in addition to user name and password.
 
 ## Features
 
@@ -37,8 +37,10 @@ The Flow and Wave themes are supported by default. Other themes may require cust
 
 ## Getting Started
 
+Open a command line interface and navigate to the shop root directory (parent of source and vendor). Execute the following command. Adapt the paths to your environment.
+
 ```
-composer require d3/oxtotp
+composer require d3/oxid-twofactor-onetimepassword
 ```
 
 Activate the module in the admin area of the shop in "Extensions -> Modules".

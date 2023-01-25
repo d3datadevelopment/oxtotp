@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased](https://git.d3data.de/D3Public/oxtotp/compare/2.0.0.1...rel_2.x)
+- add compatibility to D3 Webauthn plugin
+- installable in OXID 6.5.1
 
 ## [2.0.0.1](https://git.d3data.de/D3Public/oxtotp/compare/2.0.0.0...2.0.0.1) - 2022-11-09
 ### Fixed

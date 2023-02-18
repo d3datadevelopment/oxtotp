@@ -57,7 +57,7 @@ $aModule = [
         'de'        => 'Einmalpasswort (TOTP) als zweiter Faktor bei der Anmeldung im OXID eSales Shop',
         'en'        => 'One-time password (TOTP) as second factor for login in OXID eSales shop',
     ],
-    'version'       => '2.0.0.1',
+    'version'       => '2.1.0.0',
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'https://www.oxidmodule.com/',

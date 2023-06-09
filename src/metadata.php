@@ -61,6 +61,7 @@ $aModule = [
     'author'        => 'D&sup3; Data Development (Inh.: Thomas Dartsch)',
     'email'         => 'support@shopmodule.com',
     'url'           => 'https://www.oxidmodule.com/',
+    'thumbnail'     => 'logo.png',
     'extend'        => [
         UserController::class              => d3_totp_UserController::class,
         PaymentController::class           => d3_totp_PaymentController::class,

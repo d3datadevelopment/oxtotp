@@ -36,33 +36,35 @@
   "license": [
     "GPL-3.0-only"
   ],
-  "extra": {
-    "oxideshop": {
-      "source-directory": "/src",
-      "target-directory": "d3/totp"
-    }
-  },
   "require": {
-    "php": ">=7.2",
+    "php": ">=8.0",
     "ext-xmlwriter": "*",
     "ext-openssl": "*",
-    "oxid-esales/oxideshop-ce": "6.8.0 - 6.14",
+    "oxid-esales/oxideshop-ce": "7.0 - 7.1",
     "spomky-labs/otphp": "^10.0 || ^11.0",
-    "bacon/bacon-qr-code": "^2.0",
+    "bacon/bacon-qr-code": "^2.0 || ^3.0",
     "laminas/laminas-math": "^3.2",
     "d3/testingtools": "^1.0"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.19",
-    "phpstan/phpstan": "^1.8"
+    "friendsofphp/php-cs-fixer": "^3.9",
+    "phpstan/phpstan": "^1.8",
+    "boxblinkracer/phpunuhi": "^1.12"
   },
   "autoload": {
     "psr-4": {
-      "D3\\Totp\\": "../../../source/modules/d3/totp"
+      "D3\\Totp\\": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "D3\\Totp\\tests\\": "Tests"
     }
   },
   "scripts": {
-      "totp_phpstan": "./vendor/bin/phpstan -c./vendor/d3/oxtotp/phpstan.neon"
+      "php-cs-fixer": "./vendor/bin/php-cs-fixer fix --config=vendor/d3/oxid-twofactor-onetimepassword/.php-cs-fixer.php",
+      "phpstan": "./vendor/bin/phpstan --configuration=./vendor/d3/oxid-twofactor-onetimepassword/phpstan.neon",
+      "phpunuhi": "./vendor/bin/phpunuhi --configuration=vendor/d3/oxid-twofactor-onetimepassword/phpunuhi.xml validate"
   },
   "suggest": {
     "d3/oxid-twofactor-passwordless": "Passwordless login with FIDO2 hardware token."

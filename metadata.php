@@ -42,7 +42,7 @@ use OxidEsales\Eshop\Application\Model as OxidModel;
 $sMetadataVersion = '2.1';
 
 $sModuleId = 'd3totp';
-$logo = '<img src="https://logos.oxidmodule.com/d3logo.svg" alt="(D3)" style="height:1em;width:1em">';
+$logo = '(D3)';
 
 /**
  * Module information

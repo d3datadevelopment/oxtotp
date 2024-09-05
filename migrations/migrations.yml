@@ -1,0 +1,4 @@
+name: D3 Twofactor Onetime Password
+migrations_namespace: D3\Totp\Migrations
+table_name: d3migrations_totp
+migrations_directory: data

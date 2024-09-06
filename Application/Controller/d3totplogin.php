@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Controller;
 
+use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp_conf;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
@@ -24,7 +25,7 @@ use OxidEsales\Eshop\Core\Utils;
 
 class d3totplogin extends FrontendController
 {
-    protected $_sThisTemplate = 'd3totplogin.tpl';
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin';
 
     public function render()
     {

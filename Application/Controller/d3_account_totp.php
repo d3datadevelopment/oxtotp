@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Controller;
 
+use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
@@ -27,7 +28,7 @@ use OxidEsales\Eshop\Core\UtilsView;
 
 class d3_account_totp extends AccountController
 {
-    protected $_sThisTemplate = 'd3_account_totp.tpl';
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/wave/d3_account_totp';
 
     public $aBackupCodes = [];
 

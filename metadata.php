@@ -18,6 +18,7 @@ use D3\Totp\Application\Controller\Admin\d3user_totp;
 use D3\Totp\Application\Controller\Admin\d3force_2fa;
 use D3\Totp\Application\Controller\d3_account_totp;
 use D3\Totp\Application\Controller\d3totplogin;
+use D3\Totp\Application\Model\Constants;
 use D3\Totp\Modules\Application\Component\d3_totp_UserComponent;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Controller\d3_totp_OrderController;
@@ -36,22 +37,13 @@ use OxidEsales\Eshop\Core\SystemEventHandler;
 use OxidEsales\Eshop\Core\Utils;
 use OxidEsales\Eshop\Application\Model as OxidModel;
 
-/**
- * Metadata version
- */
 $sMetadataVersion = '2.1';
 
-$sModuleId = 'd3totp';
-$logo = '(D3)';
-
-/**
- * Module information
- */
 $aModule = [
-    'id'            => $sModuleId,
+    'id'            => Constants::OXID_MODULE_ID,
     'title'         => [
-        'de'        => $logo . ' zweiter Faktor - Einmalpasswort',
-        'en'        => $logo . ' second factor - one-time password',
+        'de'        => '(D3) zweiter Faktor - Einmalpasswort',
+        'en'        => '(D3) second factor - one-time password',
     ],
     'description'   => [
         'de'        => 'Einmalpasswort (TOTP) als zweiter Faktor bei der Anmeldung im OXID eSales Shop',
@@ -80,10 +72,14 @@ $aModule = [
         'd3totpadminlogin'  =>  d3totpadminlogin::class,
     ],
     'templates'                 => [
-        'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
-        'd3totplogin.tpl'       => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
-        'd3_account_totp.tpl'   => 'd3/totp/Application/views/tpl/d3_account_totp.tpl',
-        'd3totpadminlogin.tpl'  => 'd3/totp/Application/views/admin/tpl/d3totplogin.tpl',
+//        'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/admin/d3user_totp.tpl'       => 'views/smarty/admin/d3user_totp.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin.tpl'       => 'views/smarty/admin/d3totplogin.tpl',
+//        'd3totplogin.tpl'       => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
+//        'd3_account_totp.tpl'   => 'd3/totp/Application/views/tpl/d3_account_totp.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/wave/d3_account_totp.tpl'   => 'views/smarty/wave/d3_account_totp.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/wave/d3totpadminlogin.tpl'  => 'views/smarty/wave/d3totpadminlogin.tpl',
+//        'd3totpadminlogin.tpl'  => 'd3/totp/Application/views/admin/tpl/d3totplogin.tpl',
     ],
     'settings'                => [
         [

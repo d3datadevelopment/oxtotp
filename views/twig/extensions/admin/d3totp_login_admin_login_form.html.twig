@@ -1,0 +1,29 @@
+{% if request_totp %}
+    {{ oViewConf.getHiddenSid()|raw }}
+
+    <input type="hidden" name="fnc" value="checklogin">
+    <input type="hidden" name="cl" value="login">
+
+    {% if not empty(Errors.default) %}
+        {% include "inc_error.html.twig" with {Errorlist: Errors.default} %}
+    {% endif %}
+
+    {{ oView.getBackupCodeCountMessage() }}
+
+    <label for="d3totp">{{ translate({ ident: "TOTP_INPUT" }) }}</label>
+    <input type="text" name="d3totp" id="d3totp" value="" size="49" autofocus autocomplete="off"><br>
+
+    {{ translate({ ident: "TOTP_INPUT_HELP" }) }}
+
+    {# prevent cancel button (1st button) action when form is sent via Enter key #}
+    <input type="submit" style="display:none !important;">
+
+    <input class="btn btn_cancel" value="{{ translate({ ident: "TOTP_CANCEL_LOGIN" }) }}" type="submit"
+           onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
+    >
+
+    {{ style({ include: oViewConf.getModuleUrl('d3totp',, out/admin/src/css/d3totplogin.css'): 'out/admin/src/css/d3totplogin.css') }) }}
+    {{ style() }}
+{% else %}
+    {{ parent() }}
+{% endif %}

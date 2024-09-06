@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>{{ translate({ ident: "LOGIN_TITLE" }) }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset={{ charset }}">
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+    <link rel="shortcut icon" href="{{ oViewConf.getImageUrl() }}favicon.ico">
+    <link rel="stylesheet" href="{{ oViewConf.getResourceUrl() }}login.css">
+    <link rel="stylesheet" href="{{ oViewConf.getResourceUrl() }}colors_{{ oViewConf.getEdition()|lower }}.css">
+</head>
+<body>
+
+<div class="admin-login-box">
+
+    <div id="shopLogo"><img src="{{ oViewConf.getImageUrl('logo_dark.svg') }}" alt="" /></div>
+
+    <form action="{{ oViewConf.getSelfLink() }}" method="post" id="login">
+
+        {% block admin_login_form %}
+            {{ oViewConf.getHiddenSid()|raw }}
+
+            <input type="hidden" name="fnc" value="checklogin">
+            <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+            <input type="hidden" name="profile" value="{{ selectedProfile }}">
+            <input type="hidden" name="chlanguage" value="{{ selectedChLanguage }}">
+
+            <h3>{{ translate({ ident: "TOTP_INPUT" }) }}</h3>
+
+            {% if not empty(Errors.default) %}
+                {% include "inc_error.html.twig" with {Errorlist: Errors.default} %}
+            {% endif %}
+
+            {{ oView.getBackupCodeCountMessage() }}
+
+            <div class="container">
+                <label for="1st">erste TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id='1st' inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent(null, '2nd')" autofocus autocomplete="off">
+                <label for="2nd">zweite TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="2nd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('1st', '3rd')" autocomplete="off">
+                <label for="3rd">dritte TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="3rd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('2nd', '4th')" autocomplete="off">
+                <label for="4th">vierte TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="4th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('3rd', '5th')" autocomplete="off">
+                <label for="5th">fünfte TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="5th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('4th', '6th')" autocomplete="off">
+                <label for="6th">sechste TOTP-Ziffer</label>
+                <input type="text" name="d3totp[]" class="digit" id="6th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('5th', null)" autocomplete="off">
+            </div>
+
+            {% capture name = "d3js" %}
+                function clickEvent(previous, next){
+                    const digitKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                    const deleteKeys = ['Backspace', 'Delete'];
+                    if(next && digitKeys.includes(event.key)){
+                        document.getElementById(next).focus();
+                    } else if(previous && deleteKeys.includes(event.key)){
+                        document.getElementById(previous).focus();
+                    }
+                }
+                document.addEventListener("paste", function(e) {
+                    if (e.target.type is same as("text") {
+)
+                        var data = e.clipboardData.getData('Text');
+                        data = data.split('');
+                        [].forEach.call(document.querySelectorAll("#login input[type=text]"), (node, index) => {
+                            node.value = data[index];
+                        });
+                    }
+                });
+            {% endcapture %}
+            {{ script({ add: smarty.capture.d3js, dynamic: __oxid_include_dynamic }) }}
+
+            <div>{{ translate({ ident: "TOTP_INPUT_HELP" }) }}</div>
+
+            <input type="submit" value="{{ translate({ ident: "LOGIN_START" }) }}" class="btn"><br>
+
+            <input class="btn btn_cancel" value="{{ translate({ ident: "TOTP_CANCEL_LOGIN" }) }}" type="submit"
+                onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
+            >
+
+            {{ style({ include: oViewConf.getModuleUrl('d3totp',, out/admin/src/css/d3totplogin.css'): 'out/admin/src/css/d3totplogin.css') }) }}
+            {{ style() }}
+
+
+
+{# *
+
+
+
+
+
+ {{ oViewConf.getHiddenSid()|raw }}
+
+ <input type="hidden" name="fnc" value="">
+ <input type="hidden" name="cl" value="login">
+
+ {% if not empty(Errors.default) %}
+ {% include "inc_error.html.twig" with {Errorlist: Errors.default} %}
+ {% endif %}
+
+ <div class="d3webauthn_icon">
+ <div class="svg-container">
+ {% include $oViewConf->getModulePath('d3webauthn', with {out/img/fingerprint.svg'): 'out/img/fingerprint.svg')} %}
+ </div>
+ <div class="message">{{ translate({ ident: "WEBAUTHN_INPUT_HELP" }) }}</div>
+ </div>
+* #}
+            {# prevent cancel button (1st button) action when form is sent via Enter key #}
+{# *
+ <input type="submit" style="display:none !important;">
+
+ <input class="btn btn_cancel" value="{{ translate({ ident: "WEBAUTHN_CANCEL_LOGIN" }) }}" type="submit"
+ onclick="document.getElementById('login').fnc.value='d3WebauthnCancelLogin'; document.getElementById('login').submit();"
+ >
+
+ {{ style({ include: oViewConf.getModuleUrl('d3webauthn',, out/admin/src/css/d3webauthnlogin.css'): 'out/admin/src/css/d3webauthnlogin.css') }) }}
+ {{ style() }}
+* #}
+        {% endblock %}
+    </form>
+</div>
+
+{{ script({ dynamic: __oxid_include_dynamic }) }}
+<script type="text/javascript">if (window !== window.top) top.location.href = document.location.href;</script>
+
+</body>
+</html>

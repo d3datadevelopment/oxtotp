@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Controller\Admin;
 
+use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
@@ -30,7 +31,7 @@ class d3user_totp extends AdminDetailsController
 {
     protected $_sSaveError = null;
 
-    protected $_sThisTemplate = 'd3user_totp.tpl';
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/admin/d3user_totp';
 
     public $aBackupCodes = [];
 

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Controller\Admin;
 
+use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
@@ -32,7 +33,7 @@ use Psr\Log\LoggerInterface;
 
 class d3totpadminlogin extends AdminController
 {
-    protected $_sThisTemplate = 'd3totpadminlogin.tpl';
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/wave/d3totpadminlogin';
 
     /**
      * @return bool

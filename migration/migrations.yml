@@ -1,0 +1,4 @@
+table_storage:
+  table_name: d3migrations_totp
+migrations_paths:
+  'D3\Totp\Migrations': data

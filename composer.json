@@ -44,7 +44,8 @@
     "spomky-labs/otphp": "^10.0 || ^11.0",
     "bacon/bacon-qr-code": "^2.0 || ^3.0",
     "laminas/laminas-math": "^3.2",
-    "d3/testingtools": "^1.0"
+    "d3/testingtools": "^1.0",
+    "d3/oxidservicebridges": "^2.1.0.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.9",

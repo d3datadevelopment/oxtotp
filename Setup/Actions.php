@@ -15,7 +15,8 @@ declare(strict_types=1);
 
 namespace D3\Totp\Setup;
 
-use Doctrine\DBAL\Driver\Exception as DoctrineDriverException;
+use D3\OxidServiceBridges\Internal\Framework\Templating\Cache\ShopTemplateCacheServiceBridge;
+use D3\OxidServiceBridges\Internal\Framework\Templating\Cache\ShopTemplateCacheServiceBridgeInterface;
 use Exception;
 use OxidEsales\DoctrineMigrationWrapper\MigrationsBuilder;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
@@ -23,15 +24,10 @@ use OxidEsales\Eshop\Core\DbMetaDataHandler;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\SeoEncoder;
 use OxidEsales\Eshop\Core\Utils;
-use OxidEsales\Eshop\Core\UtilsView;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleConfigurationNotFoundException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Psr\Log\LoggerInterface;
 
 class Actions
 {
@@ -73,75 +69,27 @@ class Actions
     public function clearCache(): void
     {
         try {
+            /** @var ShopTemplateCacheServiceBridge $templateCacheService */
+            $templateCacheService = $this->getDIContainer()->get(ShopTemplateCacheServiceBridgeInterface::class);
+            $templateCacheService->invalidateCache(Registry::getConfig()->getShopId());
             $oUtils = oxNew(Utils::class);
-            $oUtils->resetTemplateCache($this->getModuleTemplates());
             $oUtils->resetLanguageCache();
-        } catch (ContainerExceptionInterface|NotFoundExceptionInterface|ModuleConfigurationNotFoundException $e) {
-            oxNew(LoggerInterface::class)->error($e->getMessage(), [$this]);
-            oxNew(UtilsView::class)->addErrorToDisplay($e->getMessage());
+        } catch (ContainerExceptionInterface|NotFoundExceptionInterface $e) {
+            Registry::getLogger()->error($e->getMessage(), [$this]);
+            Registry::getUtilsView()->addErrorToDisplay($e->getMessage());
         }
-    }
-
-    /**
-     * @return array
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws ModuleConfigurationNotFoundException
-     */
-    protected function getModuleTemplates(): array
-    {
-        $container = $this->getDIContainer();
-        $shopConfiguration = $container->get(ShopConfigurationDaoBridgeInterface::class)->get();
-        $moduleConfiguration = $shopConfiguration->getModuleConfiguration('d3totp');
-
-        return array_unique(array_merge(
-            $this->getModuleTemplatesFromTemplates($moduleConfiguration),
-            $this->getModuleTemplatesFromBlocks($moduleConfiguration)
-        ));
-    }
-
-    /**
-     * @param ModuleConfiguration $moduleConfiguration
-     *
-     * @return array
-     */
-    protected function getModuleTemplatesFromTemplates(ModuleConfiguration $moduleConfiguration): array
-    {
-        /** @var $template ModuleConfiguration\Template */
-        return array_map(
-            function ($template) {
-                return $template->getTemplateKey();
-            },
-            $moduleConfiguration->getTemplates()
-        );
-    }
-
-    /**
-     * @param ModuleConfiguration $moduleConfiguration
-     *
-     * @return array
-     */
-    protected function getModuleTemplatesFromBlocks(ModuleConfiguration $moduleConfiguration): array
-    {
-        /** @var $templateBlock ModuleConfiguration\TemplateBlock */
-        return array_map(
-            function ($templateBlock) {
-                return basename($templateBlock->getShopTemplatePath());
-            },
-            $moduleConfiguration->getTemplateBlocks()
-        );
     }
 
     /**
      * @return void
      */
-    public function seoUrl()
+    public function seoUrl(): void
     {
         try {
             if (!$this->hasSeoUrls()) {
                 $this->createSeoUrls();
             }
-        } catch (Exception|NotFoundExceptionInterface|DoctrineDriverException|ContainerExceptionInterface $e) {
+        } catch (Exception $e) {
             Registry::getLogger()->error($e->getMessage(), [$this]);
             Registry::getUtilsView()->addErrorToDisplay('error wile creating SEO URLs: ' . $e->getMessage());
         }
@@ -179,7 +127,7 @@ class Actions
     /**
      * @return void
      */
-    public function createSeoUrls()
+    public function createSeoUrls(): void
     {
         foreach (array_keys($this->stdClassName) as $id) {
             $seoEncoder = oxNew(SeoEncoder::class);

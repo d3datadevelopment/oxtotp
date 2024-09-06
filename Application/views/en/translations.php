@@ -11,9 +11,9 @@
  * @link      https://www.oxidmodule.com
  */
 
-$sLangName = "English";
+declare(strict_types=1);
 
-$aLang = [
+return [
     'charset'                                         => 'UTF-8',
 
     'TOTP_INPUT'                                      => 'authentication code',

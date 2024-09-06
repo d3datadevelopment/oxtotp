@@ -13,9 +13,7 @@
 
 declare(strict_types=1);
 
-$sLangName = "English";
-
-$aLang = [
+return [
     'charset'                                         => 'UTF-8',
 
     'D3_TOTP_INPUT'                                   => 'authentication code',

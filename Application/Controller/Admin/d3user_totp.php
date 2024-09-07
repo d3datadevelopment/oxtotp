@@ -15,17 +15,20 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Controller\Admin;
 
+use Assert\Assert;
 use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3backupcodelist;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3user_totp extends AdminDetailsController
 {
@@ -73,7 +76,7 @@ class d3user_totp extends AdminDetailsController
     /**
      * @return d3totp
      */
-    public function getTotpObject()
+    public function getTotpObject(): d3totp
     {
         return oxNew(d3totp::class);
     }
@@ -81,13 +84,15 @@ class d3user_totp extends AdminDetailsController
     /**
      * @return d3backupcodelist
      */
-    public function getBackupcodeListObject()
+    public function getBackupcodeListObject(): d3backupcodelist
     {
         return oxNew(d3backupcodelist::class);
     }
 
     /**
-     * @throws Exception
+     * @throws \Doctrine\DBAL\Driver\Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function save()
     {
@@ -97,17 +102,23 @@ class d3user_totp extends AdminDetailsController
 
         try {
             $oTotp = $this->getTotpObject();
-            if ($oTotp->checkIfAlreadyExist($this->getEditObjectId())) {
-                throw oxNew(StandardException::class, 'D3_TOTP_ALREADY_EXIST');
-            }
+
+            Assert::that($oTotp->checkIfAlreadyExist($this->getEditObjectId()))->false('D3_TOTP_ALREADY_EXIST');
 
             $oTotpBackupCodes = $this->getBackupcodeListObject();
             if ($aParams['d3totp__oxid']) {
                 $oTotp->load($aParams['d3totp__oxid']);
             } else {
                 $aParams['d3totp__usetotp'] = 1;
-                $seed = Registry::getRequest()->getRequestEscapedParameter("secret");
+                /** @var d3totp $init */
+                $init = Registry::getSession()->getVariable(d3totp_conf::OTP_SESSION_VARNAME);
+                $seed = $init->getSecret();
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
+
+                Assert::that($seed)->notBlank('D3_TOTP_EMPTY_SEED');
+                Assert::that($otp)
+                    ->integerish('D3_TOTP_MISSING_VALIDATION')
+                    ->length(6, 'D3_TOTP_MISSING_VALIDATION');
 
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
@@ -117,8 +128,8 @@ class d3user_totp extends AdminDetailsController
             }
             $oTotp->save();
             $oTotpBackupCodes->save();
-        } catch (Exception $oExcp) {
-            $this->_sSaveError = $oExcp->getMessage();
+        } catch (Exception $exception) {
+            $this->_sSaveError = $exception->getMessage();
         }
     }
 
@@ -129,7 +140,6 @@ class d3user_totp extends AdminDetailsController
     {
         $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");
 
-        /** @var d3totp $oTotp */
         $oTotp = $this->getTotpObject();
         if ($aParams['d3totp__oxid']) {
             $oTotp->load($aParams['d3totp__oxid']);
@@ -141,7 +151,7 @@ class d3user_totp extends AdminDetailsController
     /**
      * @param $aCodes
      */
-    public function setBackupCodes($aCodes)
+    public function setBackupCodes($aCodes): void
     {
         $this->aBackupCodes = $aCodes;
     }
@@ -149,7 +159,7 @@ class d3user_totp extends AdminDetailsController
     /**
      * @return string
      */
-    public function getBackupCodes()
+    public function getBackupCodes(): string
     {
         return implode(PHP_EOL, $this->aBackupCodes);
     }
@@ -158,7 +168,7 @@ class d3user_totp extends AdminDetailsController
      * @return int
      * @throws DatabaseConnectionException
      */
-    public function getAvailableBackupCodeCount()
+    public function getAvailableBackupCodeCount(): int
     {
         $oBackupCodeList = $this->getBackupcodeListObject();
         return $oBackupCodeList->getAvailableCodeCount($this->getEditObjectId());

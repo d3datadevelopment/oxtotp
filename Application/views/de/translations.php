@@ -51,6 +51,8 @@ return [
 
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
     'D3_TOTP_ALREADY_EXIST'                           => 'Die Registrierung wurde schon gespeichert.',
+    'D3_TOTP_MISSING_VALIDATION'                      => 'Das bestätigende Einmalkennwort muss aus 6 Ziffern bestehen.',
+    'D3_TOTP_EMPTY_SEED'                              => 'Der verwendete Schlüssel kann nicht ermittelt werden.',
 
     'SHOP_MODULE_D3_TOTP_ADMIN_FORCE_2FA'             => 'Administratoren sind verpflichtet 2FA zu aktivieren',
 ];

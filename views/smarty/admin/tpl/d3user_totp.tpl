@@ -1,11 +1,5 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
-
-[{oxstyle include="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"}]
-[{oxscript include="https://code.jquery.com/jquery-3.2.1.slim.min.js"}]
-[{oxscript include="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"}]
-[{oxscript include="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"}]
-[{oxstyle include="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css"}]
-[{oxstyle}]
+[{include file="@d3totp/admin/inc/bootstrap.tpl" }]
 
 [{assign var="totp" value=$edit->d3GetTotp()}]
 [{assign var="userid" value=$edit->getId()}]

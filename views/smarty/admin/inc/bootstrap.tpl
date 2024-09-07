@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="[{$oViewConf->getModuleUrl('d3totp', 'out/src/css/bootstrap.min.css')}]">
+<style>
+    * {
+        font-size: 12px;
+    }
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+    select {
+        box-sizing: border-box;
+    }
+    div.actions {
+        box-sizing: initial;
+    }
+</style>

@@ -1,11 +1,5 @@
 {% include "headitem.html.twig" with {title: "GENERAL_ADMIN_TITLE"|translate} %}
-
-{{ style({ include: "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" }) }}
-{{ script({ include: "https://code.jquery.com/jquery-3.2.1.slim.min.js", dynamic: __oxid_include_dynamic }) }}
-{{ script({ include: "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", dynamic: __oxid_include_dynamic }) }}
-{{ script({ include: "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js", dynamic: __oxid_include_dynamic }) }}
-{{ style({ include: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" }) }}
-{{ style() }}
+{% include "@d3totp/admin/inc/bootstrap.html.twig" %}
 
 {% set totp = edit.d3GetTotp() %}
 {% set userid = edit.getId() %}

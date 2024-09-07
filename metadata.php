@@ -72,14 +72,11 @@ $aModule = [
         'd3totpadminlogin'  =>  d3totpadminlogin::class,
     ],
     'templates'                 => [
-//        'd3user_totp.tpl'       => 'd3/totp/Application/views/admin/tpl/d3user_totp.tpl',
         '@'.Constants::OXID_MODULE_ID.'/admin/d3user_totp.tpl'       => 'views/smarty/admin/d3user_totp.tpl',
         '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin.tpl'       => 'views/smarty/admin/d3totplogin.tpl',
-//        'd3totplogin.tpl'       => 'd3/totp/Application/views/tpl/d3totplogin.tpl',
-//        'd3_account_totp.tpl'   => 'd3/totp/Application/views/tpl/d3_account_totp.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/wave/d3_account_totp.tpl'   => 'views/smarty/wave/d3_account_totp.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/wave/d3totpadminlogin.tpl'  => 'views/smarty/wave/d3totpadminlogin.tpl',
-//        'd3totpadminlogin.tpl'  => 'd3/totp/Application/views/admin/tpl/d3totplogin.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/admin/inc/bootstrap.tpl'     => 'views/smarty/admin/inc/bootstrap.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/wave/d3_account_totp.tpl'    => 'views/smarty/wave/d3_account_totp.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/wave/d3totpadminlogin.tpl'   => 'views/smarty/wave/d3totpadminlogin.tpl',
     ],
     'settings'                => [
         [

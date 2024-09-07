@@ -63,7 +63,7 @@
     [{if $oxid && $oxid != '-1'}]
         <div class="container-fluid">
             <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                     <div class="card">
                         [{block name="user_d3user_totp_form1"}]
                             [{if false == $totp->getId()}]
@@ -78,6 +78,15 @@
                                         <div class="col-8">
                                             [{$totp->getQrCodeElement()}]
                                             [{oxinputhelp ident="D3_TOTP_QRCODE_HELP"}]
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label for="secret">[{oxmultilang ident="D3_TOTP_SECRET" suffix="COLON"}]</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret()}]</textarea>
+                                            [{oxinputhelp ident="D3_TOTP_SECRET_HELP"}]
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +111,7 @@
                                             [{oxmultilang ident="D3_TOTP_REGISTERDELETE_DESC"}]
                                             <br>
                                             <br>
-                                            <button type="submit" [{$readonly}] class="btn btn-primary btn-outline-danger btn-sm" onClick="document.myedit.fnc.value='delete'">
+                                            <button type="submit" [{$readonly}] class="btn btn-outline-danger btn-sm" onClick="document.myedit.fnc.value='delete'">
                                                 [{oxmultilang ident="D3_TOTP_REGISTERDELETE"}]
                                             </button>
                                         </div>
@@ -113,7 +122,7 @@
                         [{/block}]
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-6">
                     <div class="card">
                         [{block name="user_d3user_totp_form2"}]
                             [{if false == $totp->getId()}]
@@ -121,15 +130,6 @@
                                     [{oxmultilang ident="D3_TOTP_CONFIRMATION"}]
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label for="secret">[{oxmultilang ident="D3_TOTP_SECRET" suffix="COLON"}]</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret()}]</textarea>
-                                            [{oxinputhelp ident="D3_TOTP_SECRET_HELP"}]
-                                        </div>
-                                    </div>
                                     <div class="row" style="margin-top: 20px;">
                                         <div class="col-4">
                                             <label for="otp">[{oxmultilang ident="D3_TOTP_CURROTP"}]</label>
@@ -139,7 +139,7 @@
                                             [{oxinputhelp ident="D3_TOTP_CURROTP_HELP"}]
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" style="margin-top: 20px">
                                         <div class="col-4"></div>
                                         <div class="col-8">
                                             <button type="submit" [{$readonly}] class="btn btn-primary btn-success btn-sm" onClick="document.myedit.fnc.value='save'">

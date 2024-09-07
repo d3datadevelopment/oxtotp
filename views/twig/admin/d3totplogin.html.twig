@@ -4,17 +4,17 @@
     <title>{{ translate({ ident: "LOGIN_TITLE" }) }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset={{ charset }}">
     <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
-    <link rel="shortcut icon" href="{{ oViewConf.getImageUrl() }}favicon.ico">
-    <link rel="stylesheet" href="{{ oViewConf.getResourceUrl() }}login.css">
-    <link rel="stylesheet" href="{{ oViewConf.getResourceUrl() }}colors_{{ oViewConf.getEdition()|lower }}.css">
+    <link rel="shortcut icon" href="{{ oViewConf.getImageUrl()|raw }}favicon.ico">
+    <link rel="stylesheet" href="{{ oViewConf.getResourceUrl()|raw }}login.css">
+    <link rel="stylesheet" href="{{ oViewConf.getResourceUrl()|raw }}colors_{{ oViewConf.getEdition()|lower }}.css">
 </head>
 <body>
 
 <div class="admin-login-box">
 
-    <div id="shopLogo"><img src="{{ oViewConf.getImageUrl('logo_dark.svg') }}" alt="" /></div>
+    <div id="shopLogo"><img src="{{ oViewConf.getImageUrl('logo_dark.svg')|raw }}" alt="" /></div>
 
-    <form action="{{ oViewConf.getSelfLink() }}" method="post" id="login">
+    <form action="{{ oViewConf.getSelfLink()|raw }}" method="post" id="login">
 
         {% block admin_login_form %}
             {{ oViewConf.getHiddenSid()|raw }}
@@ -30,7 +30,7 @@
                 {% include "inc_error.html.twig" with {Errorlist: Errors.default} %}
             {% endif %}
 
-            {{ oView.getBackupCodeCountMessage() }}
+            {{ oView.getBackupCodeCountMessage()|raw }}
 
             <div class="container">
                 <label for="1st">erste TOTP-Ziffer</label>
@@ -47,7 +47,7 @@
                 <input type="text" name="d3totp[]" class="digit" id="6th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('5th', null)" autocomplete="off">
             </div>
 
-            {% capture name = "d3js" %}
+            {% set name = "d3js" %}
                 function clickEvent(previous, next){
                     const digitKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
                     const deleteKeys = ['Backspace', 'Delete'];
@@ -67,8 +67,8 @@
                         });
                     }
                 });
-            {% endcapture %}
-            {{ script({ add: smarty.capture.d3js, dynamic: __oxid_include_dynamic }) }}
+            {% endset %}
+            {{ script({ add: d3js, dynamic: __oxid_include_dynamic }) }}
 
             <div>{{ translate({ ident: "TOTP_INPUT_HELP" }) }}</div>
 
@@ -78,44 +78,10 @@
                 onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
             >
 
-            {{ style({ include: oViewConf.getModuleUrl('d3totp',, out/admin/src/css/d3totplogin.css'): 'out/admin/src/css/d3totplogin.css') }) }}
+            {{ style({ include: oViewConf.getModuleUrl('d3totp', 'out/admin/src/css/d3totplogin.css'): 'out/admin/src/css/d3totplogin.css') }) }}
+
             {{ style() }}
 
-
-
-{# *
-
-
-
-
-
- {{ oViewConf.getHiddenSid()|raw }}
-
- <input type="hidden" name="fnc" value="">
- <input type="hidden" name="cl" value="login">
-
- {% if not empty(Errors.default) %}
- {% include "inc_error.html.twig" with {Errorlist: Errors.default} %}
- {% endif %}
-
- <div class="d3webauthn_icon">
- <div class="svg-container">
- {% include $oViewConf->getModulePath('d3webauthn', with {out/img/fingerprint.svg'): 'out/img/fingerprint.svg')} %}
- </div>
- <div class="message">{{ translate({ ident: "WEBAUTHN_INPUT_HELP" }) }}</div>
- </div>
-* #}
-            {# prevent cancel button (1st button) action when form is sent via Enter key #}
-{# *
- <input type="submit" style="display:none !important;">
-
- <input class="btn btn_cancel" value="{{ translate({ ident: "WEBAUTHN_CANCEL_LOGIN" }) }}" type="submit"
- onclick="document.getElementById('login').fnc.value='d3WebauthnCancelLogin'; document.getElementById('login').submit();"
- >
-
- {{ style({ include: oViewConf.getModuleUrl('d3webauthn',, out/admin/src/css/d3webauthnlogin.css'): 'out/admin/src/css/d3webauthnlogin.css') }) }}
- {{ style() }}
-* #}
         {% endblock %}
     </form>
 </div>

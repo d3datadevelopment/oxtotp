@@ -19,20 +19,29 @@ use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\ConnectionProviderInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3totp extends BaseModel
 {
-    public $tableName = 'd3totp';
-    public $userId;
-    public $totp;
-    protected $timeWindow = 2;
+    protected const ENC_KEY = 'fq45QS09_fqyx09239QQ';
+
+    public string $tableName = 'd3totp';
+    public null|string $userId = null;
+    public null|TOTP $totp = null;
+    protected int $timeWindow = 2;
 
     /**
      * d3totp constructor.
@@ -46,46 +55,78 @@ class d3totp extends BaseModel
 
     /**
      * @param $userId
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     * @throws DBALException
      */
-    public function loadByUserId($userId)
+    public function loadByUserId($userId): void
     {
         $this->userId = $userId;
-        $oDb = $this->d3GetDb();
 
-        if ($oDb->getOne("SHOW TABLES LIKE '".$this->tableName."'")) {
-            $query = "SELECT oxid FROM ".$this->getViewName().' WHERE oxuserid = '.$oDb->quote($userId).' LIMIT 1';
-            $this->load($oDb->getOne($query));
+        if ($this->getDbConnection()
+            ->prepare("SHOW TABLES LIKE ".$this->getDbConnection()->quote($this->tableName))
+            ->executeQuery()
+            ->fetchOne()
+        ) {
+            /** @var QueryBuilder $qb */
+            $qb = $this->getQueryBuilder();
+            $qb->select('oxid')
+                ->from($this->getViewName())
+                ->where(
+                    $qb->expr()->eq('oxuserid', $qb->createNamedParameter($userId))
+                )
+                ->setMaxResults(1);
+            $this->load($qb->execute()->fetchOne());
         }
     }
 
     /**
      * @param $userId
      * @return bool
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws DBALException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
      */
-    public function checkIfAlreadyExist($userId)
+    public function checkIfAlreadyExist($userId): bool
     {
-        $oDb = $this->d3GetDb();
-        $query = "SELECT 1 FROM ".$this->getViewName().' WHERE oxuserid = '.$oDb->quote($userId).' LIMIT 1';
-        return (bool) $oDb->getOne($query);
+        $qb = $this->getQueryBuilder();
+        $qb->select('1')
+            ->from($this->getViewName())
+            ->where(
+                $qb->expr()->eq('oxuserid', $qb->createNamedParameter($userId))
+            )
+            ->setMaxResults(1);
+        return (bool) $qb->execute()->fetchOne();
     }
 
     /**
-     * @return DatabaseInterface
-     * @throws DatabaseConnectionException
+     * @return Connection
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function d3GetDb()
+    public function getDbConnection(): Connection
     {
-        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
+        return ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get();
+    }
+
+    /**
+     * @return QueryBuilder
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function getQueryBuilder(): QueryBuilder
+    {
+        return ContainerFactory::getInstance()->getContainer()->get(QueryBuilderFactoryInterface::class)->create();
     }
 
     /**
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
-        $userId = $this->userId ?: $this->getFieldData('oxuserid');
+        $userId = $this->userId ?? $this->getFieldData('oxuserid');
 
         $user = $this->d3GetUser();
         $user->load($userId);
@@ -95,7 +136,7 @@ class d3totp extends BaseModel
     /**
      * @return User
      */
-    public function d3GetUser()
+    public function d3GetUser(): User
     {
         return oxNew(User::class);
     }
@@ -103,16 +144,16 @@ class d3totp extends BaseModel
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return false == Registry::getConfig()->getConfigParam('blDisableTotpGlobally')
-            &&  $this->UserUseTotp();
+            && $this->UserUseTotp();
     }
 
     /**
      * @return bool
      */
-    public function UserUseTotp()
+    public function UserUseTotp(): bool
     {
         return $this->getFieldData('usetotp')
             && $this->getFieldData('seed');
@@ -139,9 +180,9 @@ class d3totp extends BaseModel
      * @param $seed
      * @return TOTP
      */
-    public function getTotp($seed = null)
+    public function getTotp($seed = null): TOTP
     {
-        if (false == $this->totp) {
+        if (null == $this->totp) {
             $this->totp = TOTP::create($seed ?: $this->getSavedSecret());
             $this->totp->setLabel($this->getUser()->getFieldData('oxusername') ?: '');
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
@@ -153,10 +194,11 @@ class d3totp extends BaseModel
     /**
      * @return string
      */
-    public function getQrCodeElement()
+    public function getQrCodeElement(): string
     {
         $renderer = BaconQrCodeFactory::renderer(200);
         $writer = $this->d3GetWriter($renderer);
+
         return $writer->writeString($this->getTotp()->getProvisioningUri());
     }
 
@@ -164,7 +206,7 @@ class d3totp extends BaseModel
      * @param RendererInterface $renderer
      * @return Writer
      */
-    public function d3GetWriter(RendererInterface $renderer)
+    public function d3GetWriter(RendererInterface $renderer): Writer
     {
         return oxNew(Writer::class, $renderer);
     }
@@ -172,7 +214,7 @@ class d3totp extends BaseModel
     /**
      * @return string
      */
-    public function getSecret()
+    public function getSecret(): string
     {
         return trim($this->getTotp()->getSecret());
     }
@@ -180,13 +222,11 @@ class d3totp extends BaseModel
     /**
      * @param $seed
      */
-    public function saveSecret($seed)
+    public function saveSecret($seed): void
     {
-        $this->assign(
-            [
-                'seed'  => $this->encrypt($seed),
-            ]
-        );
+        $this->assign([
+            'seed'  => $this->encrypt($seed),
+        ]);
     }
 
     /**
@@ -196,7 +236,7 @@ class d3totp extends BaseModel
      * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
-    public function verify($totp, $seed = null)
+    public function verify($totp, $seed = null): bool
     {
         $blNotVerified = $this->getTotp($seed)->verify($totp, null, $this->timeWindow) == false;
 
@@ -217,7 +257,7 @@ class d3totp extends BaseModel
     /**
      * @return d3backupcodelist
      */
-    public function d3GetBackupCodeListObject()
+    public function d3GetBackupCodeListObject(): d3backupcodelist
     {
         return oxNew(d3backupcodelist::class);
     }
@@ -226,30 +266,28 @@ class d3totp extends BaseModel
      * @param $plaintext
      * @return string
      */
-    public function encrypt($plaintext)
+    public function encrypt($plaintext): string
     {
-        $key = Registry::getConfig()->getConfigParam('sConfigKey');
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = openssl_random_pseudo_bytes($ivlen);
-        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-        $hmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, self::ENC_KEY, OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $ciphertext_raw, self::ENC_KEY, true);
         return base64_encode($iv.$hmac.$ciphertext_raw);
     }
 
     /**
      * @param $ciphertext
-     * @return bool|string
+     * @return false|string
      */
-    public function decrypt($ciphertext)
+    public function decrypt($ciphertext): false|string
     {
-        $key = Registry::getConfig()->getConfigParam('sConfigKey');
         $c = $this->d3Base64_decode($ciphertext);
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = substr($c, 0, $ivlen);
         $hmac = substr($c, $ivlen, $sha2len=32);
         $ciphertext_raw = substr($c, $ivlen+$sha2len);
-        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-        $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, self::ENC_KEY, OPENSSL_RAW_DATA, $iv);
+        $calcmac = hash_hmac('sha256', $ciphertext_raw, self::ENC_KEY, true);
         if (hash_equals($hmac, $calcmac)) { // PHP 5.6+ compute attack-safe comparison
             return $original_plaintext;
         }
@@ -262,7 +300,7 @@ class d3totp extends BaseModel
      * @param $source
      * @return bool|string
      */
-    public function d3Base64_decode($source)
+    public function d3Base64_decode($source): bool|string
     {
         return base64_decode($source);
     }
@@ -272,7 +310,7 @@ class d3totp extends BaseModel
      * @return bool
      * @throws DatabaseConnectionException
      */
-    public function delete($oxid = null)
+    public function delete($oxid = null): bool
     {
         $oBackupCodeList = $this->d3GetBackupCodeListObject();
         $oBackupCodeList->deleteAllFromUser($this->getFieldData('oxuserid'));

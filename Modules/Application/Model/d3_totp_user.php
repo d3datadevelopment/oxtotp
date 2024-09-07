@@ -39,7 +39,9 @@ class d3_totp_user extends d3_totp_user_parent
      */
     public function d3getTotp()
     {
-        return oxNew(d3totp::class);
+        $totp = oxNew(d3totp::class);
+        Registry::getSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $totp);
+        return $totp;
     }
 
     /**

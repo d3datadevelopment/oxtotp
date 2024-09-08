@@ -1,11 +1,19 @@
-{{ parent() }}
+{% extends "page/account/dashboard.html.twig" %}
 
-<div class="card">
-    <div class="card-header">
-        <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=d3_account_totp") }) }}">{{ translate({ ident: "D3_TOTP_ACCOUNT" }) }}</a>
-        <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=d3_account_totp") }) }}" class="btn btn-outline-dark btn-sm float-right edit-button">
-            <i class="fa fa-arrow-right"></i>
-        </a>
+{% block account_dashboard_col2 %}
+    {{ parent() }}
+
+    <div class="col mb-3">
+        <div class="card card-lg h-100">
+            <h2 class="h4 card-header card-title">{{ translate({ ident: "D3_TOTP_ACCOUNT" }) }}</h2>
+            <div class="card-body">
+                <div class="card-text mb-3">
+                    {{ translate({ ident: "D3_TOTP_ACCOUNT_DESC" }) }}
+                </div>
+                <a class="btn btn-outline-primary stretched-link" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=d3_account_totp") }) }}">
+                    {{ translate({ ident: "MORE" }) }}
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="card-body">{{ translate({ ident: "D3_TOTP_ACCOUNT_DESC" }) }}</div>
-</div>
+{% endblock %}

@@ -15,9 +15,10 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Controller;
 
+use Assert\Assert;
 use D3\Totp\Application\Model\Constants;
-use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\AccountController;
@@ -25,14 +26,18 @@ use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3_account_totp extends AccountController
 {
-    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/wave/d3_account_totp';
+    use OtpManagementControllerTrait;
 
-    public $aBackupCodes = [];
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/apex/d3_account_totp';
 
-    public function render()
+    public array $aBackupCodes = [];
+
+    public function render(): string
     {
         $sRet = parent::render();
 
@@ -41,49 +46,12 @@ class d3_account_totp extends AccountController
         return $sRet;
     }
 
-    /**
-     * @param array $aCodes
-     */
-    public function setBackupCodes(array $aCodes)
+    public function getCurrentUserId(): string
     {
-        $this->aBackupCodes = $aCodes;
+        return $this->getUser()->getId();
     }
 
-    /**
-     * @return string
-     */
-    public function getBackupCodes()
-    {
-        return implode(PHP_EOL, $this->aBackupCodes);
-    }
-
-    /**
-     * @return d3backupcodelist
-     */
-    public function getBackupCodeListObject()
-    {
-        return oxNew(d3backupcodelist::class);
-    }
-
-    /**
-     * @return int
-     * @throws DatabaseConnectionException
-     */
-    public function getAvailableBackupCodeCount()
-    {
-        $oBackupCodeList = $this->getBackupCodeListObject();
-        return $oBackupCodeList->getAvailableCodeCount($this->getUser()->getId());
-    }
-
-    /**
-     * @return d3totp
-     */
-    public function getTotpObject()
-    {
-        return oxNew(d3totp::class);
-    }
-
-    public function create()
+    public function create(): void
     {
         if (Registry::getRequest()->getRequestEscapedParameter('totp_use') === '1') {
             try {
@@ -92,14 +60,25 @@ class d3_account_totp extends AccountController
 
                 /** @var d3totp $oTotp */
                 $oTotp = $this->getTotpObject();
+
+                Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
+
                 $oTotpBackupCodes = $this->getBackupCodeListObject();
 
                 $aParams = [
                     'd3totp__usetotp' => 1,
                     'd3totp__oxuserid'  => $oUser->getId(),
                 ];
-                $seed = Registry::getRequest()->getRequestEscapedParameter("secret");
+                /** @var d3totp $init */
+                $init = Registry::getSession()->getVariable(d3totp_conf::OTP_SESSION_VARNAME);
+                $seed = $init->getSecret();
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
+
+                Assert::that($seed)->notBlank('D3_TOTP_EMPTY_SEED');
+                Assert::that($otp)
+                    ->integerish('D3_TOTP_MISSING_VALIDATION')
+                    ->length(6, 'D3_TOTP_MISSING_VALIDATION');
+
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
                 $oTotp->verify($otp, $seed);
@@ -116,12 +95,15 @@ class d3_account_totp extends AccountController
 
     /**
      * @throws DatabaseConnectionException
+     * @throws \Doctrine\DBAL\Driver\Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function delete()
+    public function delete(): void
     {
         if (Registry::getRequest()->getRequestEscapedParameter('totp_use') !== '1') {
             $oUser = $this->getUser();
-            /** @var d3totp $oTotp */
             $oTotp = $this->getTotpObject();
             if ($oUser instanceof User && $oUser->getId()) {
                 $oTotp->loadByUserId($oUser->getId());

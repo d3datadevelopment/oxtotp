@@ -37,19 +37,24 @@ class d3_totp_user extends d3_totp_user_parent
     /**
      * @return d3totp
      */
-    public function d3getTotp()
+    public function d3getTotp(): d3totp
     {
-        $totp = oxNew(d3totp::class);
-        Registry::getSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $totp);
-        return $totp;
+        return oxNew(d3totp::class);
     }
 
     /**
      * @return Session
      */
-    public function d3TotpGetSession()
+    public function d3TotpGetSession(): Session
     {
         return Registry::getSession();
+    }
+
+    public function d3getSessionedTotp(): d3totp
+    {
+        $totp = $this->d3getTotp();
+        $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $totp);
+        return $totp;
     }
 
     /**

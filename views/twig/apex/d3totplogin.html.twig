@@ -1,0 +1,95 @@
+{% capture append = "oxidBlock_content" %}
+    {% set template_title = "" %}
+
+    <div class="container-xxl">
+        <h3>{{ translate({ ident: "D3_TOTP_INPUT" }) }}</h3>
+        <div class="card mb-5">
+            <div class="card-body">
+                <form action="{{ oViewConf.getSelfActionLink() }}" method="post" name="login" id="login">
+                    {{ oViewConf.getHiddenSid()|raw }}
+
+                    <input type="hidden" name="fnc" value="d3TotpCheckTotpLogin">
+                    <input type="hidden" name="cl" value="{{ oView.getPreviousClass() }}">
+                    {{ navFormParams|raw }}
+
+                    <div class="row">
+                        <div class="col">
+                            {{ translate({ ident: "D3_TOTP_INPUT_HELP" }) }}
+                            {{ oView.getBackupCodeCountMessage() }}
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col text-center my-5">
+                            <label for="1st">{{ translate({ ident: "D3_TOTP_INPUT_FIRST" }) }}</label>
+                            <input type="text" name="d3totp[]" class="digit" id='1st' inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent(null, '2nd')" autofocus autocomplete="off">
+                            <label for="2nd">{{ translate({ ident: "D3_TOTP_INPUT_SECOND" }) }}</label>
+                            <input type="text" name="d3totp[]" class="digit" id="2nd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('1st', '3rd')" autocomplete="off">
+                            <label for="3rd">{{ translate({ ident: "D3_TOTP_INPUT_THIRD" }) }}</label>
+                            <input type="text" name="d3totp[]" class="digit" id="3rd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('2nd', '4th')" autocomplete="off">
+                            <label for="4th">{{ translate({ ident: "D3_TOTP_INPUT_FOURTH" }) }}</label>
+                            <input type="text" name="d3totp[]" class="digit" id="4th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('3rd', '5th')" autocomplete="off">
+                            <label for="5th">{{ translate({ ident: "D3_TOTP_INPUT_FIFTH" }) }}</label>
+                            <input type="text" name="d3totp[]" class="digit" id="5th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('4th', '6th')" autocomplete="off">
+                            <label for="6th">{{ translate({ ident: "D3_TOTP_INPUT_SIXTH" }) }}</label>
+                            <input type="text" name="d3totp[]" class="digit" id="6th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('5th', null)" autocomplete="off">
+                        </div>
+                    </div>
+
+                    {% set d3js %}
+                        function clickEvent(previous, next){
+                            const digitKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                            const deleteKeys = ['Backspace', 'Delete'];
+                            if(next && digitKeys.includes(event.key)){
+                                document.getElementById(next).focus();
+                            } else if(previous && deleteKeys.includes(event.key)){
+                                document.getElementById(previous).focus();
+                            }
+                        }
+                        document.addEventListener("paste", function(e) {
+                            if (e.target.type === "text") {
+                                var data = e.clipboardData.getData('Text');
+                                data = data.split('');
+                                [].forEach.call(document.querySelectorAll("#login input[type=text]"), (node, index) => {
+                                    node.value = data[index];
+                                });
+                            }
+                        });
+                    {% endset %}
+                    {{ script({ add: d3js.__toString(), dynamic: __oxid_include_dynamic }) }}
+
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-6">
+                            <button type="submit" class="btn btn-primary w-100">
+                                {{ translate({ ident: "D3_TOTP_SUBMIT_LOGIN" }) }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <form action="{{ oViewConf.getSelfActionLink() }}" method="post" name="login" id="login_cancel">
+                    {{ oViewConf.getHiddenSid()|raw }}
+
+                    <input type="hidden" name="fnc" value="d3TotpCancelTotpLogin">
+                    <input type="hidden" name="cl" value="{{ oView.getPreviousClass()|raw }}">
+                    {{ navFormParams|raw }}
+
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-6">
+                            <button class="btn btn-secondary btn-light w-100" type="submit">
+                                {{ translate({ ident: "D3_TOTP_CANCEL_LOGIN" }) }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{ style({ include: oViewConf.getModuleUrl('d3totp', 'out/flow/src/css/d3totplogin.css') }) }}
+    {{ style() }}
+
+    {{ insert_tracker({title: template_title}) }}
+{% endcapture %}
+
+{% include "layout/page.html.twig" %}

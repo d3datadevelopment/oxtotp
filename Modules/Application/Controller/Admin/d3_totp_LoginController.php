@@ -64,7 +64,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         return $this->d3CallMockableFunction([d3_totp_LoginController_parent::class, 'checklogin']);
     }
 
-    public function d3totpAfterLogin()
+    public function d3totpAfterLogin(): void
     {
         $myUtilsServer = $this->d3TotpGetUtilsServer();
         $sProfile = $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_PROFILE);

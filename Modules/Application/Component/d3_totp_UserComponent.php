@@ -15,11 +15,13 @@ declare(strict_types=1);
 
 namespace D3\Totp\Modules\Application\Component;
 
+use Assert\Assert;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception as DBALException;
 use InvalidArgumentException;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -27,6 +29,8 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Utils;
 use OxidEsales\Eshop\Core\UtilsView;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 {
@@ -36,13 +40,12 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @return string
      * @throws DatabaseConnectionException
      */
-    protected function _afterLogin($oUser)
+    protected function afterLogin($oUser)
     {
-        if (!$oUser instanceof User) {
-            throw oxNew(InvalidArgumentException::class, 'user argument must an instance of User class');
-        }
+        Assert::that($oUser)->isInstanceOf(User::class, 'user argument must an instance of User class');
 
-        if ($oUser->getId()) {
+        try {
+            Assert::that($oUser->getId())->notBlank('user must logged in');
             $totp = $this->d3GetTotpObject();
             $totp->loadByUserId($oUser->getId());
 
@@ -65,9 +68,9 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 $sUrl = Registry::getConfig()->getShopHomeUrl() . 'cl=d3totplogin';
                 $this->d3TotpGetUtils()->redirect($sUrl, false);
             }
-        }
+        } catch (InvalidArgumentException) {}
 
-        return parent::_afterLogin($oUser);
+        return parent::afterLogin($oUser);
     }
 
     /**
@@ -79,10 +82,14 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     }
 
     /**
-     * @throws DBALException
+     * @return false|string
      * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws DBALException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function d3TotpCheckTotpLogin()
+    public function d3TotpCheckTotpLogin(): false|string
     {
         $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
 
@@ -101,7 +108,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 $this->d3TotpGetSession()->setVariable(d3totp_conf::OXID_FRONTEND_AUTH, $oUser->getId());
                 $this->setUser($oUser);
                 $this->setLoginStatus(USER_LOGIN_SUCCESS);
-                $this->_afterLogin($oUser);
+                $this->afterLogin($oUser);
 
                 $this->d3TotpClearSessionVariables();
 
@@ -117,7 +124,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     /**
      * @return UtilsView
      */
-    public function d3TotpGetUtilsView()
+    public function d3TotpGetUtilsView(): UtilsView
     {
         return Registry::getUtilsView();
     }
@@ -125,12 +132,12 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     /**
      * @return Utils
      */
-    public function d3TotpGetUtils()
+    public function d3TotpGetUtils(): Utils
     {
         return Registry::getUtils();
     }
 
-    public function d3TotpCancelTotpLogin()
+    public function d3TotpCancelTotpLogin(): bool
     {
         $this->d3TotpClearSessionVariables();
 
@@ -141,7 +148,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @param d3totp $totp
      * @return bool
      */
-    public function d3TotpIsNoTotpOrNoLogin($totp)
+    public function d3TotpIsNoTotpOrNoLogin($totp): bool
     {
         return false == Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER)
             || false == $totp->isActive();
@@ -154,13 +161,13 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @throws DatabaseConnectionException
      * @throws d3totp_wrongOtpException
      */
-    public function d3TotpHasValidTotp($sTotp, $totp)
+    public function d3TotpHasValidTotp($sTotp, $totp): bool
     {
         return Registry::getSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
             $totp->verify($sTotp);
     }
 
-    public function d3TotpClearSessionVariables()
+    public function d3TotpClearSessionVariables(): void
     {
         $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_CURRENTCLASS);
         $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_CURRENTUSER);
@@ -170,7 +177,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     /**
      * @return Session
      */
-    public function d3TotpGetSession()
+    public function d3TotpGetSession(): Session
     {
         return Registry::getSession();
     }

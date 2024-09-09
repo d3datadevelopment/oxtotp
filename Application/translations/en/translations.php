@@ -25,8 +25,6 @@ return [
     'D3_TOTP_ACCOUNT'                                 => '2-factor authentication',
     'D3_TOTP_ACCOUNT_DESC'                            => 'Secure your account login with a second factor.',
 
-    'D3_TOTP_ACCOUNT_USE'                             => 'Use 2-factor authentication',
-
     'D3_TOTP_REGISTERNEW'                             => 'create a new registration',
     'D3_TOTP_QRCODE'                                  => 'QR code',
     'D3_TOTP_QRCODE_HELP'                             => 'Scan this QR code with your authentication app to store this user account there.',
@@ -35,14 +33,24 @@ return [
     'D3_TOTP_CURROTP'                                 => 'Confirmation with one-time password',
     'D3_TOTP_CURROTP_HELP'                            => 'If you have registered this customer account in your authentication app, use it to generate a one-time password, enter it here and send the form directly afterwards.',
 
-    'D3_TOTP_REGISTEREXIST'                           => 'existing registration',
+    'D3_TOTP_STATUS'                                  => 'Status',
+    'D3_TOTP_ACCOUNT_USE'                             => 'use 2-factor authentication',
+
+    'D3_TOTP_REGISTEREXIST'                           => 'Existing registration',
     'D3_TOTP_REGISTERDELETE_DESC'                     => 'To change the registration, please delete it first. You can then create a new registration immediately. <br>If you delete the registration, the account is no longer protected by two-factor authentication.',
     'D3_TOTP_REGISTERDELETE_CONFIRM'                  => 'Should the existing 2-factor authentication be deleted?',
 
-    'D3_TOTP_BACKUPCODES'                             => 'backup codes',
+    'D3_TOTP_BACKUPCODES'                             => 'Backup codes',
     'D3_TOTP_BACKUPCODES_DESC'                        => 'You can use these backup codes to log on if it is not possible to generate the one-time password (e.g. device lost or newly installed). You can then change the settings to use 2-factor authentication or create a new account. Please save these codes securely at this moment. After leaving this page, these codes cannot be displayed again.',
     'D3_TOTP_AVAILBACKUPCODECOUNT'                    => 'still %1$s backup code(s) available',
     'D3_TOTP_AVAILBACKUPCODECOUNT_DESC'               => 'To create new backup codes, delete the existing registry and create a new one.',
+
+    'D3_TOTP_INPUT_FIRST'                             => 'first TOTP digit',
+    'D3_TOTP_INPUT_SECOND'                            => 'second TOTP digit',
+    'D3_TOTP_INPUT_THIRD'                             => 'third TOTP digit',
+    'D3_TOTP_INPUT_FOURTH'                            => 'fourth TOTP digit',
+    'D3_TOTP_INPUT_FIFTH'                             => 'fifth TOTP digit',
+    'D3_TOTP_INPUT_SIXTH'                             => 'sixth TOTP digit',
 
     'D3_TOTP_ACCOUNT_SAVE'                            => 'Confirm settings',
 

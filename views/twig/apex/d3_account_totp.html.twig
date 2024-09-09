@@ -38,7 +38,7 @@
 
     <script type="text/javascript">
         function toggle(id) {
-            var div1 = document.getElementById(id);
+            let div1 = document.getElementById(id);
             if(document.getElementById('totp_use').checked) {
                 div1.style.display = 'block';
             } else {
@@ -58,16 +58,21 @@
                         <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                     </div>
 
-                    <p>
-                        <input id="totp_use" value="1" type="checkbox" name="totp_use" {% if totp.getId() %} checked{% endif %} {% if false == totp.getId() %}onclick="toggle('registerNew'); toggle('submitBtn');"{% endif %}>
-                        <label for="totp_use">{{ translate({ ident: "D3_TOTP_ACCOUNT_USE" }) }}</label>
-                    </p>
+                    <div class="{# apex #} card">
+                        <h2 class="{# apex #} h5 card-header">
+                            {{ translate({ ident: "D3_TOTP_STATUS" }) }}
+                        </h2>
+                        <div class="{# apex #} card-body">
+                            <input id="totp_use" value="1" type="checkbox" name="totp_use" {% if totp.getId() %} checked{% endif %} {% if false == totp.getId() %}onclick="toggle('registerNew'); toggle('submitBtn');"{% endif %}>
+                            <label for="totp_use">{{ translate({ ident: "D3_TOTP_ACCOUNT_USE" }) }}</label>
+                        </div>
+                    </div>
 
                     {% if false == totp.getId() %}
                         <div class="registerNew {# apex #} card" id="registerNew">
-                            <div class="{# apex #} card-header">
+                            <h2 class="{# apex #} h5 card-header">
                                 {{ translate({ ident: "D3_TOTP_REGISTERNEW" }) }}
-                            </div>
+                            </h2>
                             <div class="{# apex #} card-body">
                                 <dl>
                                     <dt>
@@ -115,9 +120,9 @@
                     {% if totp.getId() %}
                         {% block d3_account_totp_deletenotes %}
                             <div class="{# apex #} card">
-                                <div class="{# apex #} card-header">
+                                <h2 class="{# apex #} h5 card-header">
                                     {{ translate({ ident: "D3_TOTP_REGISTEREXIST" }) }}
-                                </div>
+                                </h2>
                                 <div class="{# apex #} card-body">
                                     {{ translate({ ident: "D3_TOTP_REGISTERDELETE_DESC" }) }}
                                 </div>
@@ -126,9 +131,9 @@
 
                         {% block d3_account_totp_backupcodes %}
                             <div class="{# apex #} card">
-                                <div class="{# apex #} card-header">
+                                <h2 class="{# apex #} h5 card-header">
                                     {{ translate({ ident: "D3_TOTP_BACKUPCODES" }) }}
-                                </div>
+                                </h2>
                                 <div class="{# apex #} card-body">
                                     {% if oView.getBackupCodes() %}
                                         {% block d3_account_totp_backupcodes_list %}

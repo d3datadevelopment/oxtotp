@@ -25,7 +25,7 @@ use OxidEsales\Eshop\Core\Utils;
 
 class d3totplogin extends FrontendController
 {
-    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin';
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/apex/d3totplogin';
 
     public function render()
     {

@@ -47,6 +47,13 @@ return [
     'D3_TOTP_AVAILBACKUPCODECOUNT'                    => 'noch %1$s Backupcode(s) verfügbar',
     'D3_TOTP_AVAILBACKUPCODECOUNT_DESC'               => 'Um neue Backupcodes zu erstellen, löschen Sie die bestehende Registrierung und legen diese bitte neu an.',
 
+    'D3_TOTP_INPUT_FIRST'                             => 'erste TOTP-Ziffer',
+    'D3_TOTP_INPUT_SECOND'                            => 'zweite TOTP-Ziffer',
+    'D3_TOTP_INPUT_THIRD'                             => 'dritte TOTP-Ziffer',
+    'D3_TOTP_INPUT_FOURTH'                            => 'vierte TOTP-Ziffer',
+    'D3_TOTP_INPUT_FIFTH'                             => 'fünfte TOTP-Ziffer',
+    'D3_TOTP_INPUT_SIXTH'                             => 'sechste TOTP-Ziffer',
+
     'D3_TOTP_SAVE'                                    => 'Speichern',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',

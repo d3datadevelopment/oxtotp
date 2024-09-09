@@ -33,12 +33,12 @@ use Psr\Log\LoggerInterface;
 
 class d3totpadminlogin extends AdminController
 {
-    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/wave/d3totpadminlogin';
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin';
 
     /**
      * @return bool
      */
-    protected function _authorize(): bool
+    protected function authorize(): bool
     {
         return true;
     }

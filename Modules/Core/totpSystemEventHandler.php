@@ -50,6 +50,7 @@ class totpSystemEventHandler extends totpSystemEventHandler_parent
 
             $this->getUtilsObject()->redirect(
                 'index.php?cl=d3totpadminlogin&amp;'.
+                'stoken='.Registry::getRequest()->getRequestEscapedParameter('stoken').'&amp;'.
                 'profile='.$this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_PROFILE).'&amp;'.
                 'chlanguage='.$this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE),
                 false

@@ -1,0 +1,10 @@
+{% extends "widget/header/servicebox.html.twig" %}
+
+{% block widget_header_servicebox_items %}
+    {{ parent() }}
+    <li>
+        <a class="dropdown-item" href="{{ seo_url({ ident: oViewConf.getSslSelfLink() ~ "cl=d3_account_totp" }) }}">
+            {{ translate({ ident: "D3_TOTP_ACCOUNT" }) }}
+        </a>
+    </li>
+{% endblock %}

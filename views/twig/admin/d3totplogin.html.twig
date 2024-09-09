@@ -33,21 +33,21 @@
             {{ oView.getBackupCodeCountMessage()|raw }}
 
             <div class="container">
-                <label for="1st">erste TOTP-Ziffer</label>
+                <label for="1st">{{ translate({ ident: "D3_TOTP_INPUT_FIRST" }) }}</label>
                 <input type="text" name="d3totp[]" class="digit" id='1st' inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent(null, '2nd')" autofocus autocomplete="off">
-                <label for="2nd">zweite TOTP-Ziffer</label>
+                <label for="2nd">{{ translate({ ident: "D3_TOTP_INPUT_SECOND" }) }}</label>
                 <input type="text" name="d3totp[]" class="digit" id="2nd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('1st', '3rd')" autocomplete="off">
-                <label for="3rd">dritte TOTP-Ziffer</label>
+                <label for="3rd">{{ translate({ ident: "D3_TOTP_INPUT_THIRD" }) }}</label>
                 <input type="text" name="d3totp[]" class="digit" id="3rd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('2nd', '4th')" autocomplete="off">
-                <label for="4th">vierte TOTP-Ziffer</label>
+                <label for="4th">{{ translate({ ident: "D3_TOTP_INPUT_FOURTH" }) }}</label>
                 <input type="text" name="d3totp[]" class="digit" id="4th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('3rd', '5th')" autocomplete="off">
-                <label for="5th">fünfte TOTP-Ziffer</label>
+                <label for="5th">{{ translate({ ident: "D3_TOTP_INPUT_FIFTH" }) }}</label>
                 <input type="text" name="d3totp[]" class="digit" id="5th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('4th', '6th')" autocomplete="off">
-                <label for="6th">sechste TOTP-Ziffer</label>
+                <label for="6th">{{ translate({ ident: "D3_TOTP_INPUT_SIXTH" }) }}</label>
                 <input type="text" name="d3totp[]" class="digit" id="6th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('5th', null)" autocomplete="off">
             </div>
 
-            {% set name = "d3js" %}
+            {% set d3js %}
                 function clickEvent(previous, next){
                     const digitKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
                     const deleteKeys = ['Backspace', 'Delete'];
@@ -58,8 +58,7 @@
                     }
                 }
                 document.addEventListener("paste", function(e) {
-                    if (e.target.type is same as("text") {
-)
+                    if (e.target.type === "text") {
                         var data = e.clipboardData.getData('Text');
                         data = data.split('');
                         [].forEach.call(document.querySelectorAll("#login input[type=text]"), (node, index) => {
@@ -68,7 +67,7 @@
                     }
                 });
             {% endset %}
-            {{ script({ add: d3js, dynamic: __oxid_include_dynamic }) }}
+            {{ script({ add: d3js.__toString(), dynamic: __oxid_include_dynamic }) }}
 
             <div>{{ translate({ ident: "TOTP_INPUT_HELP" }) }}</div>
 
@@ -78,7 +77,7 @@
                 onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
             >
 
-            {{ style({ include: oViewConf.getModuleUrl('d3totp', 'out/admin/src/css/d3totplogin.css'): 'out/admin/src/css/d3totplogin.css') }) }}
+            {{ style({ include: oViewConf.getModuleUrl('d3totp', 'out/admin/src/css/d3totplogin.css') }) }}
 
             {{ style() }}
 

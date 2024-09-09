@@ -19,10 +19,10 @@
     <input type="submit" style="display:none !important;">
 
     <input class="btn btn_cancel" value="{{ translate({ ident: "TOTP_CANCEL_LOGIN" }) }}" type="submit"
-           onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
+        onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
     >
 
-    {{ style({ include: oViewConf.getModuleUrl('d3totp',, out/admin/src/css/d3totplogin.css'): 'out/admin/src/css/d3totplogin.css') }) }}
+    {{ style({ include: oViewConf.getModuleUrl('d3totp', 'out/admin/src/css/d3totplogin.css') }) }}
     {{ style() }}
 {% else %}
     {{ parent() }}

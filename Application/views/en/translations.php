@@ -47,6 +47,13 @@ return [
     'D3_TOTP_AVAILBACKUPCODECOUNT'                    => '%1$s backup code(s) still available',
     'D3_TOTP_AVAILBACKUPCODECOUNT_DESC'               => 'To create new backup codes, delete the existing registry and create a new one.',
 
+    'D3_TOTP_INPUT_FIRST'                             => 'first TOTP digit',
+    'D3_TOTP_INPUT_SECOND'                            => 'second TOTP digit',
+    'D3_TOTP_INPUT_THIRD'                             => 'third TOTP digit',
+    'D3_TOTP_INPUT_FOURTH'                            => 'fourth TOTP digit',
+    'D3_TOTP_INPUT_FIFTH'                             => 'fifth TOTP digit',
+    'D3_TOTP_INPUT_SIXTH'                             => 'sixth TOTP digit',
+
     'D3_TOTP_SAVE'                                    => 'Save',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',

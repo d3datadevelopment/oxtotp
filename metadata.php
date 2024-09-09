@@ -107,12 +107,6 @@ $aModule = [
             'file'          => 'Application/views/blocks/page/account/account_dashboard_col2_wave.tpl',
         ],
         [
-            'theme'         => 'flow',
-            'template'      => 'page/account/dashboard.tpl',
-            'block'         => 'account_dashboard_col2',
-            'file'          => 'Application/views/blocks/page/account/account_dashboard_col2_flow.tpl',
-        ],
-        [
             'template'      => 'widget/header/servicebox.tpl',
             'block'         => 'widget_header_servicebox_items',
             'file'          => 'Application/views/blocks/widget/header/widget_header_servicebox_items.tpl',

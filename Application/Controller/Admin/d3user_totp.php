@@ -99,6 +99,7 @@ class d3user_totp extends AdminDetailsController
                 $aParams['d3totp__usetotp'] = 1;
                 /** @var d3totp $init */
                 $init = Registry::getSession()->getVariable(d3totp_conf::OTP_SESSION_VARNAME);
+                Assert::that($init)->isInstanceOf(d3totp::class, 'D3_TOTP_INITOBJECT_MISSING');
                 $seed = $init->getSecret();
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
 

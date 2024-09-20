@@ -2,7 +2,7 @@
 
     <h1 class="page-header">[{oxmultilang ident="D3_TOTP_ACCOUNT"}]</h1>
 
-    [{assign var="totp" value=$user->d3GetTotp()}]
+    [{assign var="totp" value=$user->d3GetSessionedTotp()}]
     [{assign var="userid" value=$user->getId()}]
     [{$totp->loadByUserId($userid)}]
 
@@ -37,10 +37,15 @@
                 <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
             </div>
 
-            <p>
-                <input id="totp_use" value="1" type="checkbox" name="totp_use" [{if $totp->getId()}] checked[{/if}] [{if false == $totp->getId()}]onclick="$('.registerNew').toggle(); $('.submitBtn').toggle();"[{/if}]>
-                <label for="totp_use">[{oxmultilang ident="D3_TOTP_ACCOUNT_USE"}]</label>
-            </p>
+            <div class="[{* wave *}] card">
+                <div class="[{* wave *}] card-header">
+                    [{oxmultilang ident="D3_TOTP_STATUS"}]
+                </div>
+                <div class="[{* wave *}] card-body">
+                    <input id="totp_use" value="1" type="checkbox" name="totp_use" [{if $totp->getId()}] checked[{/if}] [{if false == $totp->getId()}]onclick="$('.registerNew').toggle(); $('.submitBtn').toggle();"[{/if}]>
+                    <label for="totp_use">[{oxmultilang ident="D3_TOTP_ACCOUNT_USE"}]</label>
+                </div>
+            </div>
 
             [{if false == $totp->getId()}]
                 <div class="registerNew [{* flow *}] panel panel-default [{* wave *}] card">
@@ -93,22 +98,22 @@
 
             [{if $totp->getId()}]
                 [{block name="d3_account_totp_deletenotes"}]
-                    <div class="[{* flow *}] panel panel-default [{* wave *}] card">
-                        <div class="[{* flow *}] panel-heading [{* wave *}] card-header">
+                    <div class="[{* wave *}] card">
+                        <div class="[{* wave *}] card-header">
                             [{oxmultilang ident="D3_TOTP_REGISTEREXIST"}]
                         </div>
-                        <div class="[{* flow *}] panel-body [{* wave *}] card-body">
+                        <div class="[{* wave *}] card-body">
                             [{oxmultilang ident="D3_TOTP_REGISTERDELETE_DESC"}]
                         </div>
                     </div>
                 [{/block}]
 
                 [{block name="d3_account_totp_backupcodes"}]
-                    <div class="[{* flow *}] panel panel-default [{* wave *}] card">
-                        <div class="[{* flow *}] panel-heading [{* wave *}] card-header">
+                    <div class="[{* wave *}] card">
+                        <div class="[{* wave *}] card-header">
                             [{oxmultilang ident="D3_TOTP_BACKUPCODES"}]
                         </div>
-                        <div class="[{* flow *}] panel-body [{* wave *}] card-body">
+                        <div class="[{* wave *}] card-body">
                             [{if $oView->getBackupCodes()}]
                                 [{block name="d3_account_totp_backupcodes_list"}]
                                     <label for="backupcodes">[{oxmultilang ident="D3_TOTP_BACKUPCODES_DESC"}]</label>

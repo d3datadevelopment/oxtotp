@@ -33,7 +33,7 @@ class d3_account_totp extends AccountController
 {
     use OtpManagementControllerTrait;
 
-    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/apex/d3_account_totp';
+    protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/tpl/d3_account_totp';
 
     public array $aBackupCodes = [];
 

@@ -17,9 +17,11 @@
 
                 <h3>[{oxmultilang ident="D3_TOTP_INPUT"}]</h3>
 
-                [{if !empty($Errors.default)}]
-                    [{include file="inc_error.tpl" Errorlist=$Errors.default}]
-                [{/if}]
+[{*                [{if !empty($Errors.default)}]*}]
+[{*                    [{include file="inc_error.tpl" Errorlist=$Errors.default}]*}]
+[{*                [{/if}]*}]
+
+                <div>[{oxmultilang ident="D3_TOTP_INPUT_HELP"}]</div>
 
                 [{$oView->getBackupCodeCountMessage()}]
 
@@ -59,8 +61,6 @@
                     });
                 [{/capture}]
                 [{oxscript add=$smarty.capture.d3js}]
-
-                <div>[{oxmultilang ident="D3_TOTP_INPUT_HELP"}]</div>
 
                 <button type="submit" class="btn btn-primary">
                     [{oxmultilang ident="D3_TOTP_SUBMIT_LOGIN"}]

@@ -1,7 +1,7 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 [{include file="@d3totp/admin/inc/bootstrap.tpl" }]
 
-[{assign var="totp" value=$edit->d3GetTotp()}]
+[{assign var="totp" value=$edit->d3GetSessionedTotp()}]
 [{assign var="userid" value=$edit->getId()}]
 [{$totp->loadByUserId($userid)}]
 

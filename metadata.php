@@ -72,11 +72,11 @@ $aModule = [
         'd3totpadminlogin'  =>  d3totpadminlogin::class,
     ],
     'templates'                 => [
-        '@'.Constants::OXID_MODULE_ID.'/admin/d3user_totp.tpl'       => 'views/smarty/admin/d3user_totp.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin.tpl'       => 'views/smarty/admin/d3totplogin.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/admin/inc/bootstrap.tpl'     => 'views/smarty/admin/inc/bootstrap.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/wave/d3_account_totp.tpl'    => 'views/smarty/wave/d3_account_totp.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/wave/d3totpadminlogin.tpl'   => 'views/smarty/wave/d3totpadminlogin.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/admin/d3user_totp.tpl'      => 'views/smarty/admin/tpl/d3user_totp.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin.tpl'      => 'views/smarty/admin/tpl/d3totplogin.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/admin/inc/bootstrap.tpl'    => 'views/smarty/admin/inc/bootstrap.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/tpl/d3_account_totp.tpl'    => 'views/smarty/tpl/d3_account_totp.tpl',
+        '@'.Constants::OXID_MODULE_ID.'/tpl/d3totplogin.tpl'        => 'views/smarty/tpl/d3totplogin.tpl',
     ],
     'settings'                => [
         [
@@ -94,22 +94,22 @@ $aModule = [
         [
             'template'      => 'login.tpl',
             'block'         => 'admin_login_form',
-            'file'          => 'Application/views/admin/blocks/d3totp_login_admin_login_form.tpl',
+            'file'          => 'views/smarty/admin/blocks/d3totp_login_admin_login_form.tpl',
         ],
         [
             'template'      => 'page/account/inc/account_menu.tpl',
             'block'         => 'account_menu',
-            'file'          => 'Application/views/blocks/page/account/inc/account_menu.tpl',
+            'file'          => 'views/smarty/blocks/page/account/inc/account_menu.tpl',
         ],
         [
             'template'      => 'page/account/dashboard.tpl',
             'block'         => 'account_dashboard_col2',
-            'file'          => 'Application/views/blocks/page/account/account_dashboard_col2_wave.tpl',
+            'file'          => 'views/smarty/blocks/page/account/account_dashboard_col2_wave.tpl',
         ],
         [
             'template'      => 'widget/header/servicebox.tpl',
             'block'         => 'widget_header_servicebox_items',
-            'file'          => 'Application/views/blocks/widget/header/widget_header_servicebox_items.tpl',
+            'file'          => 'views/smarty/blocks/widget/header/widget_header_servicebox_items.tpl',
         ],
     ],
 ];

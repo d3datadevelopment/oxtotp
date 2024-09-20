@@ -131,7 +131,7 @@ class Actions
     {
         foreach (array_keys($this->stdClassName) as $id) {
             $seoEncoder = oxNew(SeoEncoder::class);
-            $objectid = md5(strtolower(Registry::getConfig()->getShopId() . $this->seo_de[$id]));
+            $objectid = md5(strtolower(Registry::getConfig()->getShopId() . 'index.php?cl=' . $this->stdClassName[$id]));
             if (!$this->hasSeoUrl($this->stdClassName[$id], 0)) {
                 $seoEncoder->addSeoEntry(
                     $objectid,
@@ -143,7 +143,7 @@ class Actions
                     false
                 );
             }
-            if (!$this->hasSeoUrl($this->stdClassName[$id], 0)) {
+            if (!$this->hasSeoUrl($this->stdClassName[$id], 1)) {
                 $seoEncoder->addSeoEntry(
                     $objectid,
                     Registry::getConfig()->getShopId(),

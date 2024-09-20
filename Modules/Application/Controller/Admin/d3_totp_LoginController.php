@@ -87,10 +87,10 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE);
     }
 
-    public function d3totpAfterLoginSetLanguage()
+    public function d3totpAfterLoginSetLanguage(): void
     {
         $myUtilsServer = $this->d3TotpGetUtilsServer();
-        $iLang = $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_CHLANGUAGE);
+        $iLang = Registry::getRequest()->getRequestEscapedParameter('chlanguage');
 
         $aLanguages = $this->d3TotpGetLangObject()->getAdminTplLanguageArray();
         if (!isset($aLanguages[$iLang])) {
@@ -105,7 +105,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      * @param d3totp $totp
      * @return bool
      */
-    public function d3TotpLoginMissing($totp)
+    public function d3TotpLoginMissing(d3totp $totp): bool
     {
         return $totp->isActive()
             && false == $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH);

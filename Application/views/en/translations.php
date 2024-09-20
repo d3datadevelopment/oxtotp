@@ -17,18 +17,18 @@ return [
     'charset'                                         => 'UTF-8',
 
     'TOTP_INPUT'                                      => 'authentication code',
-    'TOTP_INPUT_HELP'                                 => 'The authentication code is available from the Two-Factor Authentication app on your device.',
+    'TOTP_INPUT_HELP'                                 => 'You get the one-time password from the two-factor authentication app on your device.',
     'TOTP_CANCEL_LOGIN'                               => 'Cancel login',
 
     'd3mxuser_totp'                                   => 'Two-factor authentication',
 
     'D3_TOTP_REGISTERNEW'                             => 'create new registration',
     'D3_TOTP_QRCODE'                                  => 'QR code',
-    'D3_TOTP_QRCODE_HELP'                             => 'Scan this QR code with your authentication app to deposit this user account.',
-    'D3_TOTP_SECRET'                                  => 'Can not scan QR code?',
-    'D3_TOTP_SECRET_HELP'                             => 'If you do not use an app that can scan the QR code, you can also copy this string into your authentication tool. Please also set the password length to 6 characters and the time interval to 30 seconds.',
+    'D3_TOTP_QRCODE_HELP'                             => 'Scan this QR code with your authentication app to store this user account there.',
+    'D3_TOTP_SECRET'                                  => 'QR code cannot be scanned?',
+    'D3_TOTP_SECRET_HELP'                             => 'If you are not using an app that can scan the QR code, you can also copy this character string into your authentication tool. Please set the password length to 6 characters and the time interval to 30 seconds.',
     'D3_TOTP_CURROTP'                                 => 'Confirmation with one-time password',
-    'D3_TOTP_CURROTP_HELP'                            => 'If you have registered this customer account in your authentication app, you generate a one-time password, enter it here and send the form out immediately.',
+    'D3_TOTP_CURROTP_HELP'                            => 'If you have registered this customer account in your authentication app, use it to generate a one-time password, enter it here and submit the form directly.',
 
     'SHOP_MODULE_GROUP_d3totp_main'                   => 'Basic settings',
     'D3_TOTP_FORCE2FATITLE'                           => 'Mandates two-factor authentication',

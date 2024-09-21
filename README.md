@@ -27,13 +27,12 @@ Dieses Modul stellt eine 2-Faktor-Authentisierung (zeitabhängiges Einmalpasswor
 
 Dieses Paket erfordert einen mit Composer installierten OXID eShop in einer der folgenden Versionen:
 
-- 6.3.x
-- 6.4.x
-- 6.5.x
+- 7.0.x
+- 7.1.x
 
 und dessen Anforderungen.
 
-Im Standard wird das Flow- und Wave-Theme unterstützt. Andere Themes können Anpassungen erfordern.
+Im Standard wird das Apex- (Twig) und Wave- (Smarty) Theme unterstützt. Andere Themes können Anpassungen erfordern.
 
 ## Erste Schritte
 

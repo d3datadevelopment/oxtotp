@@ -27,13 +27,12 @@ This module provides a 2-factor authentication (time-dependent one-time password
 
 This package requires an OXID eShop installed with Composer in one of the following versions:
 
-- 6.3.x
-- 6.4.x
-- 6.5.x
+- 7.0.x
+- 7.1.x
 
 and its requirements.
 
-The Flow and Wave themes are supported by default. Other themes may require customisation.
+The Apex (Twig based) and Wave (Smarty based) themes are supported by default. Other themes may require customisation.
 
 ## Getting Started
 

@@ -22,13 +22,16 @@ use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Utils;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class d3totpadminlogin extends AdminController
@@ -44,16 +47,19 @@ class d3totpadminlogin extends AdminController
     }
 
     /**
-     * @return d3totp|mixed
+     * @return d3totp
      */
-    public function d3TotpGetTotpObject()
+    public function d3TotpGetTotpObject(): d3totp
     {
         return oxNew(d3totp::class);
     }
 
     /**
      * @return bool
-     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws DBALException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function isTotpIsNotRequired(): bool
     {
@@ -79,7 +85,10 @@ class d3totpadminlogin extends AdminController
 
     /**
      * @return string
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws DBALException
      */
     public function render(): string
     {
@@ -109,7 +118,10 @@ class d3totpadminlogin extends AdminController
 
     /**
      * @return string|void
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws DBALException
      */
     public function getBackupCodeCountMessage()
     {
@@ -140,16 +152,21 @@ class d3totpadminlogin extends AdminController
     }
 
     /**
-     * @return User
+     * @return d3_totp_user
      */
     public function d3TotpGetUserObject(): User
     {
-        return oxNew(User::class);
+        /** @var d3_totp_user $user */
+        $user = oxNew(User::class);
+        return $user;
     }
 
     /**
      * @return string|void
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws DBALException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
      */
     public function checklogin()
     {
@@ -192,7 +209,10 @@ class d3totpadminlogin extends AdminController
      * @param string|null $sTotp
      * @param d3totp $totp
      * @return bool
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws DBALException
      * @throws d3totp_wrongOtpException
      */
     public function d3TotpHasValidTotp(string $sTotp = null, d3totp $totp): bool

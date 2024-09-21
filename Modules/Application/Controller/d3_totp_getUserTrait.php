@@ -18,20 +18,25 @@ namespace D3\Totp\Modules\Application\Controller;
 use D3\TestingTools\Production\IsMockable;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
+use Doctrine\DBAL\Driver\Exception;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 trait d3_totp_getUserTrait
 {
     use IsMockable;
 
     /**
-     * @return bool|object|User
-     * @throws DatabaseConnectionException
+     * @return false|User
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function getUser()
+    public function getUser(): false|User
     {
         /** @var User|null $user */
         $user = $this->d3CallMockableFunction([$this->parentClass, 'getUser']);
@@ -55,7 +60,7 @@ trait d3_totp_getUserTrait
     /**
      * @return d3totp
      */
-    public function d3GetTotpObject()
+    public function d3GetTotpObject(): d3totp
     {
         return oxNew(d3totp::class);
     }
@@ -63,7 +68,7 @@ trait d3_totp_getUserTrait
     /**
      * @return Session
      */
-    public function d3TotpGetSessionObject()
+    public function d3TotpGetSessionObject(): Session
     {
         return Registry::getSession();
     }

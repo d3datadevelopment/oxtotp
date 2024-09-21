@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * https://www.d3data.de
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <info@shopmodule.com>
+ * @link      https://www.oxidmodule.com
+ */
+
 declare(strict_types=1);
 
 namespace D3\Totp\Migrations;
@@ -14,7 +25,7 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20240905232017 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Extend Database by missing OTP tables and missing columns.';
     }
@@ -22,7 +33,7 @@ final class Version20240905232017 extends AbstractMigration
     /**
      * @throws Exception
      */
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
@@ -79,9 +90,9 @@ final class Version20240905232017 extends AbstractMigration
                 ->setDefault('CURRENT_TIMESTAMP');
         }
 
-        $table->hasPrimaryKey() ?:$table->setPrimaryKey(['oxid']);
+        $table->hasPrimaryKey() ?: $table->setPrimaryKey(['oxid']);
 
-        if($table->hasIndex('OXUSERID') === false){
+        if ($table->hasIndex('OXUSERID') === false) {
             $table->addUniqueIndex(['OXUSERID'], 'OXUSERID');
         }
     }
@@ -129,18 +140,18 @@ final class Version20240905232017 extends AbstractMigration
                 ->setDefault('CURRENT_TIMESTAMP');
         }
 
-        $table->hasPrimaryKey() ?:$table->setPrimaryKey(['oxid']);
+        $table->hasPrimaryKey() ?: $table->setPrimaryKey(['oxid']);
 
-        if($table->hasIndex('OXUSERID') === false){
+        if ($table->hasIndex('OXUSERID') === false) {
             $table->addIndex(['OXUSERID'], 'OXUSERID');
         }
 
-        if($table->hasIndex('BACKUPCODE') === false){
+        if ($table->hasIndex('BACKUPCODE') === false) {
             $table->addIndex(['BACKUPCODE'], 'BACKUPCODE');
         }
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
     }

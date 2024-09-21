@@ -32,13 +32,13 @@ use Psr\Container\NotFoundExceptionInterface;
 class Actions
 {
     public array $seo_de = [
-        '2-faktor-authentisierung/'
+        '2-faktor-authentisierung/',
     ];
     public array $seo_en = [
-        'en/2-factor-authentication/'
+        'en/2-factor-authentication/',
     ];
     public array $stdClassName = [
-        'd3_account_totp'
+        'd3_account_totp',
     ];
 
     /**
@@ -112,7 +112,7 @@ class Actions
         return true;
     }
 
-    protected function hasSeoUrl($item, $langId): bool
+    protected function hasSeoUrl(string $item, int $langId): bool
     {
         $seoEncoder = oxNew(SeoEncoder::class);
         $seoUrl = $seoEncoder->getStaticUrl(

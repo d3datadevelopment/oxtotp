@@ -18,16 +18,18 @@ namespace D3\Totp\Application\Controller;
 use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp_conf;
+use Doctrine\DBAL\Driver\Exception;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Utils;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3totplogin extends FrontendController
 {
     protected $_sThisTemplate = '@'.Constants::OXID_MODULE_ID.'/tpl/d3totplogin';
 
-    public function render()
+    public function render(): string
     {
         if (!Registry::getSession()->hasVariable(d3totp_conf::SESSION_CURRENTUSER)) {
             $this->getUtils()->redirect('index.php?cl=start', false);
@@ -48,7 +50,10 @@ class d3totplogin extends FrontendController
 
     /**
      * @return string|void
-     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function getBackupCodeCountMessage()
     {
@@ -72,7 +77,7 @@ class d3totplogin extends FrontendController
         return oxNew(d3backupcodelist::class);
     }
 
-    public function getPreviousClass()
+    public function getPreviousClass(): string
     {
         return Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTCLASS);
     }
@@ -101,7 +106,7 @@ class d3totplogin extends FrontendController
      *
      * @return array
      */
-    public function getBreadCrumb()
+    public function getBreadCrumb(): array
     {
         $aPaths = [];
         $aPath = [];

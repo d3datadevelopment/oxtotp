@@ -16,32 +16,36 @@ declare(strict_types=1);
 namespace D3\Totp\Application\Model;
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Config;
-use OxidEsales\Eshop\Core\Database\Adapter\DatabaseInterface;
-use OxidEsales\Eshop\Core\DatabaseProvider;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3backupcodelist extends ListModel
 {
     protected $_sObjectsInListName = d3backupcode::class;
 
-    /**
-     * Core table name
-     *
-     * @var string
-     */
+    /** @var string */
     protected $_sCoreTable = 'd3totp_backupcodes';
 
-    protected $_backupCodes = [];
+    protected array $_backupCodes = [];
 
     /**
-     * @param $sUserId
-     * @throws DatabaseConnectionException
+     * @param string $sUserId
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws DBALDriverException
+     * @throws DBALException
      */
-    public function generateBackupCodes($sUserId)
+    public function generateBackupCodes(string $sUserId): void
     {
         $this->deleteAllFromUser($sUserId);
 
@@ -59,7 +63,7 @@ class d3backupcodelist extends ListModel
     /**
      * @return d3backupcode
      */
-    public function getD3BackupCodeObject()
+    public function getD3BackupCodeObject(): d3backupcode
     {
         return oxNew(d3backupcode::class);
     }
@@ -67,7 +71,7 @@ class d3backupcodelist extends ListModel
     /**
      * @return Config
      */
-    public function d3GetConfig()
+    public function d3GetConfig(): Config
     {
         return Registry::getConfig();
     }
@@ -75,7 +79,7 @@ class d3backupcodelist extends ListModel
     /**
      * @throws Exception
      */
-    public function save()
+    public function save(): void
     {
         /** @var d3backupcode $oBackupCode */
         foreach ($this->getArray() as $oBackupCode) {
@@ -86,7 +90,7 @@ class d3backupcodelist extends ListModel
     /**
      * @return d3backupcode
      */
-    public function getBaseObject()
+    public function getBaseObject(): d3backupcode
     {
         /** @var d3backupcode $object */
         $object = parent::getBaseObject();
@@ -95,19 +99,32 @@ class d3backupcodelist extends ListModel
     }
 
     /**
-     * @param $totp
+     * @param string $totp
      * @return bool
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws DBALDriverException
+     * @throws DBALException
      */
-    public function verify($totp)
+    public function verify(string $totp): bool
     {
-        $oDb = $this->d3GetDb();
+        $qb = $this->getQueryBuilder();
+        $qb->select('oxid')
+            ->from($this->getBaseObject()->getViewName())
+            ->where(
+                $qb->expr()->and(
+                    $qb->expr()->eq(
+                        'backupcode',
+                        $qb->createNamedParameter($this->getBaseObject()->d3EncodeBC($totp, $this->d3GetUser()->getId()))
+                    ),
+                    $qb->expr()->eq(
+                        'oxuserid',
+                        $qb->createNamedParameter($this->d3GetUser()->getId())
+                    )
+                )
+            );
 
-        $query = "SELECT oxid FROM ".$this->getBaseObject()->getViewName().
-            " WHERE ".$oDb->quoteIdentifier('backupcode')." = ".$oDb->quote($this->getBaseObject()->d3EncodeBC($totp, $this->d3GetUser()->getId()))." AND ".
-            $oDb->quoteIdentifier("oxuserid") ." = ".$oDb->quote($this->d3GetUser()->getId());
-
-        $sVerify = $oDb->getOne($query);
+        $sVerify = $qb->execute()->fetchOne();
 
         if ($sVerify) {
             $this->getBaseObject()->delete($sVerify);
@@ -117,26 +134,23 @@ class d3backupcodelist extends ListModel
     }
 
     /**
-     * @return DatabaseInterface
-     * @throws DatabaseConnectionException
+     * @param string $sUserId
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function d3GetDb()
+    public function deleteAllFromUser(string $sUserId): void
     {
-        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
-    }
+        $qb = $this->getQueryBuilder();
+        $qb->select('oxid')
+            ->from($this->getBaseObject()->getCoreTableName())
+            ->where(
+                $qb->expr()->eq(
+                    'oxuserid',
+                    $qb->createNamedParameter($sUserId)
+                )
+            );
 
-    /**
-     * @param $sUserId
-     * @throws DatabaseConnectionException
-     */
-    public function deleteAllFromUser($sUserId)
-    {
-        $oDb = $this->d3GetDb();
-
-        $query = "SELECT OXID FROM ".$oDb->quoteIdentifier($this->getBaseObject()->getCoreTableName()).
-            " WHERE ".$oDb->quoteIdentifier('oxuserid')." = ".$oDb->quote($sUserId);
-
-        $this->selectString($query);
+        $this->selectString($qb->getSQL(), $qb->getParameters());
 
         /** @var d3backupcode $oBackupCode */
         foreach ($this->getArray() as $oBackupCode) {
@@ -145,22 +159,40 @@ class d3backupcodelist extends ListModel
     }
 
     /**
-     * @param $sUserId
+     * @param string $sUserId
      * @return int
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws DBALDriverException
+     * @throws DBALException
      */
-    public function getAvailableCodeCount($sUserId)
+    public function getAvailableCodeCount(string $sUserId): int
     {
-        $oDb = $this->d3GetDb();
+        $qb = $this->getQueryBuilder();
+        $qb->select('count(*)')
+            ->from($this->getBaseObject()->getViewName())
+            ->where(
+                $qb->expr()->eq(
+                    'oxuserid',
+                    $qb->createNamedParameter($sUserId)
+                )
+            );
 
-        $query = "SELECT count(*) FROM ".$oDb->quoteIdentifier($this->getBaseObject()->getViewName()).
-            " WHERE ".$oDb->quoteIdentifier('oxuserid')." = ".$oDb->quote($sUserId);
-
-        return (int) $oDb->getOne($query);
+        return (int) $qb->execute()->fetchOne();
     }
 
-    public function d3GetUser()
+    public function d3GetUser(): User
     {
         return $this->getBaseObject()->d3GetUser();
+    }
+
+    /**
+     * @return QueryBuilder
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function getQueryBuilder(): QueryBuilder
+    {
+        return ContainerFactory::getInstance()->getContainer()->get(QueryBuilderFactoryInterface::class)->create();
     }
 }

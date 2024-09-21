@@ -23,7 +23,6 @@ use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\AccountController;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
 use Psr\Container\ContainerExceptionInterface;
@@ -51,14 +50,18 @@ class d3_account_totp extends AccountController
         return $this->getUser()->getId();
     }
 
+    /**
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Doctrine\DBAL\Driver\Exception
+     */
     public function create(): void
     {
         if (Registry::getRequest()->getRequestEscapedParameter('totp_use') === '1') {
             try {
                 /** @var d3_totp_user $oUser */
                 $oUser = $this->getUser();
-
-                /** @var d3totp $oTotp */
                 $oTotp = $this->getTotpObject();
 
                 Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
@@ -94,11 +97,10 @@ class d3_account_totp extends AccountController
     }
 
     /**
-     * @throws DatabaseConnectionException
-     * @throws \Doctrine\DBAL\Driver\Exception
-     * @throws \Doctrine\DBAL\Exception
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Doctrine\DBAL\Driver\Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     public function delete(): void
     {

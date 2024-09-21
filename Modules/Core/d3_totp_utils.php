@@ -18,9 +18,8 @@ namespace D3\Totp\Modules\Core;
 use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
 use OxidEsales\Eshop\Core\Config;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
@@ -34,8 +33,11 @@ class d3_totp_utils extends d3_totp_utils_parent
 {
     /**
      * @return bool
-     * @throws DBALException
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws ModuleSettingNotFountException
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     public function checkAccessRights()
     {
@@ -43,7 +45,6 @@ class d3_totp_utils extends d3_totp_utils_parent
         $blAuth = $this->d3AuthHook($blAuth);
         $userID = $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::OXID_ADMIN_AUTH);
         $totpAuth = (bool) $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH);
-        /** @var d3totp $totp */
         $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($userID);
 

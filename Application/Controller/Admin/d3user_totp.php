@@ -25,7 +25,6 @@ use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Exception;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
 use Psr\Container\ContainerExceptionInterface;
@@ -122,7 +121,8 @@ class d3user_totp extends AdminDetailsController
     }
 
     /**
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function delete(): void
     {

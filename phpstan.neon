@@ -1,14 +1,21 @@
 parameters:
     scanFiles:
-        - src/IntelliSenseHelper.php
+        - IntelliSenseHelper.php
+        - ../../oxid-esales/oxideshop-ce/source/bootstrap.php
         - ../../oxid-esales/oxideshop-ce/source/oxfunctions.php
+        - ../../oxid-esales/oxideshop-ce/source/overridablefunctions.php
     paths:
-        - src
-    level: 5
-    phpVersion: 70300
+        - .
+    excludePaths:
+        - .php-cs-fixer.php
+        - rector.php
+        - Tests
+    level: 6
+    phpVersion: 80300
     ignoreErrors:
-        - '#Call to method getFieldData\(\) on an unknown class oxShop.#'
-        - '#Return type \(array\) of method D3\\Totp\\Application\\Controller\\d3totplogin::getBreadCrumb\(\) should be compatible with return type \(null\) of method OxidEsales\\EshopCommunity\\Application\\Controller\\FrontendController::getBreadCrumb\(\)#'
-        - '#Parameter \#\d+ \$value of method OxidEsales\\EshopCommunity\\Core\\Config::setConfigParam\(\) expects string, (true|false) given.#'
+        - '#Return type [()a-z]* of method .*getBreadCrumb\(\) should be compatible with return type [()a-z]* of method\s*.*getBreadCrumb\(\)#'
+        - '#Unable to resolve the template type T in call to function oxNew#'
+        - '#(Property|Method) D3\\Totp\\Modules\\.* has no (return type|type) specified.#'
+        - identifier: missingType.iterableValue
     parallel:
         processTimeout: 900.0

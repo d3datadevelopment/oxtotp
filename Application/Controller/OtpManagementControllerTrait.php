@@ -17,7 +17,9 @@ namespace D3\Totp\Application\Controller;
 
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use Doctrine\DBAL\Driver\Exception;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 trait OtpManagementControllerTrait
 {
@@ -47,7 +49,10 @@ trait OtpManagementControllerTrait
 
     /**
      * @return int
-     * @throws DatabaseConnectionException
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function getAvailableBackupCodeCount(): int
     {

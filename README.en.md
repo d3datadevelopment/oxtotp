@@ -3,7 +3,7 @@
 
 # 2-factor authentication (one-time password) for OXID eShop
 
-This module provides a 2-factor authentication (time-dependent one-time password / TOTP) for login in front- and backend in addition to user name and password.
+This module provides a 2-factor authentication (time-dependent one-time password / TOTP) for login in front- and backend in addition to username and password.
 
 ## Features
 
@@ -48,7 +48,7 @@ The necessary configuration can be found in the same area in the "Settings" tab.
 
 ## Changelog
 
-See [CHANGELOG](CHANGELOG.md) for further informations.
+See [CHANGELOG](CHANGELOG.md) for further information.
 
 ## Contributing
 

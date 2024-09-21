@@ -18,9 +18,6 @@ namespace D3\Totp\Modules\Application\Controller\Admin;
 use D3\TestingTools\Production\IsMockable;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
-use D3\Totp\Modules\Application\Model\d3_totp_user;
-use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
@@ -48,7 +45,6 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
     /**
      * @return mixed|string
-     * @throws DatabaseConnectionException
      */
     public function checklogin()
     {
@@ -74,13 +70,13 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             $aProfiles = $this->d3TotpGetSession()->getVariable("aAdminProfiles");
             if ($aProfiles && isset($aProfiles[$sProfile])) {
                 // setting cookie to store last locally used profile
-                $myUtilsServer->setOxCookie("oxidadminprofile", $sProfile . "@" . implode("@", $aProfiles[$sProfile]), time() + 31536000, "/");
+                $myUtilsServer->setOxCookie("oxidadminprofile", $sProfile . "@" . implode("@", $aProfiles[$sProfile]), time() + 31536000);
                 $this->d3TotpGetSession()->setVariable("profile", $aProfiles[$sProfile]);
                 $this->d3TotpGetSession()->deleteVariable(d3totp_conf::SESSION_ADMIN_PROFILE);
             }
         } else {
             //deleting cookie info, as setting profile to default
-            $myUtilsServer->setOxCookie("oxidadminprofile", "", time() - 3600, "/");
+            $myUtilsServer->setOxCookie("oxidadminprofile", "", time() - 3600);
         }
 
         $this->d3totpAfterLoginSetLanguage();
@@ -97,7 +93,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             $iLang = key($aLanguages);
         }
 
-        $myUtilsServer->setOxCookie("oxidadminlanguage", $aLanguages[$iLang]->abbr, time() + 31536000, "/");
+        $myUtilsServer->setOxCookie("oxidadminlanguage", $aLanguages[$iLang]->abbr, time() + 31536000);
         $this->d3TotpGetLangObject()->setTplLanguage($iLang);
     }
 

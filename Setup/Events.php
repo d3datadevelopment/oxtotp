@@ -15,16 +15,14 @@ declare(strict_types=1);
 
 namespace D3\Totp\Setup;
 
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use Exception;
 
 // @codeCoverageIgnoreStart
 class Events
 {
     /**
      * @return void
-     * @throws DatabaseConnectionException
-     * @throws DatabaseErrorException
+     * @throws Exception
      */
     public static function onActivate(): void
     {
@@ -38,7 +36,7 @@ class Events
     /**
      * @codeCoverageIgnore
      */
-    public static function onDeactivate()
+    public static function onDeactivate(): void
     {
     }
 }

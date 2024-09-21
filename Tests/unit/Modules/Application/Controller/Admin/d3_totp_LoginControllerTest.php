@@ -271,7 +271,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     public function d3TotpLoginMissingTestDataProvider(): array
     {
         return [
-            'totp not active, not logged in'=> [false, false, false],
+            'totp not active, not logged in' => [false, false, false],
             'totp active, logged in'        => [true, true, false],
             'totp active, not logged in'    => [true, false, true],
             'totp not active, logged in'    => [false, true, false],

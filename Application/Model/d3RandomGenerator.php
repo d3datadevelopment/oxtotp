@@ -24,7 +24,7 @@ class d3RandomGenerator extends Rand
     /**
      * @return string
      */
-    public static function getRandomTotpBackupCode()
+    public static function getRandomTotpBackupCode(): string
     {
         return self::getString(6, self::CHAR_DIGITS);
     }

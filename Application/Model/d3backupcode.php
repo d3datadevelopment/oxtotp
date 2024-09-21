@@ -16,56 +16,65 @@ declare(strict_types=1);
 namespace D3\Totp\Application\Model;
 
 use D3\Totp\Modules\Application\Model\d3_totp_user;
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\DatabaseProvider;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3backupcode extends BaseModel
 {
     protected $_sCoreTable = 'd3totp_backupcodes';
 
     /**
-     * @param $sUserId
+     * @param string $sUserId
      * @return string
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function generateCode($sUserId)
+    public function generateCode(string $sUserId): string
     {
         $sCode = $this->getRandomTotpBackupCode();
-        $this->assign(
-            [
-                'oxuserid'    => $sUserId,
-                'backupcode' => $this->d3EncodeBC($sCode, $sUserId),
-            ]
-        );
+        $this->assign([
+            'oxuserid'    => $sUserId,
+            'backupcode' => $this->d3EncodeBC($sCode, $sUserId),
+        ]);
 
         return $sCode;
     }
 
-    public function getRandomTotpBackupCode()
+    public function getRandomTotpBackupCode(): string
     {
         return d3RandomGenerator::getRandomTotpBackupCode();
     }
 
     /**
-     * @param $code
-     * @param $sUserId
-     * @return false|string
-     * @throws DatabaseConnectionException
+     * @param string $code
+     * @param string $sUserId
+     * @return string
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function d3EncodeBC($code, $sUserId)
+    public function d3EncodeBC(string $code, string $sUserId): string
     {
-        $oDb = DatabaseProvider::getDb();
         $oUser = $this->d3TotpGetUserObject();
         $oUser->load($sUserId);
         $salt = $oUser->getFieldData('oxpasssalt');
-        $sSelect = "SELECT BINARY MD5( CONCAT( " . $oDb->quote($code) . ", UNHEX( ".$oDb->quote($salt)." ) ) )";
 
-        return $oDb->getOne($sSelect);
+        $qb = $this->getQueryBuilder();
+        $qb->select('BINARY MD5( CONCAT('.$qb->createNamedParameter($code).', UNHEX('.$qb->createNamedParameter($salt).')))');
+
+        return $qb->execute()->fetchOne();
     }
 
-    public function d3GetUser()
+    public function d3GetUser(): User
     {
         /** @var User|null $user */
         $user = $this->getUser();
@@ -84,8 +93,18 @@ class d3backupcode extends BaseModel
     /**
      * @return User
      */
-    public function d3TotpGetUserObject()
+    public function d3TotpGetUserObject(): User
     {
         return oxNew(User::class);
+    }
+
+    /**
+     * @return QueryBuilder
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function getQueryBuilder(): QueryBuilder
+    {
+        return ContainerFactory::getInstance()->getContainer()->get(QueryBuilderFactoryInterface::class)->create();
     }
 }

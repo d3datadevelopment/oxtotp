@@ -19,15 +19,26 @@ use D3\TestingTools\Production\IsMockable;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
+use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Utils;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class totpSystemEventHandler extends totpSystemEventHandler_parent
 {
     use IsMockable;
 
+    /**
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws DBALDriverException
+     * @throws DBALException
+     * @throws NotFoundExceptionInterface
+     */
     public function onAdminLogin()
     {
         $this->d3RequestTotp();
@@ -35,7 +46,14 @@ class totpSystemEventHandler extends totpSystemEventHandler_parent
         $this->d3CallMockableFunction([totpSystemEventHandler_parent::class, 'onAdminLogin']);
     }
 
-    protected function d3requestTotp()
+    /**
+     * @return void
+     * @throws DBALDriverException
+     * @throws DBALException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function d3requestTotp(): void
     {
         $totp = $this->d3GetTotpObject();
         $userId = $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH);
@@ -86,7 +104,7 @@ class totpSystemEventHandler extends totpSystemEventHandler_parent
      * @param d3totp $totp
      * @return bool
      */
-    public function d3TotpLoginMissing($totp)
+    public function d3TotpLoginMissing(d3totp $totp)
     {
         return $totp->isActive()
             && false == $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH);

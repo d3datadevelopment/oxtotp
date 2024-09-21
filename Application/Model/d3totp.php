@@ -25,7 +25,6 @@ use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
@@ -54,13 +53,13 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $userId
+     * @param string $userId
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws Exception
      * @throws DBALException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
      */
-    public function loadByUserId($userId): void
+    public function loadByUserId(string $userId): void
     {
         $this->userId = $userId;
 
@@ -69,7 +68,6 @@ class d3totp extends BaseModel
             ->executeQuery()
             ->fetchOne()
         ) {
-            /** @var QueryBuilder $qb */
             $qb = $this->getQueryBuilder();
             $qb->select('oxid')
                 ->from($this->getViewName())
@@ -82,14 +80,14 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $userId
+     * @param string $userId
      * @return bool
      * @throws ContainerExceptionInterface
      * @throws DBALException
      * @throws Exception
      * @throws NotFoundExceptionInterface
      */
-    public function checkIfAlreadyExist($userId): bool
+    public function checkIfAlreadyExist(string $userId): bool
     {
         $qb = $this->getQueryBuilder();
         $qb->select('1')
@@ -98,6 +96,7 @@ class d3totp extends BaseModel
                 $qb->expr()->eq('oxuserid', $qb->createNamedParameter($userId))
             )
             ->setMaxResults(1);
+
         return (bool) $qb->execute()->fetchOne();
     }
 
@@ -177,10 +176,10 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $seed
+     * @param string|null $seed
      * @return TOTP
      */
-    public function getTotp($seed = null): TOTP
+    public function getTotp(string $seed = null): TOTP
     {
         if (null == $this->totp) {
             $this->totp = TOTP::create($seed ?: $this->getSavedSecret());
@@ -220,9 +219,9 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $seed
+     * @param string $seed
      */
-    public function saveSecret($seed): void
+    public function saveSecret(string $seed): void
     {
         $this->assign([
             'seed'  => $this->encrypt($seed),
@@ -230,13 +229,16 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $totp
-     * @param $seed
+     * @param string $totp
+     * @param string|null $seed
      * @return bool
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws DBALException
      * @throws d3totp_wrongOtpException
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
      */
-    public function verify($totp, $seed = null): bool
+    public function verify(string $totp, string $seed = null): bool
     {
         $blNotVerified = $this->getTotp($seed)->verify($totp, null, $this->timeWindow) == false;
 
@@ -245,10 +247,14 @@ class d3totp extends BaseModel
             $blNotVerified = $oBC->verify($totp) == false;
 
             if ($blNotVerified) {
-                throw oxNew(d3totp_wrongOtpException::class);
+                /** @var d3totp_wrongOtpException $exception */
+                $exception = oxNew(d3totp_wrongOtpException::class);
+                throw $exception;
             }
         } elseif ($blNotVerified && $seed !== null) {
-            throw oxNew(d3totp_wrongOtpException::class);
+            /** @var d3totp_wrongOtpException $exception */
+            $exception = oxNew(d3totp_wrongOtpException::class);
+            throw $exception;
         }
 
         return !$blNotVerified;
@@ -263,12 +269,12 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $plaintext
+     * @param string $plaintext
      * @return string
      */
-    public function encrypt($plaintext): string
+    public function encrypt(string $plaintext): string
     {
-        $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
+        $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
         $iv = openssl_random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($plaintext, $cipher, self::ENC_KEY, OPENSSL_RAW_DATA, $iv);
         $hmac = hash_hmac('sha256', $ciphertext_raw, self::ENC_KEY, true);
@@ -276,16 +282,16 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param $ciphertext
+     * @param string $ciphertext
      * @return false|string
      */
-    public function decrypt($ciphertext): false|string
+    public function decrypt(string $ciphertext): false|string
     {
         $c = $this->d3Base64_decode($ciphertext);
-        $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
+        $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
         $iv = substr($c, 0, $ivlen);
-        $hmac = substr($c, $ivlen, $sha2len=32);
-        $ciphertext_raw = substr($c, $ivlen+$sha2len);
+        $hmac = substr($c, $ivlen, $sha2len = 32);
+        $ciphertext_raw = substr($c, $ivlen + $sha2len);
         $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, self::ENC_KEY, OPENSSL_RAW_DATA, $iv);
         $calcmac = hash_hmac('sha256', $ciphertext_raw, self::ENC_KEY, true);
         if (hash_equals($hmac, $calcmac)) { // PHP 5.6+ compute attack-safe comparison
@@ -297,18 +303,19 @@ class d3totp extends BaseModel
 
     /**
      * required for unit tests
-     * @param $source
-     * @return bool|string
+     * @param string $source
+     * @return string
      */
-    public function d3Base64_decode($source): bool|string
+    public function d3Base64_decode(string $source): string
     {
         return base64_decode($source);
     }
 
     /**
-     * @param null|string $oxid
+     * @param string|null $oxid
      * @return bool
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function delete($oxid = null): bool
     {

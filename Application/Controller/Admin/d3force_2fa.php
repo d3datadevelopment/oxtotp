@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * https://www.d3data.de
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <info@shopmodule.com>
+ * @link      https://www.oxidmodule.com
+ */
+
 declare(strict_types=1);
 
 namespace D3\Totp\Application\Controller\Admin;
@@ -27,7 +38,12 @@ class d3force_2fa extends d3user_totp
         return parent::render();
     }
 
-
+    /**
+     * @return bool
+     * @throws ContainerExceptionInterface
+     * @throws ModuleSettingNotFountException
+     * @throws NotFoundExceptionInterface
+     */
     protected function authorize(): bool
     {
         $userID = $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::OXID_ADMIN_AUTH);

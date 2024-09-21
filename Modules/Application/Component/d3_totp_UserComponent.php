@@ -24,7 +24,6 @@ use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
 use InvalidArgumentException;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Utils;
@@ -38,7 +37,10 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @param User $oUser
      *
      * @return string
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws DBALException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
      */
     protected function afterLogin($oUser)
     {
@@ -68,7 +70,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 $sUrl = Registry::getConfig()->getShopHomeUrl() . 'cl=d3totplogin';
                 $this->d3TotpGetUtils()->redirect($sUrl, false);
             }
-        } catch (InvalidArgumentException) {}
+        } catch (InvalidArgumentException) {
+        }
 
         return parent::afterLogin($oUser);
     }
@@ -83,10 +86,9 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 
     /**
      * @return false|string
-     * @throws DatabaseConnectionException
-     * @throws Exception
-     * @throws DBALException
      * @throws ContainerExceptionInterface
+     * @throws DBALException
+     * @throws Exception
      * @throws NotFoundExceptionInterface
      */
     public function d3TotpCheckTotpLogin(): false|string
@@ -148,7 +150,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @param d3totp $totp
      * @return bool
      */
-    public function d3TotpIsNoTotpOrNoLogin($totp): bool
+    public function d3TotpIsNoTotpOrNoLogin(d3totp $totp): bool
     {
         return false == Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER)
             || false == $totp->isActive();
@@ -158,10 +160,13 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @param string $sTotp
      * @param d3totp $totp
      * @return bool
-     * @throws DatabaseConnectionException
+     * @throws ContainerExceptionInterface
+     * @throws DBALException
+     * @throws Exception
+     * @throws NotFoundExceptionInterface
      * @throws d3totp_wrongOtpException
      */
-    public function d3TotpHasValidTotp($sTotp, $totp): bool
+    public function d3TotpHasValidTotp(string $sTotp, d3totp $totp): bool
     {
         return Registry::getSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
             $totp->verify($sTotp);

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Modules\Core;
 
+use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use Doctrine\DBAL\DBALException;
@@ -22,6 +23,12 @@ use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3_totp_utils extends d3_totp_utils_parent
 {
@@ -60,7 +67,7 @@ class d3_totp_utils extends d3_totp_utils_parent
     /**
      * @return Session
      */
-    public function d3TotpGetSessionObject()
+    public function d3TotpGetSessionObject(): Session
     {
         return Registry::getSession();
     }
@@ -68,7 +75,7 @@ class d3_totp_utils extends d3_totp_utils_parent
     /**
      * @return d3totp
      */
-    public function d3GetTotpObject()
+    public function d3GetTotpObject(): d3totp
     {
         return oxNew(d3totp::class);
     }
@@ -83,11 +90,21 @@ class d3_totp_utils extends d3_totp_utils_parent
 
     /**
      * @return bool
+     * @throws ModuleSettingNotFountException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    protected function d3IsAdminForce2FA()
+    protected function d3IsAdminForce2FA(): bool
     {
-        return $this->isAdmin() &&
-            $this->d3GetConfig()->getConfigParam('D3_TOTP_ADMIN_FORCE_2FA') === true;
+        if (!$this->isAdmin()) {
+            return false;
+        }
+
+        $container = ContainerFactory::getInstance()->getContainer();
+        $moduleConfigurationBridge = $container->get(ModuleConfigurationDaoBridgeInterface::class);
+        /** @var ModuleConfiguration $moduleConfiguration */
+        $moduleConfiguration = $moduleConfigurationBridge->get(Constants::OXID_MODULE_ID);
+        return (bool) $moduleConfiguration->getModuleSetting('D3_TOTP_ADMIN_FORCE_2FA')->getValue();
     }
 
     /**

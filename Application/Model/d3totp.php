@@ -37,7 +37,7 @@ class d3totp extends BaseModel
 {
     protected const ENC_KEY = 'fq45QS09_fqyx09239QQ';
 
-    public string $tableName = 'd3totp';
+    protected $_sCoreTable = 'd3totp';
     public null|string $userId = null;
     public null|TOTP $totp = null;
     protected int $timeWindow = 2;
@@ -47,7 +47,7 @@ class d3totp extends BaseModel
      */
     public function __construct()
     {
-        $this->init($this->tableName);
+        $this->init($this->getCoreTableName());
 
         parent::__construct();
     }
@@ -64,7 +64,7 @@ class d3totp extends BaseModel
         $this->userId = $userId;
 
         if ($this->getDbConnection()
-            ->prepare("SHOW TABLES LIKE ".$this->getDbConnection()->quote($this->tableName))
+            ->prepare("SHOW TABLES LIKE ".$this->getDbConnection()->quote($this->getCoreTableName()))
             ->executeQuery()
             ->fetchOne()
         ) {
@@ -75,7 +75,10 @@ class d3totp extends BaseModel
                     $qb->expr()->eq('oxuserid', $qb->createNamedParameter($userId))
                 )
                 ->setMaxResults(1);
-            $this->load($qb->execute()->fetchOne());
+
+            if ($oxid = $qb->execute()->fetchOne()) {
+                $this->load($oxid);
+            }
         }
     }
 

@@ -126,7 +126,7 @@ class d3totpadminlogin extends AdminController
     public function getBackupCodeCountMessage()
     {
         /** @var d3_totp_user $user */
-        $user = oxNew(User::class);
+        $user = $this->d3TotpGetUserObject();
         $userId = $user->d3TotpGetCurrentUser();
 
         $oBackupCodeList = $this->d3GetBackupCodeListObject();
@@ -172,7 +172,7 @@ class d3totpadminlogin extends AdminController
     {
         $session = $this->d3TotpGetSession();
         /** @var d3_totp_user $user */
-        $user = oxNew(User::class);
+        $user = $this->d3TotpGetUserObject();
         $userId = $user->d3TotpGetCurrentUser();
 
         try {
@@ -206,7 +206,7 @@ class d3totpadminlogin extends AdminController
     }
 
     /**
-     * @param string|null $sTotp
+     * @param string $sTotp
      * @param d3totp $totp
      * @return bool
      * @throws ContainerExceptionInterface
@@ -215,7 +215,7 @@ class d3totpadminlogin extends AdminController
      * @throws DBALException
      * @throws d3totp_wrongOtpException
      */
-    public function d3TotpHasValidTotp(string $sTotp = null, d3totp $totp): bool
+    public function d3TotpHasValidTotp(string $sTotp, d3totp $totp): bool
     {
         return $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH)
             || $totp->verify($sTotp);

@@ -84,7 +84,7 @@ class d3user_totp extends AdminDetailsController
     {
         parent::save();
 
-        $aParams = Registry::getRequest()->getRequestEscapedParameter("editval");
+        $aParams = Registry::getRequest()->getRequestEscapedParameter("editval") ?? [];
 
         try {
             $oTotp = $this->getTotpObject();
@@ -92,7 +92,7 @@ class d3user_totp extends AdminDetailsController
             Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
 
             $oTotpBackupCodes = $this->getBackupcodeListObject();
-            if ($aParams['d3totp__oxid']) {
+            if (isset($aParams['d3totp__oxid'])) {
                 $oTotp->load($aParams['d3totp__oxid']);
             } else {
                 $aParams['d3totp__usetotp'] = 1;

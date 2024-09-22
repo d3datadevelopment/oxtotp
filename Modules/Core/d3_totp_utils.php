@@ -101,11 +101,7 @@ class d3_totp_utils extends d3_totp_utils_parent
             return false;
         }
 
-        $container = ContainerFactory::getInstance()->getContainer();
-        $moduleConfigurationBridge = $container->get(ModuleConfigurationDaoBridgeInterface::class);
-        /** @var ModuleConfiguration $moduleConfiguration */
-        $moduleConfiguration = $moduleConfigurationBridge->get(Constants::OXID_MODULE_ID);
-        return (bool) $moduleConfiguration->getModuleSetting('D3_TOTP_ADMIN_FORCE_2FA')->getValue();
+        return (bool) $this->getModuleConfiguration()->getModuleSetting('D3_TOTP_ADMIN_FORCE_2FA')->getValue();
     }
 
     /**
@@ -115,5 +111,13 @@ class d3_totp_utils extends d3_totp_utils_parent
     protected function d3AuthHook(bool $blAuth): bool
     {
         return $blAuth;
+    }
+
+    protected function getModuleConfiguration(): ModuleConfiguration
+    {
+        $container = ContainerFactory::getInstance()->getContainer();
+        $moduleConfigurationBridge = $container->get(ModuleConfigurationDaoBridgeInterface::class);
+        /** @var ModuleConfiguration $moduleConfiguration */
+        return $moduleConfigurationBridge->get(Constants::OXID_MODULE_ID);
     }
 }

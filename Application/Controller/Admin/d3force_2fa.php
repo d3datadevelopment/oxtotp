@@ -40,9 +40,7 @@ class d3force_2fa extends d3user_totp
 
     /**
      * @return bool
-     * @throws ContainerExceptionInterface
      * @throws ModuleSettingNotFountException
-     * @throws NotFoundExceptionInterface
      */
     protected function authorize(): bool
     {
@@ -62,8 +60,6 @@ class d3force_2fa extends d3user_totp
     /**
      * @return bool
      * @throws ModuleSettingNotFountException
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     private function d3IsAdminForce2FA(): bool
     {
@@ -71,10 +67,14 @@ class d3force_2fa extends d3user_totp
             return false;
         }
 
+        return (bool) $this->getModuleConfiguration()->getModuleSetting('D3_TOTP_ADMIN_FORCE_2FA')->getValue();
+    }
+
+    protected function getModuleConfiguration(): ModuleConfiguration
+    {
         $container = ContainerFactory::getInstance()->getContainer();
         $moduleConfigurationBridge = $container->get(ModuleConfigurationDaoBridgeInterface::class);
         /** @var ModuleConfiguration $moduleConfiguration */
-        $moduleConfiguration = $moduleConfigurationBridge->get(Constants::OXID_MODULE_ID);
-        return (bool) $moduleConfiguration->getModuleSetting('D3_TOTP_ADMIN_FORCE_2FA')->getValue();
+        return $moduleConfigurationBridge->get(Constants::OXID_MODULE_ID);
     }
 }

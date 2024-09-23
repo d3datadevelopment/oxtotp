@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Modules\Application\Controller;
 
-use D3\TestingTools\Production\IsMockable;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use Doctrine\DBAL\Driver\Exception;
@@ -27,8 +26,6 @@ use Psr\Container\NotFoundExceptionInterface;
 
 trait d3_totp_getUserTrait
 {
-    use IsMockable;
-
     /**
      * @return false|User
      * @throws ContainerExceptionInterface
@@ -38,8 +35,7 @@ trait d3_totp_getUserTrait
      */
     public function getUser(): false|User
     {
-        /** @var User|null $user */
-        $user = $this->d3CallMockableFunction([$this->parentClass, 'getUser']);
+        $user = parent::getUser();
 
         if ($user && $user->isLoaded() && $user->getId()) {
             $totp = $this->d3GetTotpObject();

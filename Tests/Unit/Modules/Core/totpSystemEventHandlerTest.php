@@ -42,10 +42,9 @@ class totpSystemEventHandlerTest extends d3TotpUnitTestCase
     {
         /** @var totpSystemEventHandler|MockObject $sut */
         $sut = $this->d3getMockBuilder(SystemEventHandler::class)
-            ->onlyMethods(['d3CallMockableFunction', 'd3requestTotp'])
+            ->onlyMethods(['d3requestTotp'])
             ->getMock();
 
-        $sut->method('d3CallMockableFunction')->willReturn(true);
         $sut->expects($this->once())->method('d3requestTotp');
 
         $this->callMethod(

@@ -63,10 +63,11 @@ trait d3_totp_getUserTestTrait
     {
         /** @var d3_totp_orderController|d3_totp_UserController|d3_totp_PaymentController|MockObject $oControllerMock */
         $oControllerMock = $this->d3getMockBuilder($this->sControllerClass)
-            ->onlyMethods(['d3GetTotpObject', 'd3CallMockableFunction'])
+            ->onlyMethods(['d3GetTotpObject'])
             ->getMock();
         $oControllerMock->expects($this->never())->method('d3GetTotpObject');
-        $oControllerMock->method('d3CallMockableFunction')->willReturn(false);
+
+        $this->setValue($oControllerMock, '_oActUser', false);
 
         $this->assertFalse(
             $this->callMethod($oControllerMock, 'getUser')

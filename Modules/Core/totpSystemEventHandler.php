@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Modules\Core;
 
-use D3\TestingTools\Production\IsMockable;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
@@ -30,8 +29,6 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class totpSystemEventHandler extends totpSystemEventHandler_parent
 {
-    use IsMockable;
-
     /**
      * @return void
      * @throws ContainerExceptionInterface
@@ -41,9 +38,9 @@ class totpSystemEventHandler extends totpSystemEventHandler_parent
      */
     public function onAdminLogin()
     {
-        $this->d3RequestTotp();
+        $this->d3requestTotp();
 
-        $this->d3CallMockableFunction([totpSystemEventHandler_parent::class, 'onAdminLogin']);
+        parent::onAdminLogin();
     }
 
     /**

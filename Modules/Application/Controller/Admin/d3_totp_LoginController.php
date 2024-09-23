@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Modules\Application\Controller\Admin;
 
-use D3\TestingTools\Production\IsMockable;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use OxidEsales\Eshop\Core\Language;
@@ -25,8 +24,6 @@ use OxidEsales\Eshop\Core\UtilsServer;
 
 class d3_totp_LoginController extends d3_totp_LoginController_parent
 {
-    use IsMockable;
-
     /**
      * @return d3totp
      */
@@ -57,7 +54,15 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
             Registry::getRequest()->getRequestEscapedParameter('chlanguage')
         );
 
-        return $this->d3CallMockableFunction([d3_totp_LoginController_parent::class, 'checklogin']);
+        return $this->parent__checklogin();
+    }
+
+    /**
+     * mockable parent method
+     */
+    protected function parent__checklogin()
+    {
+        return parent::checklogin();
     }
 
     public function d3totpAfterLogin(): void

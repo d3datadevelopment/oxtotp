@@ -66,8 +66,13 @@
   },
   "scripts": {
     "php-cs-fixer": "./vendor/bin/php-cs-fixer fix --config=vendor/d3/oxid-twofactor-onetimepassword/.php-cs-fixer.php",
+
     "phpstan": "./vendor/bin/phpstan --configuration=./vendor/d3/oxid-twofactor-onetimepassword/phpstan.neon",
+
     "phpunit": "XDEBUG_MODE=off vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/Tests/",
+    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/Tests/ --coverage-html=vendor/d3/oxid-twofactor-onetimepassword/Tests/reports/coverage",
+    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/Tests/ --coverage-html=vendor/d3/oxid-twofactor-onetimepassword/Tests/reports/coverage --path-coverage",
+
     "phpunuhi": "./vendor/bin/phpunuhi --configuration=vendor/d3/oxid-twofactor-onetimepassword/phpunuhi.xml validate"
   },
   "suggest": {

@@ -1,3 +1,3 @@
-src/tests/.phpunit.result.cache
-src/tests/reports/
+Tests/.phpunit.result.cache
+Tests/reports/
 .php_cs.cache

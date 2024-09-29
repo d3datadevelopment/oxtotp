@@ -27,7 +27,7 @@ use OxidEsales\Eshop\Core\Utils;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 class Actions
 {
@@ -42,14 +42,26 @@ class Actions
     ];
 
     /**
+     * @return MigrationsBuilder
+     */
+    protected function getMigrationsBuilder(): MigrationsBuilder
+    {
+        return oxNew(MigrationsBuilder::class);
+    }
+
+    /**
      * @throws Exception
      */
     public function runModuleMigrations(): void
     {
-        /** @var MigrationsBuilder $migrationsBuilder */
-        $migrationsBuilder = oxNew(MigrationsBuilder::class);
+        $migrationsBuilder = $this->getMigrationsBuilder();
         $migrations = $migrationsBuilder->build();
         $migrations->execute('migrations:migrate', 'd3totp');
+    }
+
+    protected function getDbMetaDataHandler(): DbMetaDataHandler
+    {
+        return oxNew(DbMetaDataHandler::class);
     }
 
     /**
@@ -58,8 +70,18 @@ class Actions
      */
     public function regenerateViews(): void
     {
-        $oDbMetaDataHandler = oxNew(DbMetaDataHandler::class);
+        $oDbMetaDataHandler = $this->getDbMetaDataHandler();
         $oDbMetaDataHandler->updateViews();
+    }
+
+    protected function getUtils(): Utils
+    {
+        return oxNew(Utils::class);
+    }
+
+    protected function getLogger(): LoggerInterface
+    {
+        return Registry::getLogger();
     }
 
     /**
@@ -72,9 +94,9 @@ class Actions
             /** @var ShopTemplateCacheServiceBridge $templateCacheService */
             $templateCacheService = $this->getDIContainer()->get(ShopTemplateCacheServiceBridgeInterface::class);
             $templateCacheService->invalidateCache(Registry::getConfig()->getShopId());
-            $oUtils = oxNew(Utils::class);
+            $oUtils = $this->getUtils();
             $oUtils->resetLanguageCache();
-        } catch (ContainerExceptionInterface|NotFoundExceptionInterface $e) {
+        } catch (ContainerExceptionInterface $e) {
             Registry::getLogger()->error($e->getMessage(), [$this]);
             Registry::getUtilsView()->addErrorToDisplay($e->getMessage());
         }
@@ -86,24 +108,25 @@ class Actions
     public function seoUrl(): void
     {
         try {
-            if (!$this->hasSeoUrls()) {
-                $this->createSeoUrls();
+            $seoEncoder = oxNew(SeoEncoder::class);
+            if (!$this->hasSeoUrls($seoEncoder)) {
+                $this->createSeoUrls($seoEncoder);
             }
         } catch (Exception $e) {
-            Registry::getLogger()->error($e->getMessage(), [$this]);
+            $this->getLogger()->error($e->getMessage(), [$this]);
             Registry::getUtilsView()->addErrorToDisplay('error wile creating SEO URLs: ' . $e->getMessage());
         }
     }
 
     /**
+     * @param SeoEncoder $seoEncoder
      * @return bool
-     * @throws Exception
      */
-    public function hasSeoUrls(): bool
+    public function hasSeoUrls(SeoEncoder $seoEncoder): bool
     {
         foreach ($this->stdClassName as $item) {
             foreach ([0, 1] as $lang) {
-                if (false === $this->hasSeoUrl($item, $lang)) {
+                if (false === $this->hasSeoUrl($seoEncoder, $item, $lang)) {
                     return false;
                 }
             }
@@ -112,27 +135,25 @@ class Actions
         return true;
     }
 
-    protected function hasSeoUrl(string $item, int $langId): bool
+    protected function hasSeoUrl(SeoEncoder $seoEncoder, string $item, int $langId): bool
     {
-        $seoEncoder = oxNew(SeoEncoder::class);
         $seoUrl = $seoEncoder->getStaticUrl(
             oxNew(FrontendController::class)->getViewConfig()->getSelfLink() .
             "cl=" . $item,
             $langId
         );
-
         return (bool)strlen($seoUrl);
     }
 
     /**
+     * @param SeoEncoder $seoEncoder
      * @return void
      */
-    public function createSeoUrls(): void
+    public function createSeoUrls(SeoEncoder $seoEncoder): void
     {
         foreach (array_keys($this->stdClassName) as $id) {
-            $seoEncoder = oxNew(SeoEncoder::class);
             $objectid = md5(strtolower(Registry::getConfig()->getShopId() . 'index.php?cl=' . $this->stdClassName[$id]));
-            if (!$this->hasSeoUrl($this->stdClassName[$id], 0)) {
+            if (!$this->hasSeoUrl($seoEncoder, $this->stdClassName[$id], 0)) {
                 $seoEncoder->addSeoEntry(
                     $objectid,
                     Registry::getConfig()->getShopId(),
@@ -143,7 +164,7 @@ class Actions
                     false
                 );
             }
-            if (!$this->hasSeoUrl($this->stdClassName[$id], 1)) {
+            if (!$this->hasSeoUrl($seoEncoder, $this->stdClassName[$id], 1)) {
                 $seoEncoder->addSeoEntry(
                     $objectid,
                     Registry::getConfig()->getShopId(),

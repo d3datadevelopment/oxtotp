@@ -218,6 +218,70 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::afterLogin
+     */
+    public function afterFailedNoUserLoaded()
+    {
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->d3getMockBuilder(User::class)
+            ->onlyMethods([
+                'logout',
+                'getId',
+            ])
+            ->getMock();
+        $oUserMock->expects($this->never())->method('logout')->willReturn(false);
+        $oUserMock->method('getId')->willReturn('');
+
+        /** @var Utils|MockObject $oUtilsMock */
+        $oUtilsMock = $this->d3getMockBuilder(Utils::class)
+            ->onlyMethods(['redirect'])
+            ->getMock();
+        $oUtilsMock->expects($this->never())->method('redirect')->willReturn(true);
+
+        /** @var Session|MockObject $oSessionMock */
+        $oSessionMock = $this->d3getMockBuilder(Session::class)
+            ->onlyMethods(['setVariable', 'getVariable'])
+            ->getMock();
+        $oSessionMock->expects($this->never())->method('setVariable');
+        $oSessionMock->method('getVariable')->willReturn(null);
+
+        /** @var BaseController|MockObject $oParentMock */
+        $oParentMock = $this->d3getMockBuilder(BaseController::class)
+            ->onlyMethods(['getClassKey'])
+            ->getMock();
+        $oParentMock->method('getClassKey')->willReturn('foo');
+
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->d3getMockBuilder(d3totp::class)
+            ->onlyMethods([
+                'isActive',
+                'loadByUserId',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $oTotpMock->expects($this->never())->method('isActive')->willReturn(true);
+        $oTotpMock->method('loadByUserId');
+
+        /** @var UserComponent|MockObject $oControllerMock */
+        $oControllerMock = $this->d3getMockBuilder(UserComponent::class)
+            ->onlyMethods([
+                'd3GetTotpObject',
+                'd3TotpGetSession',
+                'd3TotpGetUtils',
+                'getParent',
+            ])
+            ->getMock();
+        $oControllerMock->method('d3GetTotpObject')->willReturn($oTotpMock);
+        $oControllerMock->method('getParent')->willReturn($oParentMock);
+        $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
+        $oControllerMock->method('d3TotpGetUtils')->willReturn($oUtilsMock);
+
+        $this->callMethod($oControllerMock, 'afterLogin', [$oUserMock]);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
      * @covers \D3\Totp\Modules\Application\Component\d3_totp_UserComponent::d3GetTotpObject
      */
     public function d3GetTotpObjectReturnsRightInstance()

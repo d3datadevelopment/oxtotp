@@ -127,4 +127,21 @@ class d3force_2faTest extends d3user_totpTest
             )
         );
     }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3force_2fa::getModuleConfiguration
+     */
+    public function canGetModuleConfiguration()
+    {
+        $this->assertInstanceOf(
+            ModuleConfiguration::class,
+            $this->callMethod(
+                $this->_oController,
+                'getModuleConfiguration'
+            )
+        );
+    }
 }

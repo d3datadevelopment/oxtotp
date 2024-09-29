@@ -31,6 +31,7 @@
       <file>../.php-cs-fixer.php</file>
       <file>../IntelliSenseHelper.php</file>
       <file>../rector.php</file>
+      <file>../metadata.php</file>
       <directory>../Tests/</directory>
     </exclude>
   </coverage>

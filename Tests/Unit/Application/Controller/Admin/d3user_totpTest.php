@@ -552,4 +552,28 @@ class d3user_totpTest extends d3TotpUnitTestCase
             $this->callMethod($this->_oController, 'getAvailableBackupCodeCount')
         );
     }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\Admin\d3user_totp::getCurrentUserId
+     */
+    public function canGetCurrentUserId(): void
+    {
+        /** @var d3user_totp|MockObject $oControllerMock */
+        $oControllerMock = $this->d3getMockBuilder(d3user_totp::class)
+            ->onlyMethods([
+                'getEditObjectId'
+            ])
+            ->getMock();
+        $oControllerMock->expects($this->once())->method('getEditObjectId')->willReturn('foo');
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod(
+            $this->_oController,
+            'getCurrentUserId'
+        );
+    }
 }

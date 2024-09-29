@@ -21,6 +21,7 @@ use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
@@ -91,6 +92,31 @@ class d3_totp_userTest extends d3TotpUnitTestCase
                 $sut,
                 'd3TotpGetSession'
             )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::d3getSessionedTotp
+     */
+    public function d3getSessionedTotpReturnsRightInstance()
+    {
+        $sut = oxNew(User::class);
+
+        $otp = $this->callMethod(
+            $sut,
+            'd3getSessionedTotp'
+        );
+
+        $this->assertInstanceOf(
+            d3totp::class,
+            $otp
+        );
+
+        $this->assertSame(
+            $otp,
+            Registry::getSession()->getVariable(d3totp_conf::OTP_SESSION_VARNAME)
         );
     }
 

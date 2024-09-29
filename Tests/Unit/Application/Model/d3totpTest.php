@@ -23,6 +23,7 @@ use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ForwardCompatibility\Result;
 use Doctrine\DBAL\Query\QueryBuilder;
 use OTPHP\TOTP;
@@ -918,6 +919,40 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $this->assertFalse(
             $this->callMethod($this->_oModel, 'delete')
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getQueryBuilder
+     */
+    public function canGetQueryBuilder(): void
+    {
+        $this->assertInstanceOf(
+            QueryBuilder::class,
+            $this->callMethod(
+                $this->_oModel,
+                'getQueryBuilder'
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::getDbConnection
+     */
+    public function canGetDbConnection(): void
+    {
+        $this->assertInstanceOf(
+            Connection::class,
+            $this->callMethod(
+                $this->_oModel,
+                'getDbConnection'
+            )
         );
     }
 }

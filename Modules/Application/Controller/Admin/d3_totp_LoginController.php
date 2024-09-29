@@ -59,6 +59,7 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
 
     /**
      * mockable parent method
+     * @codeCoverageIgnore
      */
     protected function parent__checklogin()
     {

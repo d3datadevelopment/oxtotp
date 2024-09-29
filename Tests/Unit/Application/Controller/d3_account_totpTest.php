@@ -421,4 +421,36 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             )
         );
     }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::getCurrentUserId
+     */
+    public function canGetCurrentUserId(): void
+    {
+        $userMock = $this->d3getMockBuilder(User::class)
+            ->onlyMethods(['getId'])
+            ->getMock();
+        $userMock->expects($this->once())->method('getId')->willReturn('foo');
+
+        /** @var d3_account_totp|MockObject $oControllerMock */
+        $oControllerMock = $this->d3getMockBuilder(d3_account_totp::class)
+            ->onlyMethods([
+                'getUser'
+            ])
+            ->getMock();
+        $oControllerMock->expects($this->once())->method('getUser')->willReturn($userMock);
+
+        $this->_oController = $oControllerMock;
+
+        $this->assertSame(
+            'foo',
+            $this->callMethod(
+                $this->_oController,
+                'getCurrentUserId'
+            )
+        );
+    }
 }

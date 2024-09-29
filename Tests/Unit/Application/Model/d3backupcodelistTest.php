@@ -393,4 +393,21 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             $this->callMethod($this->_oModel, 'd3GetUser')
         );
     }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::getQueryBuilder
+     */
+    public function canGetQueryBuilder(): void
+    {
+        $this->assertInstanceOf(
+            QueryBuilder::class,
+            $this->callMethod(
+                $this->_oModel,
+                'getQueryBuilder'
+            )
+        );
+    }
 }

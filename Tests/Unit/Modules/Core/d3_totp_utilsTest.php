@@ -383,6 +383,23 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
     }
 
     /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::getModuleConfiguration
+     */
+    public function canGetModuleConfiguration()
+    {
+        $this->assertInstanceOf(
+            ModuleConfiguration::class,
+            $this->callMethod(
+                $this->_oCoreClass,
+                'getModuleConfiguration'
+            )
+        );
+    }
+
+    /**
      * @return array
      */
     public function d3AuthHookDataProvider(): array

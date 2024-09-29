@@ -19,6 +19,7 @@ use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3backupcode;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -157,15 +158,32 @@ class d3backupcodeTest extends d3TotpUnitTestCase
      */
     public function d3GetUserReturnCurrentUser()
     {
-        Registry::getSession()->setVariable(d3totp_conf::SESSION_CURRENTUSER, 'foobar');
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->d3getMockBuilder(User::class)
+            ->onlyMethods(['d3TotpGetCurrentUser', 'load'])
+            ->getMock();
+        $oUserMock->expects($this->once())->method('d3TotpGetCurrentUser')->willReturn('currentUserId');
+        $oUserMock->expects($this->once())->method('load');
+        $oUserMock->assign([
+                'oxid' => 'currentUserId',
+        ]);
 
-        $oUser = $this->callMethod($this->_oModel, 'd3GetUser');
+        /** @var d3backupcode|MockObject $oModelMock */
+        $oModelMock = $this->d3getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['d3TotpGetUserObject'])
+            ->getMock();
+        $oModelMock->method('d3TotpGetUserObject')->willReturn($oUserMock);
+
+        $this->_oModel->setUser(null);
+
+        $oUser = $this->callMethod($oModelMock, 'd3GetUser');
 
         $this->assertInstanceOf(
             User::class,
             $oUser
         );
-        $this->assertNull(
+        $this->assertSame(
+            'currentUserId',
             $oUser->getId()
         );
     }
@@ -180,6 +198,23 @@ class d3backupcodeTest extends d3TotpUnitTestCase
         $this->assertInstanceOf(
             User::class,
             $this->callMethod($this->_oModel, 'd3TotpGetUserObject')
+        );
+    }
+
+    /**
+     * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcode::getQueryBuilder
+     */
+    public function canGetQueryBuilder(): void
+    {
+        $this->assertInstanceOf(
+            QueryBuilder::class,
+            $this->callMethod(
+                $this->_oModel,
+                'getQueryBuilder'
+            )
         );
     }
 }

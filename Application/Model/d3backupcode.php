@@ -80,11 +80,11 @@ class d3backupcode extends BaseModel
         $user = $this->getUser();
 
         if ($user instanceof User) {
-            return $this->getUser();
+            return $user;
         }
 
         /** @var d3_totp_user $oUser */
-        $oUser = oxNew(User::class);
+        $oUser = $this->d3TotpGetUserObject();
         $sUserId = $oUser->d3TotpGetCurrentUser();
         $oUser->load($sUserId);
         return $oUser;

@@ -46,6 +46,10 @@ Activate the module in the admin area of the shop in "Extensions -> Modules".
 
 The necessary configuration can be found in the same area in the "Settings" tab.
 
+### Additional installation instructions
+
+- [Customising the database structure](migration/README.en.md)
+
 ## Changelog
 
 See [CHANGELOG](CHANGELOG.md) for further information.

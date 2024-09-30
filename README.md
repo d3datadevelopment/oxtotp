@@ -46,6 +46,10 @@ Aktivieren Sie das Modul im Shopadmin unter "Erweiterungen -> Module".
 
 Die nötige Konfiguration finden Sie im selben Bereich im Tab "Einstell.".
 
+### ergänzende Installationhinweise
+
+- [Anpassen der Datenbankstruktur](migration/README.md)
+
 ## Changelog
 
 Siehe [CHANGELOG](CHANGELOG.md) für weitere Informationen.

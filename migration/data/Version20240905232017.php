@@ -41,6 +41,14 @@ final class Version20240905232017 extends AbstractMigration
         $this->addTotpBackupCodesTable($schema);
     }
 
+    public function down(Schema $schema): void
+    {
+        $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+
+        $this->removeTotpTable($schema);
+        $this->removeTotpBackupCodesTable($schema);
+    }
+
     /**
      * @param Schema $schema
      * @return void
@@ -99,6 +107,18 @@ final class Version20240905232017 extends AbstractMigration
 
     /**
      * @param Schema $schema
+     *
+     * @return void
+     */
+    public function removeTotpTable(Schema $schema): void
+    {
+        if ($schema->hasTable('d3totp')) {
+             $schema->dropTable('d3totp');
+        }
+    }
+
+    /**
+     * @param Schema $schema
      * @return void
      * @throws SchemaException
      */
@@ -151,8 +171,15 @@ final class Version20240905232017 extends AbstractMigration
         }
     }
 
-    public function down(Schema $schema): void
+    /**
+     * @param Schema $schema
+     *
+     * @return void
+     */
+    public function removeTotpBackupCodesTable(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        if ($schema->hasTable('d3totp_backupcodes')) {
+            $schema->dropTable('d3totp_backupcodes');
+        }
     }
 }

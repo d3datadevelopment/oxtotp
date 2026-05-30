@@ -19,6 +19,8 @@ use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Services\CryptoService;
+use D3\Totp\Services\CryptoServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
@@ -32,15 +34,15 @@ use OxidEsales\EshopCommunity\Internal\Framework\Database\ConnectionProviderInte
 use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use RuntimeException;
 
 class d3totp extends BaseModel
 {
-    protected const ENC_KEY = 'fq45QS09_fqyx09239QQ';
-
     protected $_sCoreTable = 'd3totp';
     public null|string $userId = null;
     public null|TOTP $totp = null;
     protected int $timeWindow = 2;
+    protected CryptoServiceInterface $crypto;
 
     /**
      * d3totp constructor.
@@ -48,6 +50,8 @@ class d3totp extends BaseModel
     public function __construct()
     {
         $this->init($this->getCoreTableName());
+
+        $this->crypto = ContainerFactory::getInstance()->getContainer()->get(CryptoServiceInterface::class);
 
         parent::__construct();
     }
@@ -125,6 +129,7 @@ class d3totp extends BaseModel
 
     /**
      * @return User
+     * @deprecated
      */
     public function getUser(): User
     {
@@ -182,11 +187,11 @@ class d3totp extends BaseModel
      * @param string|null $seed
      * @return TOTP
      */
-    public function getTotp(string $seed = null): TOTP
+    public function getTotp(User $user, string $seed = null): TOTP
     {
         if (null == $this->totp) {
             $this->totp = TOTP::create($seed ?: $this->getSavedSecret());
-            $this->totp->setLabel($this->getUser()->getFieldData('oxusername') ?: '');
+            $this->totp->setLabel($user->getFieldData('oxusername') ?: '');
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
         }
 
@@ -196,12 +201,12 @@ class d3totp extends BaseModel
     /**
      * @return string
      */
-    public function getQrCodeElement(): string
+    public function getQrCodeElement(User $user): string
     {
         $renderer = BaconQrCodeFactory::renderer(200);
         $writer = $this->d3GetWriter($renderer);
 
-        return $writer->writeString($this->getTotp()->getProvisioningUri());
+        return $writer->writeString($this->getTotp($user)->getProvisioningUri());
     }
 
     /**
@@ -216,9 +221,9 @@ class d3totp extends BaseModel
     /**
      * @return string
      */
-    public function getSecret(): string
+    public function getSecret(User $user): string
     {
-        return trim($this->getTotp()->getSecret());
+        return trim($this->getTotp($user)->getSecret());
     }
 
     /**
@@ -241,9 +246,9 @@ class d3totp extends BaseModel
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function verify(string $totp, string $seed = null): bool
+    public function verify(User $user, string $totp, string $seed = null): bool
     {
-        $blNotVerified = $this->getTotp($seed)->verify($totp, null, $this->timeWindow) == false;
+        $blNotVerified = $this->getTotp($user, $seed)->verify($totp, null, $this->timeWindow) == false;
 
         if ($blNotVerified && null == $seed) {
             $oBC = $this->d3GetBackupCodeListObject();
@@ -277,10 +282,12 @@ class d3totp extends BaseModel
      */
     public function encrypt(string $plaintext): string
     {
+        $key = $this->crypto->getKey(CryptoService::KEY_VERSION_MASTER_KEY);
+
         $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
         $iv = openssl_random_pseudo_bytes($ivlen);
-        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, self::ENC_KEY, OPENSSL_RAW_DATA, $iv);
-        $hmac = hash_hmac('sha256', $ciphertext_raw, self::ENC_KEY, true);
+        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
         return base64_encode($iv.$hmac.$ciphertext_raw);
     }
 
@@ -290,18 +297,45 @@ class d3totp extends BaseModel
      */
     public function decrypt(string $ciphertext): false|string
     {
-        $c = $this->d3Base64_decode($ciphertext);
+        $result = $this->decryptWithKey(
+            $ciphertext,
+            $this->crypto->getKey(CryptoService::KEY_VERSION_MASTER_KEY)
+        );
+
+        if (null !== $result) {
+            return $result;
+        }
+
+        // Legacy-Fallback
+        $result = $this->decryptWithKey(
+            $ciphertext,
+            $this->crypto->getKey(CryptoService::KEY_VERSION_LEGACY)
+        );
+
+        if (null !== $result) {
+            $this->assign(['seed' => $this->encrypt($result)]);
+            $this->save();
+
+            return $result;
+        }
+
+        return false;
+    }
+
+    protected function decryptWithKey(string $ciphertext, string $key): ?string
+    {
+        $payload = $this->d3Base64_decode($ciphertext);
         $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
-        $iv = substr($c, 0, $ivlen);
-        $hmac = substr($c, $ivlen, $sha2len = 32);
-        $ciphertext_raw = substr($c, $ivlen + $sha2len);
-        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, self::ENC_KEY, OPENSSL_RAW_DATA, $iv);
-        $calcmac = hash_hmac('sha256', $ciphertext_raw, self::ENC_KEY, true);
+        $iv = substr($payload, 0, $ivlen);
+        $hmac = substr($payload, $ivlen, $sha2len = 32);
+        $ciphertext_raw = substr($payload, $ivlen + $sha2len);
+        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        $calcmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
         if (hash_equals($hmac, $calcmac)) { // PHP 5.6+ compute attack-safe comparison
             return $original_plaintext;
         }
 
-        return false;
+        return null;
     }
 
     /**

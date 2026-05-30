@@ -53,7 +53,13 @@ class d3_totp_user extends d3_totp_user_parent
     public function d3getSessionedTotp(): d3totp
     {
         $totp = $this->d3getTotp();
-        $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $totp);
+
+        if ($this->isLoaded()) {
+            $totp->loadByUserId($this->getId());
+            $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, $totp->getTotp($this)->getSecret());
+            $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME, $totp->getTotp($this)->getLabel());
+        }
+
         return $totp;
     }
 

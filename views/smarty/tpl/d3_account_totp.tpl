@@ -58,7 +58,7 @@
                                 [{oxmultilang ident="D3_TOTP_QRCODE"}]&nbsp;
                             </dt>
                             <dd>
-                                [{$totp->getQrCodeElement()}]
+                                [{$totp->getQrCodeElement($user)}]
                             </dd>
                         </dl>
                         <p>
@@ -72,7 +72,7 @@
                                 <label for="secret">[{oxmultilang ident="D3_TOTP_SECRET"}]</label>
                             </dt>
                             <dd>
-                                <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret()}]</textarea>
+                                <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret($user)}]</textarea>
                             </dd>
                         </dl>
                         <p>

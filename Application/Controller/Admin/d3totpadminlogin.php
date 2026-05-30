@@ -217,11 +217,15 @@ class d3totpadminlogin extends AdminController
      */
     public function d3TotpHasValidTotp(string $sTotp, d3totp $totp): bool
     {
+        $user = $this->d3TotpGetUserObject();
+        $userId = $user->d3TotpGetCurrentUser();
+        $user->load($userId);
+
         return (
                 $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) &&
                 $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) == $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH)
             )
-            || $totp->verify($sTotp);
+            || $totp->verify($user, $sTotp);
     }
 
     /**

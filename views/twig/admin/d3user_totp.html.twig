@@ -76,7 +76,7 @@
                                             {{ translate({ ident: "D3_TOTP_QRCODE", suffix: "COLON" }) }}
                                         </div>
                                         <div class="col-8">
-                                            {{ totp.getQrCodeElement()|raw }}
+                                            {{ totp.getQrCodeElement(edit)|raw }}
                                             {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_TOTP_QRCODE_HELP"), 'sHelpText': help_text("D3_TOTP_QRCODE_HELP")} %}
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
                                             <label for="secret">{{ translate({ ident: "D3_TOTP_SECRET", suffix: "COLON" }) }}</label>
                                         </div>
                                         <div class="col-8">
-                                            <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">{{ totp.getSecret() }}</textarea>
+                                            <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">{{ totp.getSecret(edit) }}</textarea>
                                             {% include "inputhelp.html.twig" with {'sHelpId': help_id("D3_TOTP_SECRET_HELP"), 'sHelpText': help_text("D3_TOTP_SECRET_HELP")} %}
                                         </div>
                                     </div>

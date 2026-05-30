@@ -168,8 +168,13 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      */
     public function d3TotpHasValidTotp(string $sTotp, d3totp $totp): bool
     {
+        /** @var d3_totp_user $user */
+        $user = oxNew(User::class);
+        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
+        $user->load($sUserId);
+
         return Registry::getSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
-            $totp->verify($sTotp);
+            $totp->verify($user, $sTotp);
     }
 
     public function d3TotpClearSessionVariables(): void

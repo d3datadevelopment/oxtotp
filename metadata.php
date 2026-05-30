@@ -85,6 +85,16 @@ $aModule = [
             'type' => 'bool',
             'value' => false,
         ],
+        [
+            'name' => 'D3_TOTP_MASTER_KEY',
+            'type' => 'string',
+            'value' => '',
+        ],
+        [
+            'name' => 'D3_TOTP_MASTER_KEY_VERSION',
+            'type' => 'int',
+            'value' => 1,
+        ],
     ],
     'events'                => [
         'onActivate'        => ModuleSetup\Events::class.'::onActivate',

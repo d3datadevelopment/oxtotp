@@ -1,0 +1,7 @@
+services:
+  _defaults:
+    autowire: true
+
+  D3\Totp\Services\CryptoServiceInterface:
+    class: D3\Totp\Services\CryptoService
+    public: true

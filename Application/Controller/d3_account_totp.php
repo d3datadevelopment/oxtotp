@@ -60,8 +60,8 @@ class d3_account_totp extends AccountController
     {
         if (Registry::getRequest()->getRequestEscapedParameter('totp_use') === '1') {
             try {
-                /** @var d3_totp_user $oUser */
-                $oUser = $this->getUser();
+                /** @var d3_totp_user $user */
+                $user = $this->getUser();
                 $oTotp = $this->getTotpObject();
 
                 Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
@@ -70,11 +70,14 @@ class d3_account_totp extends AccountController
 
                 $aParams = [
                     'd3totp__usetotp' => 1,
-                    'd3totp__oxuserid'  => $oUser->getId(),
+                    'd3totp__oxuserid'  => $user->getId(),
                 ];
-                /** @var d3totp $init */
-                $init = Registry::getSession()->getVariable(d3totp_conf::OTP_SESSION_VARNAME);
-                $seed = $init->getSecret();
+                $secret = Registry::getSession()->getVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME);
+                $label = Registry::getSession()->getVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME);
+                $init = oxNew(d3totp::class);
+                $init->getTotp($user)->setSecret($secret);
+                $init->getTotp($user)->setLabel($label);
+                $seed = $init->getSecret($user);
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
 
                 Assert::that($seed)->notBlank('D3_TOTP_EMPTY_SEED');
@@ -84,8 +87,8 @@ class d3_account_totp extends AccountController
 
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
-                $oTotp->verify($otp, $seed);
-                $oTotpBackupCodes->generateBackupCodes($oUser->getId());
+                $oTotp->verify($user, $otp, $seed);
+                $oTotpBackupCodes->generateBackupCodes($user->getId());
                 $oTotp->setId();
 
                 $oTotp->save();

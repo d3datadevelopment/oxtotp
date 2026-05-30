@@ -27,5 +27,6 @@ class d3totp_conf
     public const SESSION_ADMIN_CURRENTUSER      = 'd3Totp_be_currentUser';    // oxid assigned to user from entered username
     public const SESSION_ADMIN_PROFILE          = 'd3Totp_be_currentProfile'; // selected profile
     public const SESSION_ADMIN_CHLANGUAGE       = 'd3Totp_be_currentChLanguage'; // selected language
-    public const OTP_SESSION_VARNAME            = 'd3totpinstance';        // saved OTP initialisation
+    public const OTP_SECRET_SESSION_VARNAME     = 'd3totpsecret';             // saved OTP initialisation
+    public const OTP_LABEL_SESSION_VARNAME      = 'd3totplabel';             // saved OTP initialisation
 }

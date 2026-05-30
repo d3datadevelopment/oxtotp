@@ -76,7 +76,7 @@
                                             [{oxmultilang ident="D3_TOTP_QRCODE" suffix="COLON"}]
                                         </div>
                                         <div class="col-8">
-                                            [{$totp->getQrCodeElement()}]
+                                            [{$totp->getQrCodeElement($edit)}]
                                             [{oxinputhelp ident="D3_TOTP_QRCODE_HELP"}]
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
                                             <label for="secret">[{oxmultilang ident="D3_TOTP_SECRET" suffix="COLON"}]</label>
                                         </div>
                                         <div class="col-8">
-                                            <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret()}]</textarea>
+                                            <textarea rows="3" cols="50" id="secret" name="secret" class="editinput" readonly="readonly">[{$totp->getSecret($edit)}]</textarea>
                                             [{oxinputhelp ident="D3_TOTP_SECRET_HELP"}]
                                         </div>
                                     </div>

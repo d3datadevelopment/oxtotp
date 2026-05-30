@@ -47,17 +47,18 @@ class d3user_totp extends AdminDetailsController
     {
         parent::render();
 
-        $soxId = $this->getEditObjectId();
+        $userId = $this->getEditObjectId();
 
-        if ($soxId && $soxId != "-1") {
+        if ($userId && $userId != "-1") {
             /** @var d3_totp_user $oUser */
             $oUser = $this->getUserObject();
-            if ($oUser->load($soxId)) {
+
+            $this->addTplParam("edit", $oUser);
+            if ($oUser->load($userId)) {
                 $this->addTplParam("oxid", $oUser->getId());
             } else {
                 $this->addTplParam("oxid", '-1');
             }
-            $this->addTplParam("edit", $oUser);
         }
 
         if ($this->_sSaveError) {
@@ -90,30 +91,34 @@ class d3user_totp extends AdminDetailsController
             $oTotp = $this->getTotpObject();
 
             Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
-
             $oTotpBackupCodes = $this->getBackupcodeListObject();
-            if (isset($aParams['d3totp__oxid'])) {
+            if (isset($aParams['d3totp__oxid']) && strlen(trim($aParams['d3totp__oxid']))) {
                 $oTotp->load($aParams['d3totp__oxid']);
             } else {
                 $aParams['d3totp__usetotp'] = 1;
-                /** @var d3totp $init */
-                $init = Registry::getSession()->getVariable(d3totp_conf::OTP_SESSION_VARNAME);
+                $secret = Registry::getSession()->getVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME);
+                $label = Registry::getSession()->getVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME);
+                $init = oxNew(d3totp::class);
+                $user = $this->getUserObject();
+                $user->load($this->getEditObjectId());
+                $otp = $init->getTotp($user);
+                $otp->setSecret($secret);
+                $otp->setLabel($label);
                 Assert::that($init)->isInstanceOf(d3totp::class, 'D3_TOTP_INITOBJECT_MISSING');
-                $seed = $init->getSecret();
+                $seed = $init->getSecret($user);
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
-
                 Assert::that($seed)->notBlank('D3_TOTP_EMPTY_SEED');
                 Assert::that($otp)
                     ->integerish('D3_TOTP_MISSING_VALIDATION')
                     ->length(6, 'D3_TOTP_MISSING_VALIDATION');
-
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
-                $oTotp->verify($otp, $seed);
+                $oTotp->verify($user, $otp, $seed);
                 $oTotpBackupCodes->generateBackupCodes($this->getEditObjectId());
                 $oTotp->setId();
             }
             $oTotp->save();
+
             $oTotpBackupCodes->save();
         } catch (Exception $exception) {
             $this->_sSaveError = $exception->getMessage();

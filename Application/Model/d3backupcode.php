@@ -27,6 +27,9 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class d3backupcode extends BaseModel
 {
+    public const VERSION_MD5 = 1;
+    public const VERSION_ARGON = 2;
+
     protected $_sCoreTable = 'd3totp_backupcodes';
 
     /**
@@ -41,8 +44,9 @@ class d3backupcode extends BaseModel
     {
         $sCode = $this->getRandomTotpBackupCode();
         $this->assign([
-            'oxuserid'    => $sUserId,
-            'backupcode' => $this->d3EncodeBC($sCode, $sUserId),
+            'oxuserid'      => $sUserId,
+            'backupcode'    => $this->d3EncodeBC($sCode),
+            'codeversion'   => self::VERSION_ARGON,
         ]);
 
         return $sCode;
@@ -55,23 +59,15 @@ class d3backupcode extends BaseModel
 
     /**
      * @param string $code
-     * @param string $sUserId
      * @return string
-     * @throws ContainerExceptionInterface
-     * @throws Exception
-     * @throws NotFoundExceptionInterface
-     * @throws \Doctrine\DBAL\Exception
      */
-    public function d3EncodeBC(string $code, string $sUserId): string
+    public function d3EncodeBC(string $code): string
     {
-        $oUser = $this->d3TotpGetUserObject();
-        $oUser->load($sUserId);
-        $salt = $oUser->getFieldData('oxpasssalt');
+        return password_hash(
+            $code,
+            PASSWORD_ARGON2ID
+        );
 
-        $qb = $this->getQueryBuilder();
-        $qb->select('BINARY MD5( CONCAT('.$qb->createNamedParameter($code).', UNHEX('.$qb->createNamedParameter($salt).')))');
-
-        return $qb->execute()->fetchOne();
     }
 
     public function d3GetUser(): User

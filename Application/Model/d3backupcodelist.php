@@ -98,6 +98,54 @@ class d3backupcodelist extends ListModel
         return $object;
     }
 
+    public function verify(string $code): bool
+    {
+        $bc = $this->verifyArgon2($code);
+
+        if ($bc instanceof d3backupcode) {
+            $bc->delete();
+
+            return true;
+        }
+
+        return $this->verifyLegacy($code);
+    }
+
+    protected function verifyArgon2(string $code): ?d3backupcode
+    {
+        $this->loadUserArgonBackupCodes();
+
+        /** @var d3backupcode $backupCode */
+        foreach ($this->getArray() as $backupCode) {
+            if (password_verify($code, $backupCode->getRawFieldData('backupcode'))) {
+                return $backupCode;
+            }
+        }
+
+        return null;
+    }
+
+    protected function loadUserArgonBackupCodes(): void
+    {
+        $qb = $this->getQueryBuilder();
+        $qb->select('oxid', 'backupcode')
+            ->from($this->getBaseObject()->getViewName())
+            ->where(
+                $qb->expr()->and(
+                    $qb->expr()->eq(
+                        'oxuserid',
+                        $qb->createNamedParameter($this->d3GetUser()->getId())
+                    ),
+                    $qb->expr()->eq(
+                        'codeversion',
+                        $qb->createNamedParameter(d3backupcode::VERSION_ARGON)
+                    )
+                )
+            );
+
+        $this->selectString($qb->getSQL(), $qb->getParameters());
+    }
+
     /**
      * @param string $totp
      * @return bool
@@ -105,8 +153,9 @@ class d3backupcodelist extends ListModel
      * @throws NotFoundExceptionInterface
      * @throws DBALDriverException
      * @throws DBALException
+     * @deprecated
      */
-    public function verify(string $totp): bool
+    protected function verifyLegacy(string $totp): bool
     {
         $qb = $this->getQueryBuilder();
         $qb->select('oxid')
@@ -115,11 +164,15 @@ class d3backupcodelist extends ListModel
                 $qb->expr()->and(
                     $qb->expr()->eq(
                         'backupcode',
-                        $qb->createNamedParameter($this->getBaseObject()->d3EncodeBC($totp, $this->d3GetUser()->getId()))
+                        'BINARY MD5( CONCAT('.$qb->createNamedParameter($totp).', UNHEX('.$qb->createNamedParameter($this->d3GetUser()->getFieldData('oxpasssalt')).')))'
                     ),
                     $qb->expr()->eq(
                         'oxuserid',
                         $qb->createNamedParameter($this->d3GetUser()->getId())
+                    ),
+                    $qb->expr()->eq(
+                        'codeversion',
+                        $qb->createNamedParameter(d3backupcode::VERSION_MD5)
                     )
                 )
             );

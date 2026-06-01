@@ -15,17 +15,20 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Model;
 
-use Laminas\Math\Rand;
-
-class d3RandomGenerator extends Rand
+class d3RandomGenerator
 {
     public const CHAR_DIGITS    = '0123456789';
+    public const CHAR_ALNUM     = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
-    /**
-     * @return string
-     */
     public static function getRandomTotpBackupCode(): string
     {
-        return self::getString(6, self::CHAR_DIGITS);
+        $rawCode = '';
+        $alphabet = self::CHAR_ALNUM;
+
+        for ($i = 0; $i < 12; $i++) {
+            $rawCode .= $alphabet[random_int(0, strlen($alphabet) - 1)];
+        }
+
+        return implode('-', str_split($rawCode, 4));
     }
 }

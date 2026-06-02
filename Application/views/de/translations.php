@@ -18,7 +18,12 @@ return [
 
     'TOTP_INPUT'                                      => 'Authentisierungscode',
     'TOTP_INPUT_HELP'                                 => 'Das Einmalpasswort erhalten Sie von der Zwei-Faktor-Authentisierungs-App auf Ihrem Gerät.',
+    'TOTP_INPUT_BC'                                   => 'Backupcode',
+    'TOTP_INPUT_BCHELP'                               => 'Verwenden Sie einen Backupcode aus Ihrer Liste',
     'TOTP_CANCEL_LOGIN'                               => 'Anmeldung abbrechen',
+
+    'TOTP_MODE_AUTH'                                  => 'Probleme mit Ihrer Authenticator-App?',
+    'TOTP_MODE_BC'                                    => 'Zurück zur Eingabe des Authenticator-Codes.',
 
     'd3mxuser_totp'                                   => '2-Faktor-Authentisierung',
 

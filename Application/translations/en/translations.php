@@ -18,6 +18,9 @@ return [
 
     'D3_TOTP_INPUT'                                   => 'authentication code',
     'D3_TOTP_INPUT_HELP'                              => 'You get the one-time password from the two-factor authentication app on your device.',
+    'D3_TOTP_INPUT_BCHELP'                            => 'Use a backup code from your list',
+    'D3_TOTP_MODE_AUTH'                               => 'Having trouble with your authenticator app?',
+    'D3_TOTP_MODE_BC'                                 => 'Back to entering the authenticator code.',
     'D3_TOTP_SUBMIT_LOGIN'                            => 'Log in',
     'D3_TOTP_CANCEL_LOGIN'                            => 'Cancel login',
     'D3_TOTP_BREADCRUMB'                              => 'one-time password login',

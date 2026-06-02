@@ -18,7 +18,12 @@ return [
 
     'TOTP_INPUT'                                      => 'authentication code',
     'TOTP_INPUT_HELP'                                 => 'You get the one-time password from the two-factor authentication app on your device.',
+    'TOTP_INPUT_BC'                                   => 'backup code',
+    'TOTP_INPUT_BCHELP'                               => 'Use a backup code from your list',
     'TOTP_CANCEL_LOGIN'                               => 'Cancel login',
+
+    'TOTP_MODE_AUTH'                                  => 'Having trouble with your authenticator app?',
+    'TOTP_MODE_BC'                                    => 'Back to entering the authenticator code.',
 
     'd3mxuser_totp'                                   => 'Two-factor authentication',
 

@@ -24,97 +24,101 @@
             <input type="hidden" name="profile" value="[{$selectedProfile}]">
             <input type="hidden" name="chlanguage" value="[{$selectedChLanguage}]">
 
-            <h3>[{oxmultilang ident="TOTP_INPUT"}]</h3>
-
             [{if !empty($Errors.default)}]
                 [{include file="inc_error.tpl" Errorlist=$Errors.default}]
             [{/if}]
 
             [{$oView->getBackupCodeCountMessage()}]
 
-            <div class="container">
-                <label for="1st">[{oxmultilang ident="D3_TOTP_INPUT_FIRST"}]</label>
-                <input type="text" name="d3totp[]" class="digit" id='1st' inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent(null, '2nd')" autofocus autocomplete="off">
-                <label for="2nd">[{oxmultilang ident="D3_TOTP_INPUT_SECOND"}]</label>
-                <input type="text" name="d3totp[]" class="digit" id="2nd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('1st', '3rd')" autocomplete="off">
-                <label for="3rd">[{oxmultilang ident="D3_TOTP_INPUT_THIRD"}]</label>
-                <input type="text" name="d3totp[]" class="digit" id="3rd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('2nd', '4th')" autocomplete="off">
-                <label for="4th">[{oxmultilang ident="D3_TOTP_INPUT_FOURTH"}]</label>
-                <input type="text" name="d3totp[]" class="digit" id="4th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('3rd', '5th')" autocomplete="off">
-                <label for="5th">[{oxmultilang ident="D3_TOTP_INPUT_FIFTH"}]</label>
-                <input type="text" name="d3totp[]" class="digit" id="5th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('4th', '6th')" autocomplete="off">
-                <label for="6th">[{oxmultilang ident="D3_TOTP_INPUT_SIXTH"}]</label>
-                <input type="text" name="d3totp[]" class="digit" id="6th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('5th', null)" autocomplete="off">
+            <div class="auth_container">
+                <h3>[{oxmultilang ident="TOTP_INPUT"}]</h3>
+
+                <div class="container">
+                    <label for="1st">[{oxmultilang ident="D3_TOTP_INPUT_FIRST"}]</label>
+                    <input type="text" name="d3totp[]" class="digit" id='1st' inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent(null, '2nd')" autofocus autocomplete="off">
+                    <label for="2nd">[{oxmultilang ident="D3_TOTP_INPUT_SECOND"}]</label>
+                    <input type="text" name="d3totp[]" class="digit" id="2nd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('1st', '3rd')" autocomplete="off">
+                    <label for="3rd">[{oxmultilang ident="D3_TOTP_INPUT_THIRD"}]</label>
+                    <input type="text" name="d3totp[]" class="digit" id="3rd" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('2nd', '4th')" autocomplete="off">
+                    <label for="4th">[{oxmultilang ident="D3_TOTP_INPUT_FOURTH"}]</label>
+                    <input type="text" name="d3totp[]" class="digit" id="4th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('3rd', '5th')" autocomplete="off">
+                    <label for="5th">[{oxmultilang ident="D3_TOTP_INPUT_FIFTH"}]</label>
+                    <input type="text" name="d3totp[]" class="digit" id="5th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('4th', '6th')" autocomplete="off">
+                    <label for="6th">[{oxmultilang ident="D3_TOTP_INPUT_SIXTH"}]</label>
+                    <input type="text" name="d3totp[]" class="digit" id="6th" inputmode="numeric" pattern="[0-9]*" maxlength="1" onkeyup="clickEvent('5th', null)" autocomplete="off">
+                </div>
+
+                [{capture name="d3js"}]
+                    function clickEvent(previous, next){
+                        const digitKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                        const deleteKeys = ['Backspace', 'Delete'];
+                        if(next && digitKeys.includes(event.key)){
+                            document.getElementById(next).focus();
+                        } else if(previous && deleteKeys.includes(event.key)){
+                            document.getElementById(previous).focus();
+                        }
+                    }
+                    document.addEventListener("paste", function(e) {
+                        if (!e.target.classList.contains('digit')) {
+                            return;
+                        }
+
+                        e.preventDefault();
+
+                        const data = e.clipboardData.getData('Text').split('');
+
+                        document.querySelectorAll('#login .digit').forEach((node, index) => {
+                            node.value = data[index] ?? '';
+                        });
+                    });
+                [{/capture}]
+                [{oxscript add=$smarty.capture.d3js}]
+
+                <div>[{oxmultilang ident="TOTP_INPUT_HELP"}]</div>
             </div>
 
-            [{capture name="d3js"}]
-                function clickEvent(previous, next){
-                    const digitKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-                    const deleteKeys = ['Backspace', 'Delete'];
-                    if(next && digitKeys.includes(event.key)){
-                        document.getElementById(next).focus();
-                    } else if(previous && deleteKeys.includes(event.key)){
-                        document.getElementById(previous).focus();
-                    }
-                }
-                document.addEventListener("paste", function(e) {
-                    if (e.target.type === "text") {
-                        var data = e.clipboardData.getData('Text');
-                        data = data.split('');
-                        [].forEach.call(document.querySelectorAll("#login input[type=text]"), (node, index) => {
-                            node.value = data[index];
-                        });
-                    }
-                });
-            [{/capture}]
-            [{oxscript add=$smarty.capture.d3js}]
+            <div class="bc_container hidden_container">
+                <h3>[{oxmultilang ident="TOTP_INPUT_BC"}]</h3>
 
-            <div>[{oxmultilang ident="TOTP_INPUT_HELP"}]</div>
+                <div>[{oxmultilang ident="TOTP_INPUT_BCHELP" suffix="COLON"}]</div>
 
-            <input type="submit" value="[{oxmultilang ident="LOGIN_START"}]" class="btn"><br>
+                <input type="text" name="d3totpbc" class="bcinput" autocomplete="off" disabled="disabled">
+            </div>
 
-            <input class="btn btn_cancel" value="[{oxmultilang ident="TOTP_CANCEL_LOGIN"}]" type="submit"
-                onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
-            >
+            <div>
+                <input type="submit" value="[{oxmultilang ident="LOGIN_START"}]" class="btn"><br>
+
+                <input class="btn btn_cancel" value="[{oxmultilang ident="TOTP_CANCEL_LOGIN"}]" type="submit"
+                    onclick="document.getElementById('login').fnc.value='d3CancelLogin'; document.getElementById('login').submit();"
+                >
+            </div>
+
+            <div class="auth_container modelink">
+                <a href="#" id="switchToAuth">[{oxmultilang ident="TOTP_MODE_AUTH"}]</a>
+            </div>
+
+            <div class="bc_container modelink hidden_container">
+                <a href="#" id="switchToBc">[{oxmultilang ident="TOTP_MODE_BC"}]</a>
+            </div>
 
             [{oxstyle include=$oViewConf->getModuleUrl('d3totp', 'out/admin/src/css/d3totplogin.css')}]
             [{oxstyle}]
 
+            [{capture name="d3js2"}]
+                function toggleMode(e) {
+                    e.preventDefault();
 
+                    document.querySelectorAll('.auth_container, .bc_container')
+                        .forEach(el => el.classList.toggle('hidden_container'));
 
-[{**
+                    document.querySelectorAll('.auth_container input, .bc_container input')
+                        .forEach(el => el.disabled = !el.disabled);
+                }
 
-
-
-
-
-            [{$oViewConf->getHiddenSid()}]
-
-            <input type="hidden" name="fnc" value="">
-            <input type="hidden" name="cl" value="login">
-
-            [{if !empty($Errors.default)}]
-                [{include file="inc_error.tpl" Errorlist=$Errors.default}]
-            [{/if}]
-
-            <div class="d3webauthn_icon">
-                <div class="svg-container">
-                    [{include file=$oViewConf->getModulePath('d3webauthn', 'out/img/fingerprint.svg')}]
-                </div>
-                <div class="message">[{oxmultilang ident="WEBAUTHN_INPUT_HELP"}]</div>
-            </div>
-**}]
-            [{* prevent cancel button (1st button) action when form is sent via Enter key *}]
-[{**
-            <input type="submit" style="display:none !important;">
-
-            <input class="btn btn_cancel" value="[{oxmultilang ident="WEBAUTHN_CANCEL_LOGIN"}]" type="submit"
-                   onclick="document.getElementById('login').fnc.value='d3WebauthnCancelLogin'; document.getElementById('login').submit();"
-            >
-
-            [{oxstyle include=$oViewConf->getModuleUrl('d3webauthn', 'out/admin/src/css/d3webauthnlogin.css')}]
-            [{oxstyle}]
-**}]
+                document.querySelectorAll('.modelink a')
+                    .forEach(el => el.addEventListener('click', toggleMode));
+            [{/capture}]
+            [{oxscript add=$smarty.capture.d3js2}]
         [{/block}]
     </form>
 </div>

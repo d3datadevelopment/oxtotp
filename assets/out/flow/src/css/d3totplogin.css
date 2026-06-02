@@ -22,7 +22,8 @@
     left: -2000px;
 }
 
-#login label.show {
+#login label.show,
+#login .bc_container label {
     position: relative;
     display: block;
     left: 0;
@@ -35,7 +36,8 @@
     justify-content: center;
 }
 
-#login .digit {
+#login .digit,
+#login .bcinput {
     width: 2em;
     margin: 0 2px;
     text-align: center;
@@ -45,4 +47,24 @@
 
 #login .digit:nth-of-type(4) {
     margin-left: 15px;
+}
+
+.hidden_container {
+    display: none;
+}
+
+.modelink,
+.bcinput {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#login .bcinput {
+    display: block;
+    margin: 20px auto;
+    width: auto;
+}
+
+.modelink a {
+    color: darkgrey;
 }

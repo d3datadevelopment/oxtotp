@@ -176,12 +176,13 @@ class d3totpadminlogin extends AdminController
         $userId = $user->d3TotpGetCurrentUser();
 
         try {
-            $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
+            $totpCode = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
+            $totpBcCode = trim((string) Registry::getRequest()->getRequestEscapedParameter('d3totpbc'));
 
             $totp = $this->d3TotpGetTotpObject();
             $totp->loadByUserId($userId);
 
-            $this->d3TotpHasValidTotp($sTotp, $totp);
+            $this->d3TotpHasValidTotp($totpCode, $totpBcCode, $totp);
 
             $selectedProfile = Registry::getRequest()->getRequestEscapedParameter('profile');
             $selectedLanguage = Registry::getRequest()->getRequestEscapedParameter('chlanguage');
@@ -215,7 +216,7 @@ class d3totpadminlogin extends AdminController
      * @throws DBALException
      * @throws d3totp_wrongOtpException
      */
-    public function d3TotpHasValidTotp(string $sTotp, d3totp $totp): bool
+    public function d3TotpHasValidTotp(string $totpCode, string $totpBcCode, d3totp $totp): bool
     {
         $user = $this->d3TotpGetUserObject();
         $userId = $user->d3TotpGetCurrentUser();
@@ -225,7 +226,7 @@ class d3totpadminlogin extends AdminController
                 $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) &&
                 $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) == $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH)
             )
-            || $totp->verify($user, $sTotp);
+            || $totp->verify($user, $totpCode, $totpBcCode);
     }
 
     /**

@@ -34,7 +34,6 @@ use OxidEsales\EshopCommunity\Internal\Framework\Database\ConnectionProviderInte
 use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use RuntimeException;
 
 class d3totp extends BaseModel
 {
@@ -237,32 +236,28 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param string $totp
      * @param string|null $seed
-     * @return bool
+     *
      * @throws ContainerExceptionInterface
      * @throws DBALException
      * @throws d3totp_wrongOtpException
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function verify(User $user, string $totp, string $seed = null): bool
+    public function verify(User $user, string $totp, string $totpBc, string $seed = null): bool
     {
         $blNotVerified = $this->getTotp($user, $seed)->verify($totp, null, $this->timeWindow) == false;
 
         if ($blNotVerified && null == $seed) {
             $oBC = $this->d3GetBackupCodeListObject();
-            $blNotVerified = $oBC->verify($totp) == false;
+
+            $blNotVerified = $oBC->verify($totpBc) == false;
 
             if ($blNotVerified) {
-                /** @var d3totp_wrongOtpException $exception */
-                $exception = oxNew(d3totp_wrongOtpException::class);
-                throw $exception;
+                throw oxNew(d3totp_wrongOtpException::class);
             }
         } elseif ($blNotVerified && $seed !== null) {
-            /** @var d3totp_wrongOtpException $exception */
-            $exception = oxNew(d3totp_wrongOtpException::class);
-            throw $exception;
+            throw oxNew(d3totp_wrongOtpException::class);
         }
 
         return !$blNotVerified;

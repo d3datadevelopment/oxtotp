@@ -18,6 +18,9 @@ return [
 
     'D3_TOTP_INPUT'                                   => 'Authentisierungscode',
     'D3_TOTP_INPUT_HELP'                              => 'Das Einmalpasswort erhalten Sie von der Zwei-Faktor-Authentisierungs-App auf Ihrem Gerät.',
+    'D3_TOTP_INPUT_BCHELP'                            => 'Verwenden Sie einen Backupcode aus Ihrer Liste',
+    'D3_TOTP_MODE_AUTH'                               => 'Probleme mit Ihrer Authenticator-App?',
+    'D3_TOTP_MODE_BC'                                 => 'Zurück zur Eingabe des Authenticator-Codes.',
     'D3_TOTP_SUBMIT_LOGIN'                            => 'Anmelden',
     'D3_TOTP_CANCEL_LOGIN'                            => 'Anmeldung abbrechen',
     'D3_TOTP_BREADCRUMB'                              => 'Einmalpasswort-Anmeldung',

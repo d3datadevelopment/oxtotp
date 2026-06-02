@@ -87,7 +87,7 @@ class d3_account_totp extends AccountController
 
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
-                $oTotp->verify($user, $otp, $seed);
+                $oTotp->verify($user, $otp, '', $seed);
                 $oTotpBackupCodes->generateBackupCodes($user->getId());
                 $oTotp->setId();
 

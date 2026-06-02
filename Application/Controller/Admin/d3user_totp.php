@@ -91,7 +91,7 @@ class d3user_totp extends AdminDetailsController
             $oTotp = $this->getTotpObject();
 
             Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
-            $oTotpBackupCodes = $this->getBackupcodeListObject();
+            $oTotpBackupCodes = $this->getBackupCodeListObject();
             if (isset($aParams['d3totp__oxid']) && strlen(trim($aParams['d3totp__oxid']))) {
                 $oTotp->load($aParams['d3totp__oxid']);
             } else {
@@ -113,7 +113,7 @@ class d3user_totp extends AdminDetailsController
                     ->length(6, 'D3_TOTP_MISSING_VALIDATION');
                 $oTotp->saveSecret($seed);
                 $oTotp->assign($aParams);
-                $oTotp->verify($user, $otp, $seed);
+                $oTotp->verify($user, $otp, '', $seed);
                 $oTotpBackupCodes->generateBackupCodes($this->getEditObjectId());
                 $oTotp->setId();
             }

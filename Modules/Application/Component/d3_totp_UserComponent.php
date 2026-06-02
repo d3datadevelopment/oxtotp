@@ -93,7 +93,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      */
     public function d3TotpCheckTotpLogin(): false|string
     {
-        $sTotp = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
+        $totpCode = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
+        $totpBcCode = trim((string) Registry::getRequest()->getRequestEscapedParameter('d3totpbc'));
 
         /** @var d3_totp_user $oUser */
         $oUser = oxNew(User::class);
@@ -104,7 +105,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
         $totp->loadByUserId($sUserId);
 
         try {
-            if (!$this->d3TotpIsNoTotpOrNoLogin($totp) && $this->d3TotpHasValidTotp($sTotp, $totp)) {
+            if (!$this->d3TotpIsNoTotpOrNoLogin($totp) && $this->d3TotpHasValidTotp($totpCode, $totpBcCode, $totp)) {
                 // relogin, don't extract from this try block
                 $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_AUTH, $oUser->getId());
                 $this->d3TotpGetSession()->setVariable(d3totp_conf::OXID_FRONTEND_AUTH, $oUser->getId());
@@ -166,7 +167,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @throws NotFoundExceptionInterface
      * @throws d3totp_wrongOtpException
      */
-    public function d3TotpHasValidTotp(string $sTotp, d3totp $totp): bool
+    public function d3TotpHasValidTotp(string $totpCode, string $totpBcCode, d3totp $totp): bool
     {
         /** @var d3_totp_user $user */
         $user = oxNew(User::class);
@@ -174,7 +175,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
         $user->load($sUserId);
 
         return Registry::getSession()->getVariable(d3totp_conf::SESSION_AUTH) ||
-            $totp->verify($user, $sTotp);
+            $totp->verify($user, $totpCode, $totpBcCode);
     }
 
     public function d3TotpClearSessionVariables(): void

@@ -39,3 +39,17 @@
 #login .digit:nth-of-type(4) {
     margin-left: 7px;
 }
+
+.hidden_container {
+    display: none;
+}
+
+.modelink,
+.bcinput {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.modelink a {
+    color: darkgrey;
+}

@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://git.d3data.de/D3Public/oxtotp/compare/3.0.0.0...rel_3.x)
 
-## [3.0.0.0](https://git.d3data.de/D3Public/oxtotp/compare/2.1.1.0...3.0.0.0) - 2024-09-23
+## [3.0.0.0](https://git.d3data.de/D3Public/oxtotp/compare/2.1.1.0...3.0.0.0) - 2026-06-XX
 ### Added
-- installable in OXID eShop 7.0 + 7.1
+- installable in OXID eShop 7.0 to 7.4
+### Changed
+- use separated session variable names between front and backend
+- use generated master key instead of static one
+- use hardened backup codes
 ### Removed
 - support for OXID eShop < 7
 

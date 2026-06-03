@@ -62,6 +62,7 @@ return [
     'D3_TOTP_SAVE'                                    => 'Save',
 
     'D3_TOTP_ERROR_UNVALID'                           => 'The one-time password is invalid.',
+    'D3_TOTP_ERROR_REPLAY'                            => 'The one-time password cannot be used again. Please wait a moment.',
     'D3_TOTP_ALREADY_EXIST'                           => 'The registration has already been saved.',
     'D3_TOTP_MISSING_VALIDATION'                      => 'The confirming one-time password must consist of 6 digits',
     'D3_TOTP_EMPTY_SEED'                              => 'The key used cannot be determined.',

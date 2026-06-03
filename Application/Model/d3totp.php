@@ -18,6 +18,7 @@ namespace D3\Totp\Application\Model;
 use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
+use D3\Totp\Application\Model\Exceptions\replayException;
 use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
 use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Services\CryptoService;
@@ -250,6 +251,13 @@ class d3totp extends BaseModel
      */
     public function verify(User $user, string $totp, string $totpBc, string $seed = null): bool
     {
+        $currentSlice = floor(time() / 30);
+        $lastAcceptedTimeSlice = $this->getFieldData('lastacceptedtimeslice');
+
+        if ($lastAcceptedTimeSlice && $currentSlice <= $lastAcceptedTimeSlice) {
+            throw oxNew(replayException::class);
+        }
+
         $verified = $this->getTotp($user, $seed)->verify($totp, null, $this->timeWindow);
 
         if ($verified) {

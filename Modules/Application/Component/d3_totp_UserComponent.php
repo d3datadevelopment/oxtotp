@@ -18,7 +18,8 @@ namespace D3\Totp\Modules\Application\Component;
 use Assert\Assert;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
-use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
@@ -117,7 +118,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 
                 return false;
             }
-        } catch (d3totp_wrongOtpException $oEx) {
+        } catch (totpExceptionInterface $oEx) {
             $this->d3TotpGetUtilsView()->addErrorToDisplay($oEx, false, false, "", 'd3totplogin');
         }
 
@@ -165,7 +166,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @throws DBALException
      * @throws Exception
      * @throws NotFoundExceptionInterface
-     * @throws d3totp_wrongOtpException
+     * @throws wrongOtpException
      */
     public function d3TotpHasValidTotp(string $totpCode, string $totpBcCode, d3totp $totp): bool
     {

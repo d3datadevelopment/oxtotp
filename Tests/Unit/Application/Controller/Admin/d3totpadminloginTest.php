@@ -20,7 +20,7 @@ use D3\Totp\Application\Controller\Admin\d3totpadminlogin;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
-use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
@@ -453,7 +453,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
             ])
             ->getMock();
         $oControllerMock->method('d3TotpHasValidTotp')
-            ->willThrowException(oxNew(d3totp_wrongOtpException::class));
+            ->willThrowException(oxNew(wrongOtpException::class));
         $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
         $oControllerMock->method('getLogger')->willReturn($loggerMock);
         $oControllerMock->method('d3GetLoginController')->willReturn($loginControllerMock);
@@ -592,9 +592,9 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
             ->onlyMethods(['verify'])
             ->disableOriginalConstructor()
             ->getMock();
-        $oTotpMock->method('verify')->willThrowException(oxNew(d3totp_wrongOtpException::class));
+        $oTotpMock->method('verify')->willThrowException(oxNew(wrongOtpException::class));
 
-        $this->expectException(d3totp_wrongOtpException::class);
+        $this->expectException(wrongOtpException::class);
         $this->callMethod($this->_oController, 'd3TotpHasValidTotp', ['123456', $oTotpMock]);
     }
 

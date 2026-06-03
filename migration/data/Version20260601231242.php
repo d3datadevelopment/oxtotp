@@ -37,10 +37,10 @@ final class Version20260601231242 extends AbstractMigration
 
         $table = $schema->getTable('d3totp_backupcodes');
 
-        if (!$table->hasColumn('CODEVERSION')) {
-            $table->addColumn('CODEVERSION', (new IntegerType())->getName())
-                ->setLength(1)
-                ->setNotnull(true);
-        }
+        $this->skipIf($table->hasColumn('CODEVERSION'), 'Column already exists.');
+
+        $table->addColumn('CODEVERSION', (new IntegerType())->getName())
+            ->setLength(1)
+            ->setNotnull(true);
     }
 }

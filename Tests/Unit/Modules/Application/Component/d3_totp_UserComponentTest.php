@@ -18,7 +18,7 @@ namespace D3\Totp\Tests\Unit\Modules\Application\Component;
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
-use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Modules\Application\Component\d3_totp_UserComponent;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use InvalidArgumentException;
@@ -357,8 +357,8 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
             ->getMock();
         $oSessionMock->expects($this->never())->method('setVariable');
 
-        /** @var d3totp_wrongOtpException|MockObject $oTotpExceptionMock */
-        $oTotpExceptionMock = $this->d3getMockBuilder(d3totp_wrongOtpException::class)
+        /** @var wrongOtpException|MockObject $oTotpExceptionMock */
+        $oTotpExceptionMock = $this->d3getMockBuilder(wrongOtpException::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -627,12 +627,12 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
             ->onlyMethods(['verify'])
             ->disableOriginalConstructor()
             ->getMock();
-        $oTotpMock->method('verify')->willThrowException(oxNew(d3totp_wrongOtpException::class));
+        $oTotpMock->method('verify')->willThrowException(oxNew(wrongOtpException::class));
 
         /** @var d3_totp_UserComponent $oController */
         $oController = oxNew(UserComponent::class);
 
-        $this->expectException(d3totp_wrongOtpException::class);
+        $this->expectException(wrongOtpException::class);
         $this->callMethod($oController, 'd3TotpHasValidTotp', ['', $oTotpMock]);
     }
 

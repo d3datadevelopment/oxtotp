@@ -18,7 +18,7 @@ namespace D3\Totp\Application\Model\Exceptions;
 use Exception;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 
-class d3totp_wrongOtpException extends StandardException
+class wrongOtpException extends StandardException implements totpExceptionInterface
 {
     /**
      * Default constructor

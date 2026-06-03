@@ -18,13 +18,15 @@ namespace D3\Totp\Application\Model;
 use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
-use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Services\CryptoService;
 use D3\Totp\Services\CryptoServiceInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Exception;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Model\BaseModel;
@@ -57,9 +59,10 @@ class d3totp extends BaseModel
 
     /**
      * @param string $userId
+     *
      * @throws ContainerExceptionInterface
      * @throws DBALException
-     * @throws Exception
+     * @throws DBALDriverException
      * @throws NotFoundExceptionInterface
      */
     public function loadByUserId(string $userId): void
@@ -87,10 +90,11 @@ class d3totp extends BaseModel
 
     /**
      * @param string $userId
+     *
      * @return bool
      * @throws ContainerExceptionInterface
      * @throws DBALException
-     * @throws Exception
+     * @throws DBALDriverException
      * @throws NotFoundExceptionInterface
      */
     public function checkIfAlreadyExist(string $userId): bool
@@ -240,27 +244,32 @@ class d3totp extends BaseModel
      *
      * @throws ContainerExceptionInterface
      * @throws DBALException
-     * @throws d3totp_wrongOtpException
      * @throws NotFoundExceptionInterface
+     * @throws totpExceptionInterface
      * @throws Exception
      */
     public function verify(User $user, string $totp, string $totpBc, string $seed = null): bool
     {
-        $blNotVerified = $this->getTotp($user, $seed)->verify($totp, null, $this->timeWindow) == false;
+        $verified = $this->getTotp($user, $seed)->verify($totp, null, $this->timeWindow);
 
-        if ($blNotVerified && null == $seed) {
-            $oBC = $this->d3GetBackupCodeListObject();
+        if ($verified) {
+            $this->assign([
+                'lastacceptedtimeslice' => floor(time() / 30),
+            ]);
+            $this->save();
 
-            $blNotVerified = $oBC->verify($totpBc) == false;
-
-            if ($blNotVerified) {
-                throw oxNew(d3totp_wrongOtpException::class);
-            }
-        } elseif ($blNotVerified && $seed !== null) {
-            throw oxNew(d3totp_wrongOtpException::class);
+            return true;
         }
 
-        return !$blNotVerified;
+        if (null == $seed) {
+            $verified = $this->d3GetBackupCodeListObject()->verify($totpBc);
+
+            if ($verified) {
+                return true;
+            }
+        }
+
+        throw oxNew(wrongOtpException::class);
     }
 
     /**

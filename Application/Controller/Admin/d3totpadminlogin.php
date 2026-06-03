@@ -19,7 +19,8 @@ use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
-use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\Driver\Exception;
@@ -199,7 +200,7 @@ class d3totpadminlogin extends AdminController
             $loginController->d3totpAfterLogin();
 
             return "admin_start";
-        } catch (d3totp_wrongOtpException $e) {
+        } catch (totpExceptionInterface $e) {
             Registry::getUtilsView()->addErrorToDisplay($e);
             $this->getLogger()->error($e->getMessage(), ['UserId'   => $userId]);
             $this->getLogger()->debug($e->getTraceAsString());
@@ -207,14 +208,14 @@ class d3totpadminlogin extends AdminController
     }
 
     /**
-     * @param string $sTotp
+     * @param string $totpCode
+     * @param string $totpBcCode
      * @param d3totp $totp
+     *
      * @return bool
      * @throws ContainerExceptionInterface
-     * @throws Exception
-     * @throws NotFoundExceptionInterface
      * @throws DBALException
-     * @throws d3totp_wrongOtpException
+     * @throws NotFoundExceptionInterface
      */
     public function d3TotpHasValidTotp(string $totpCode, string $totpBcCode, d3totp $totp): bool
     {

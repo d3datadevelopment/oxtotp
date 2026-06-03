@@ -21,7 +21,7 @@ use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\d3backupcode;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
-use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ForwardCompatibility\Result;
@@ -751,7 +751,7 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function verifyFailed()
     {
-        $this->expectException(d3totp_wrongOtpException::class);
+        $this->expectException(wrongOtpException::class);
 
         /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->d3getMockBuilder(d3backupcodelist::class)
@@ -783,7 +783,7 @@ class d3totpTest extends d3TotpUnitTestCase
      */
     public function verifyWithSeedFailed()
     {
-        $this->expectException(d3totp_wrongOtpException::class);
+        $this->expectException(wrongOtpException::class);
 
         /** @var d3backupcodelist|MockObject $oBackupCodeListMock */
         $oBackupCodeListMock = $this->d3getMockBuilder(d3backupcodelist::class)

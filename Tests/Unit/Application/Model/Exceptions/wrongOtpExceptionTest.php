@@ -16,15 +16,15 @@ declare(strict_types=1);
 namespace D3\Totp\Tests\Unit\Application\Model\Exceptions;
 
 use D3\TestingTools\Development\CanAccessRestricted;
-use D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use ReflectionException;
 
-class d3totp_wrongOtpExceptionTest extends d3TotpUnitTestCase
+class wrongOtpExceptionTest extends d3TotpUnitTestCase
 {
     use CanAccessRestricted;
 
-    /** @var d3totp_wrongOtpException */
+    /** @var wrongOtpException */
     protected $_oModel;
 
     /**
@@ -34,7 +34,7 @@ class d3totp_wrongOtpExceptionTest extends d3TotpUnitTestCase
     {
         parent::setUp();
 
-        $this->_oModel = oxNew(d3totp_wrongOtpException::class);
+        $this->_oModel = oxNew(wrongOtpException::class);
     }
 
     public function tearDown(): void
@@ -47,11 +47,11 @@ class d3totp_wrongOtpExceptionTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\Exceptions\d3totp_wrongOtpException::__construct
+     * @covers \D3\Totp\Application\Model\Exceptions\wrongOtpException::__construct
      */
     public function constructorHasRightDefaultMessage()
     {
-        $this->_oModel = oxNew(d3totp_wrongOtpException::class);
+        $this->_oModel = oxNew(wrongOtpException::class);
         $this->assertSame(
             'D3_TOTP_ERROR_UNVALID',
             $this->callMethod($this->_oModel, 'getMessage')

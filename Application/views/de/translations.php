@@ -63,6 +63,7 @@ return [
 
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
     'D3_TOTP_ERROR_REPLAY'                            => 'Das Einmalpasswort kann nicht noch einmal verwendet werden. Bitte warten Sie kurz.',
+    'D3_TOTP_ERROR_LOCKOUT'                           => 'Zu viele Anmeldeversuche, bitte versuchen Sie es später wieder.',
     'D3_TOTP_ALREADY_EXIST'                           => 'Die Registrierung wurde schon gespeichert.',
     'D3_TOTP_MISSING_VALIDATION'                      => 'Das bestätigende Einmalkennwort muss aus 6 Ziffern bestehen.',
     'D3_TOTP_EMPTY_SEED'                              => 'Der verwendete Schlüssel kann nicht ermittelt werden.',

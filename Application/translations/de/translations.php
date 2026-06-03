@@ -26,6 +26,7 @@ return [
     'D3_TOTP_BREADCRUMB'                              => 'Einmalpasswort-Anmeldung',
     'D3_TOTP_ERROR_UNVALID'                           => 'Das Einmalpasswort ist ungültig.',
     'D3_TOTP_ERROR_REPLAY'                            => 'Das Einmalpasswort kann nicht noch einmal verwendet werden. Bitte warten Sie kurz.',
+    'D3_TOTP_ERROR_LOCKOUT'                           => 'Zu viele Anmeldeversuche, bitte versuchen Sie es später wieder.',
     'D3_TOTP_ACCOUNT'                                 => '2-Faktor-Authentisierung',
     'D3_TOTP_ACCOUNT_DESC'                            => 'Sichern Sie Ihre Kontoanmeldung mit einem zweiten Faktor.',
 

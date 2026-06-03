@@ -19,14 +19,15 @@ use D3\Totp\Application\Model\d3backupcode;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\BigIntType;
+use Doctrine\DBAL\Types\DateTimeType;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20260603082417 extends AbstractMigration
+final class Version20260603211938 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'add last accepted time slice column';
+        return 'add locked until column';
     }
 
     public function preUp(Schema $schema): void
@@ -37,7 +38,7 @@ final class Version20260603082417 extends AbstractMigration
 
         $table = $schema->getTable('d3totp');
 
-        $this->skipIf($table->hasColumn('lastacceptedtimeslice'), 'Column already exists.');
+        $this->skipIf($table->hasColumn('lockeduntil'), 'Column already exists.');
     }
 
     /**
@@ -49,8 +50,9 @@ final class Version20260603082417 extends AbstractMigration
 
         $table = $schema->getTable('d3totp');
 
-        $table->addColumn('lastacceptedtimeslice', (new BigIntType())->getName())
-            ->setNotnull(false)
-            ->setDefault(null);
+        $this->skipIf($table->hasColumn('lockeduntil'), 'Column already exists.');
+
+        $table->addColumn('lockeduntil', (new DateTimeType())->getName())
+            ->setNotnull(false);
     }
 }

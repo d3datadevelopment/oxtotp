@@ -18,6 +18,7 @@ namespace D3\Totp\Application\Model;
 use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
+use D3\Totp\Application\Model\Exceptions\tooManyAttemptsException;
 use D3\Totp\Application\Model\Exceptions\replayException;
 use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
 use D3\Totp\Application\Model\Exceptions\wrongOtpException;
@@ -40,6 +41,9 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class d3totp extends BaseModel
 {
+    public const LOCK_THRESHOLD = 5;
+    public const LOCKTIME_IN_SECONDS = 60;
+
     protected $_sCoreTable = 'd3totp';
     public null|string $userId = null;
     public null|TOTP $totp = null;
@@ -47,7 +51,8 @@ class d3totp extends BaseModel
     protected CryptoServiceInterface $crypto;
 
     /**
-     * d3totp constructor.
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __construct()
     {
@@ -188,6 +193,7 @@ class d3totp extends BaseModel
     }
 
     /**
+     * @param User $user
      * @param string|null $seed
      * @return TOTP
      */
@@ -251,20 +257,17 @@ class d3totp extends BaseModel
      */
     public function verify(User $user, string $totp, string $totpBc, string $seed = null): bool
     {
-        $currentSlice = floor(time() / 30);
-        $lastAcceptedTimeSlice = $this->getFieldData('lastacceptedtimeslice');
-
-        if ($lastAcceptedTimeSlice && $currentSlice <= $lastAcceptedTimeSlice) {
-            throw oxNew(replayException::class);
-        }
+        $this->assertReplayProtection();
+        $this->assertNotLocked();
 
         $verified = $this->getTotp($user, $seed)->verify($totp, null, $this->timeWindow);
 
         if ($verified) {
+            $acceptedSlice = floor(time() / 30);
             $this->assign([
-                'lastacceptedtimeslice' => floor(time() / 30),
+                'lastacceptedtimeslice' => $acceptedSlice,
             ]);
-            $this->save();
+            $this->resetFailedAttempts();
 
             return true;
         }
@@ -273,9 +276,12 @@ class d3totp extends BaseModel
             $verified = $this->d3GetBackupCodeListObject()->verify($totpBc);
 
             if ($verified) {
+                $this->resetFailedAttempts();
                 return true;
             }
         }
+
+        $this->registerFailedAttempt();
 
         throw oxNew(wrongOtpException::class);
     }
@@ -372,5 +378,54 @@ class d3totp extends BaseModel
         $oBackupCodeList->deleteAllFromUser($this->getFieldData('oxuserid'));
 
         return parent::delete($oxid);
+    }
+
+    protected function assertReplayProtection(): void
+    {
+        $currentSlice = floor(time() / 30);
+        $lastAcceptedTimeSlice = $this->getFieldData('lastacceptedtimeslice');
+
+        if ($lastAcceptedTimeSlice && $currentSlice <= $lastAcceptedTimeSlice) {
+            throw oxNew(replayException::class);
+        }
+    }
+
+    protected function assertNotLocked(): void
+    {
+        $lockedUntil = $this->getFieldData('lockeduntil');
+
+        if ($lockedUntil && strtotime($lockedUntil) > time()) {
+            throw oxNew(tooManyAttemptsException::class);
+        }
+    }
+
+    protected function resetFailedAttempts(): void
+    {
+        $this->assign([
+            'failedattempts' => 0,
+            'lockeduntil' => null,
+        ]);
+
+        $this->save();
+    }
+
+    protected function registerFailedAttempt(): void
+    {
+        $failedAttempts =
+            (int) $this->getFieldData('failedattempts') + 1;
+
+        $data = [
+            'failedattempts' => $failedAttempts,
+        ];
+
+        if ($failedAttempts >= self::LOCK_THRESHOLD) {
+            $data['lockeduntil'] = date(
+                'Y-m-d H:i:s',
+                time() + self::LOCKTIME_IN_SECONDS
+            );
+        }
+
+        $this->assign($data);
+        $this->save();
     }
 }

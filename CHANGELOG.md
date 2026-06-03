@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - installable in OXID eShop 7.0 to 7.4
 - replay protection
+- brute force protection
 ### Changed
 - use separated session variable names between front and backend
 - use generated master key instead of static one

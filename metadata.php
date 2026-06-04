@@ -71,13 +71,7 @@ $aModule = [
         'd3_account_totp'   =>  d3_account_totp::class,
         'd3totpadminlogin'  =>  d3totpadminlogin::class,
     ],
-    'templates'                 => [
-        '@'.Constants::OXID_MODULE_ID.'/admin/d3user_totp.tpl'      => 'views/smarty/admin/tpl/d3user_totp.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/admin/d3totplogin.tpl'      => 'views/smarty/admin/tpl/d3totplogin.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/admin/inc/bootstrap.tpl'    => 'views/smarty/admin/inc/bootstrap.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/tpl/d3_account_totp.tpl'    => 'views/smarty/tpl/d3_account_totp.tpl',
-        '@'.Constants::OXID_MODULE_ID.'/tpl/d3totplogin.tpl'        => 'views/smarty/tpl/d3totplogin.tpl',
-    ],
+    'templates'                 => [],
     'settings'                => [
         [
             'group' => 'd3totp_main',
@@ -100,26 +94,5 @@ $aModule = [
         'onActivate'        => ModuleSetup\Events::class.'::onActivate',
         'onDeactivate'      => ModuleSetup\Events::class.'::onDeactivate',
     ],
-    'blocks'                => [
-        [
-            'template'      => 'login.tpl',
-            'block'         => 'admin_login_form',
-            'file'          => 'views/smarty/admin/blocks/d3totp_login_admin_login_form.tpl',
-        ],
-        [
-            'template'      => 'page/account/inc/account_menu.tpl',
-            'block'         => 'account_menu',
-            'file'          => 'views/smarty/blocks/page/account/inc/account_menu.tpl',
-        ],
-        [
-            'template'      => 'page/account/dashboard.tpl',
-            'block'         => 'account_dashboard_col2',
-            'file'          => 'views/smarty/blocks/page/account/account_dashboard_col2_wave.tpl',
-        ],
-        [
-            'template'      => 'widget/header/servicebox.tpl',
-            'block'         => 'widget_header_servicebox_items',
-            'file'          => 'views/smarty/blocks/widget/header/widget_header_servicebox_items.tpl',
-        ],
-    ],
+    'blocks'                => [],
 ];

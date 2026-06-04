@@ -29,10 +29,13 @@ This package requires an OXID eShop installed with Composer in one of the follow
 
 - 7.0.x
 - 7.1.x
+- 7.2.x
+- 7.3.x
+- 7.4.x
 
 and its requirements.
 
-The Apex (Twig based) and Wave (Smarty based) themes are supported by default. Other themes may require customisation.
+The Apex (Twig based) theme is supported by default. Other themes may require customisation.
 
 ## Getting Started
 

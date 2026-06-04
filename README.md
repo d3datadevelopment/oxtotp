@@ -29,10 +29,13 @@ Dieses Paket erfordert einen mit Composer installierten OXID eShop in einer der 
 
 - 7.0.x
 - 7.1.x
+- 7.2.x
+- 7.3.x
+- 7.4.x
 
 und dessen Anforderungen.
 
-Im Standard wird das Apex- (Twig) und Wave- (Smarty) Theme unterstützt. Andere Themes können Anpassungen erfordern.
+Im Standard wird das Apex-Theme (Twig) unterstützt. Andere Themes können Anpassungen erfordern.
 
 ## Erste Schritte
 

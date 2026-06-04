@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.0.0.0](https://git.d3data.de/D3Public/oxtotp/compare/2.1.1.0...3.0.0.0) - 2026-06-XX
 ### Added
 - installable in OXID eShop 7.0 to 7.4
+- Twig based template support (Apex theme)
 - replay protection
 - brute force protection
 ### Changed
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - use hardened backup codes
 ### Removed
 - support for OXID eShop < 7
+- support for Smarty based templates
 
 ## [2.1.1.0](https://git.d3data.de/D3Public/oxtotp/compare/2.1.0.0...2.1.1.0) - 2023-09-07
 ### Added

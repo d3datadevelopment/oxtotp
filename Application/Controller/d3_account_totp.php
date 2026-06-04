@@ -65,11 +65,9 @@ class d3_account_totp extends AccountController
                 /** @var d3_totp_user $user */
                 $user = $this->getUser();
                 $oTotp = $this->getTotpObject();
-
                 Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
 
                 $oTotpBackupCodes = $this->getBackupCodeListObject();
-
                 $aParams = [
                     'd3totp__usetotp' => 1,
                     'd3totp__oxuserid'  => $user->getId(),
@@ -92,7 +90,6 @@ class d3_account_totp extends AccountController
                 $oTotp->setId();
                 $oTotp->verify($user, $otp, '', $seed);
                 $oTotpBackupCodes->generateBackupCodes($user->getId());
-
                 $oTotp->save();
                 $oTotpBackupCodes->save();
             } catch (Exception $oExcp) {

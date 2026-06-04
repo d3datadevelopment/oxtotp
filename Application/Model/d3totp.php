@@ -331,9 +331,8 @@ class d3totp extends BaseModel
         );
 
         if (null !== $result) {
-            $this->assign(['seed' => $this->encrypt($result)]);
+            $this->setSecret($result);
             $this->save();
-
             return $result;
         }
 
@@ -348,8 +347,11 @@ class d3totp extends BaseModel
         $hmac = substr($payload, $ivlen, $sha2len = 32);
         $ciphertext_raw = substr($payload, $ivlen + $sha2len);
         $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+
         $calcmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
-        if (hash_equals($hmac, $calcmac)) { // PHP 5.6+ compute attack-safe comparison
+        $legacyCalcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+
+        if (hash_equals($hmac, $calcmac) || hash_equals($hmac, $legacyCalcmac)) {
             return $original_plaintext;
         }
 

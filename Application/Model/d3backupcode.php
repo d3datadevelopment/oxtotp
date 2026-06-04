@@ -67,7 +67,6 @@ class d3backupcode extends BaseModel
             $code,
             PASSWORD_ARGON2ID
         );
-
     }
 
     public function d3GetUser(): User

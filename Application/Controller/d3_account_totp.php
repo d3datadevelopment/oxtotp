@@ -25,6 +25,8 @@ use OxidEsales\Eshop\Application\Controller\AccountController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsView;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Domain\Authentication\Bridge\PasswordServiceBridgeInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -107,13 +109,31 @@ class d3_account_totp extends AccountController
      */
     public function delete(): void
     {
-        if (Registry::getRequest()->getRequestEscapedParameter('totp_use') !== '1') {
-            $oUser = $this->getUser();
-            $oTotp = $this->getTotpObject();
-            if ($oUser instanceof User && $oUser->getId()) {
-                $oTotp->loadByUserId($oUser->getId());
-                $oTotp->delete();
+        try {
+            if ( Registry::getRequest()->getRequestEscapedParameter( 'totp_use' ) !== '1' ) {
+                $user  = $this->getUser();
+                $oTotp = $this->getTotpObject();
+                if ( $user instanceof User && $user->getId() ) {
+                    $oTotp->loadByUserId( $user->getId() );
+                    $this->verifyPassword(
+                        $user,
+                        trim( Registry::getRequest()->getRequestEscapedParameter('password'))
+                    );
+                    $oTotp->delete();
+                }
             }
+        } catch ( Exception $oExcp ) {
+            Registry::get( UtilsView::class )->addErrorToDisplay( $oExcp->getMessage() );
         }
+    }
+
+    protected function verifyPassword(User $user, string $password): void
+    {
+        $container = ContainerFactory::getInstance()->getContainer();
+
+        Assert::that(
+            $container->get(PasswordServiceBridgeInterface::class)
+                ->verifyPassword($password, $user->getFieldData('oxpassword'))
+        )->true(Registry::getLang()->translateString('D3_TOTP_ACCOUNT_PASSWORD_ERR'));
     }
 }

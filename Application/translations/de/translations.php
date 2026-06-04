@@ -29,6 +29,8 @@ return [
     'D3_TOTP_ERROR_LOCKOUT'                           => 'Zu viele Anmeldeversuche, bitte versuchen Sie es später wieder.',
     'D3_TOTP_ACCOUNT'                                 => '2-Faktor-Authentisierung',
     'D3_TOTP_ACCOUNT_DESC'                            => 'Sichern Sie Ihre Kontoanmeldung mit einem zweiten Faktor.',
+    'D3_TOTP_ACCOUNT_PASSWORD'                        => 'Geben Sie zum Bestätigen der Deaktivierung bitte Ihr Passwort ein.',
+    'D3_TOTP_ACCOUNT_PASSWORD_ERR'                    => 'Das Passwort ist falsch. Die Deaktivierung wird abgebrochen.',
 
     'D3_TOTP_REGISTERNEW'                             => 'neue Registrierung erstellen',
     'D3_TOTP_QRCODE'                                  => 'QR-Code',

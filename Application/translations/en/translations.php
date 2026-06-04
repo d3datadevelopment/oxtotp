@@ -29,6 +29,8 @@ return [
     'D3_TOTP_ERROR_LOCKOUT'                           => 'Too many login attempts. Please try again later.',
     'D3_TOTP_ACCOUNT'                                 => '2-factor authentication',
     'D3_TOTP_ACCOUNT_DESC'                            => 'Secure your account login with a second factor.',
+    'D3_TOTP_ACCOUNT_PASSWORD'                        => 'Please enter your password to confirm the deactivation.',
+    'D3_TOTP_ACCOUNT_PASSWORD_ERR'                    => 'The password is incorrect. The deactivation process has been cancelled.',
 
     'D3_TOTP_REGISTERNEW'                             => 'create a new registration',
     'D3_TOTP_QRCODE'                                  => 'QR code',

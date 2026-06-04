@@ -63,10 +63,23 @@
                             {{ translate({ ident: "D3_TOTP_STATUS" }) }}
                         </h2>
                         <div class="{# apex #} card-body">
-                            <input id="totp_use" value="1" type="checkbox" name="totp_use" {% if totp.getId() %} checked{% endif %} {% if false == totp.getId() %}onclick="toggle('registerNew'); toggle('submitBtn');"{% endif %}>
+                            <input id="totp_use" value="1" type="checkbox" name="totp_use" data-was-enabled="{% if totp.getId() %}1{% else %}0{% endif %}" {% if totp.getId() %} checked{% endif %} {% if false == totp.getId() %}onclick="toggle('registerNew'); toggle('submitBtn');"{% endif %}>
                             <label for="totp_use">{{ translate({ ident: "D3_TOTP_ACCOUNT_USE" }) }}</label>
                         </div>
                     </div>
+
+                    {% if totp.getId() %}
+                        <div id="disableTotpPasswordContainer" class="mb-3 form-floating{% if aErrors.oxuser__oxpassword %} is-invalid{% endif %}">
+                            <input type="password" id="password" name="password" class="form-control" required placeholder="{{ translate({ ident: "D3_TOTP_ACCOUNT_PASSWORD" }) }}">
+                            <label for="password">{{ translate({ ident: "D3_TOTP_ACCOUNT_PASSWORD" }) }}</label>
+                            {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxpassword} %}
+                        </div>
+
+                        {{ script({
+                            add: include('@d3totp/tpl/d3_account_totp.js.twig'),
+                            dynamic: __oxid_include_dynamic
+                        }) }}
+                    {% endif %}
 
                     {% if false == totp.getId() %}
                         <div class="registerNew {# apex #} card" id="registerNew">

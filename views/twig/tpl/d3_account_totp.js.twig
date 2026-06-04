@@ -1,0 +1,21 @@
+const totpCheckbox = document.getElementById('totp_use');
+const passwordContainer = document.getElementById('disableTotpPasswordContainer');
+const passwordInput = document.getElementById('password');
+
+function updatePasswordRequirement() {
+    const wasEnabled = totpCheckbox.dataset.wasEnabled === '1';
+    const isEnabled = totpCheckbox.checked;
+
+    const mustConfirmDisable = wasEnabled && !isEnabled;
+console.log(wasEnabled)
+console.log(!isEnabled);
+console.log(passwordContainer.classList);
+    passwordContainer.classList.toggle('d-none', !mustConfirmDisable);
+console.log(passwordContainer.classList);
+
+    passwordInput.required = mustConfirmDisable;
+}
+
+totpCheckbox.addEventListener('change', updatePasswordRequirement);
+
+updatePasswordRequirement();

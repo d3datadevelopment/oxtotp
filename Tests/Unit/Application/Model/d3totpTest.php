@@ -653,10 +653,10 @@ class d3totpTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\d3totp::saveSecret
+     * @covers \D3\Totp\Application\Model\d3totp::setSecret
      * @covers \D3\Totp\Application\Model\d3totp::getFieldData
      */
-    public function saveSecretPass()
+    public function setSecretPass()
     {
         /** @var d3totp|MockObject $oModelMock */
         $oModelMock = $this->d3getMockBuilder(d3totp::class)
@@ -666,7 +666,7 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'saveSecret', ['newSecret']);
+        $this->callMethod($this->_oModel, 'setSecret', ['newSecret']);
         $this->assertSame(
             'enc_secret',
             $this->callMethod($this->_oModel, 'getFieldData', ['seed'])

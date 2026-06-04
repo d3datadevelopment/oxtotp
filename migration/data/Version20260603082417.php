@@ -15,11 +15,9 @@ declare(strict_types=1);
 
 namespace D3\Totp\Migrations;
 
-use D3\Totp\Application\Model\d3backupcode;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\BigIntType;
-use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\Migrations\AbstractMigration;
 
 final class Version20260603082417 extends AbstractMigration

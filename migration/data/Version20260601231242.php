@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Migrations;
 
-use D3\Totp\Application\Model\d3backupcode;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\IntegerType;

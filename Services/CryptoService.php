@@ -37,7 +37,7 @@ class CryptoService implements CryptoServiceInterface
             self::KEY_VERSION_LEGACY => $this->getLegacyKey(),
             self::KEY_VERSION_MASTER_KEY => $this->getMasterKey(),
             default => throw new RuntimeException(
-                "Unknown key version {$version}"
+                "Unknown key version $version"
             )
         };
     }

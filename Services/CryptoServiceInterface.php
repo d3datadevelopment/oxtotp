@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Services;
 
-use D3\Totp\Application\Model\Constants;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Facade\ModuleSettingServiceInterface;
 
 interface CryptoServiceInterface

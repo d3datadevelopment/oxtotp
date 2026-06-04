@@ -239,7 +239,7 @@ class d3totp extends BaseModel
     /**
      * @param string $seed
      */
-    public function saveSecret(string $seed): void
+    public function setSecret(string $seed): void
     {
         $this->assign([
             'seed'  => $this->encrypt($seed),
@@ -399,8 +399,14 @@ class d3totp extends BaseModel
         }
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     protected function resetFailedAttempts(): void
     {
+        if (!$this->getId()) return;
+
         $this->assign([
             'failedattempts' => 0,
             'lockeduntil' => null,
@@ -409,8 +415,14 @@ class d3totp extends BaseModel
         $this->save();
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     protected function registerFailedAttempt(): void
     {
+        if (!$this->getId()) return;
+
         $failedAttempts =
             (int) $this->getFieldData('failedattempts') + 1;
 

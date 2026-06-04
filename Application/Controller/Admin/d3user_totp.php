@@ -111,11 +111,11 @@ class d3user_totp extends AdminDetailsController
                 Assert::that($otp)
                     ->integerish('D3_TOTP_MISSING_VALIDATION')
                     ->length(6, 'D3_TOTP_MISSING_VALIDATION');
-                $oTotp->saveSecret($seed);
+                $oTotp->setSecret($seed);
                 $oTotp->assign($aParams);
+                $oTotp->setId();
                 $oTotp->verify($user, $otp, '', $seed);
                 $oTotpBackupCodes->generateBackupCodes($this->getEditObjectId());
-                $oTotp->setId();
             }
             $oTotp->save();
 

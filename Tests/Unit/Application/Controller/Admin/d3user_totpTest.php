@@ -235,7 +235,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'load',
                 'save',
                 'verify',
-                'saveSecret',
+                'setSecret',
                 'assign',
                 'checkIfAlreadyExist',
             ])
@@ -244,7 +244,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oTotpMock->method('load')->willReturn(true);
         $oTotpMock->expects($this->never())->method('save')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willThrowException(new Exception());
-        $oTotpMock->method('saveSecret');
+        $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
 
@@ -289,7 +289,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'load',
                 'save',
                 'verify',
-                'saveSecret',
+                'setSecret',
                 'assign',
                 'checkIfAlreadyExist',
             ])
@@ -297,7 +297,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oTotpMock->method('load')->willReturn(true);
         $oTotpMock->expects($this->never())->method('save')->willReturn(true);
         $oTotpMock->expects($this->never())->method('verify')->willThrowException(new Exception());
-        $oTotpMock->method('saveSecret');
+        $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->method('checkIfAlreadyExist')->willReturn(true);
 
@@ -342,7 +342,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'load',
                 'save',
                 'verify',
-                'saveSecret',
+                'setSecret',
                 'assign',
                 'checkIfAlreadyExist',
             ])
@@ -351,7 +351,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oTotpMock->expects($this->never())->method('load')->willReturn(true);
         $oTotpMock->expects($this->once())->method('save')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willReturn(true);
-        $oTotpMock->method('saveSecret');
+        $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
 
@@ -404,7 +404,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
                 'load',
                 'save',
                 'verify',
-                'saveSecret',
+                'setSecret',
                 'assign',
                 'checkIfAlreadyExist',
             ])
@@ -413,7 +413,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oTotpMock->expects($this->once())->method('load')->willReturn(true);
         $oTotpMock->expects($this->once())->method('save')->willReturn(true);
         $oTotpMock->expects($this->never())->method('verify')->willReturn(true);
-        $oTotpMock->method('saveSecret');
+        $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
 

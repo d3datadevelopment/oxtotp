@@ -18,7 +18,6 @@ namespace D3\Totp\Migrations;
 use D3\Totp\Application\Model\d3backupcode;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\Migrations\AbstractMigration;
 
 final class Version20260601232203 extends AbstractMigration

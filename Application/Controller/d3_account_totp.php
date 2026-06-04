@@ -87,11 +87,11 @@ class d3_account_totp extends AccountController
                     ->integerish('D3_TOTP_MISSING_VALIDATION')
                     ->length(6, 'D3_TOTP_MISSING_VALIDATION');
 
-                $oTotp->saveSecret($seed);
+                $oTotp->setSecret($seed);
                 $oTotp->assign($aParams);
+                $oTotp->setId();
                 $oTotp->verify($user, $otp, '', $seed);
                 $oTotpBackupCodes->generateBackupCodes($user->getId());
-                $oTotp->setId();
 
                 $oTotp->save();
                 $oTotpBackupCodes->save();
@@ -127,6 +127,14 @@ class d3_account_totp extends AccountController
         }
     }
 
+    /**
+     * @param User   $user
+     * @param string $password
+     *
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function verifyPassword(User $user, string $password): void
     {
         $container = ContainerFactory::getInstance()->getContainer();

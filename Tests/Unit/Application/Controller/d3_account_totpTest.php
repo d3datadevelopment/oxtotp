@@ -223,13 +223,13 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oTotpMock = $this->d3getMockBuilder(d3totp::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
-                'saveSecret',
+                'setSecret',
                 'assign',
                 'verify',
                 'save',
             ])
             ->getMock();
-        $oTotpMock->method('saveSecret');
+        $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willThrowException(new Exception('foo'));
         $oTotpMock->expects($this->never())->method('save');
@@ -281,14 +281,14 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oTotpMock = $this->d3getMockBuilder(d3totp::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
-                'saveSecret',
+                'setSecret',
                 'assign',
                 'verify',
                 'save',
                 'setId',
             ])
             ->getMock();
-        $oTotpMock->method('saveSecret');
+        $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->method('verify')->willReturn(true);
         $oTotpMock->method('setId')->willReturn(true);

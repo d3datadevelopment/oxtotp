@@ -53,7 +53,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
             $totp->loadByUserId($oUser->getId());
 
             if ($totp->isActive()
-                && !$this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH)
+                && $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH) != $oUser->getId()
             ) {
                 $this->d3TotpGetSession()->setVariable(
                     d3totp_conf::SESSION_CURRENTCLASS,

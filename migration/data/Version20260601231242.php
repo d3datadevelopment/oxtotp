@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Migrations;
 
+use D3\Totp\Application\Model\d3backupcode;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\IntegerType;
@@ -40,6 +41,7 @@ final class Version20260601231242 extends AbstractMigration
 
         $table->addColumn('CODEVERSION', (new IntegerType())->getName())
             ->setLength(1)
-            ->setNotnull(true);
+            ->setNotnull(true)
+            ->setDefault(d3backupcode::VERSION_MD5);  // handling for legacy items only
     }
 }

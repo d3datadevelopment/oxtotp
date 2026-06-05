@@ -34,6 +34,11 @@ final class Version20260601232203 extends AbstractMigration
     {
         $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
-        $this->addSql('UPDATE d3totp_backupcodes SET codeversion = ? WHERE 1;', [d3backupcode::VERSION_MD5]);
+        $table = $schema->getTable('d3totp_backupcodes');
+
+        $this->skipIf(!$table->hasColumn('CODEVERSION'), 'Column missing.');
+
+        $table->getColumn('CODEVERSION')
+            ->setDefault(d3backupcode::VERSION_ARGON);
     }
 }

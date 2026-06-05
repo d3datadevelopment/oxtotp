@@ -24,11 +24,13 @@ use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
 use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Services\CryptoService;
 use D3\Totp\Services\CryptoServiceInterface;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
+use Lcobucci\Clock\SystemClock;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Model\BaseModel;
@@ -36,6 +38,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\ConnectionProviderInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -193,19 +196,37 @@ class d3totp extends BaseModel
     }
 
     /**
-     * @param User $user
+     * @param User        $user
      * @param string|null $seed
+     *
      * @return TOTP
+     * @throws Exception
      */
     public function getTotp(User $user, string $seed = null): TOTP
     {
         if (null == $this->totp) {
-            $this->totp = TOTP::create($seed ?: $this->getSavedSecret());
+            $this->totp = TOTP::create(
+                $seed ?: $this->getSavedSecret(),
+                TOTP::DEFAULT_PERIOD,
+                TOTP::DEFAULT_DIGEST,
+                TOTP::DEFAULT_DIGITS,
+                TOTP::DEFAULT_EPOCH,
+                $this->getClock()
+            );
             $this->totp->setLabel($user->getFieldData('oxusername') ?: '');
             $this->totp->setIssuer(Registry::getConfig()->getActiveShop()->getFieldData('oxname'));
         }
 
         return $this->totp;
+    }
+
+    /**
+     * @return ClockInterface
+     * @throws Exception
+     */
+    protected function getClock(): ClockInterface
+    {
+        return new SystemClock(new DateTimeZone('UTC'));
     }
 
     /**
@@ -257,13 +278,16 @@ class d3totp extends BaseModel
      */
     public function verify(User $user, string $totp, string $totpBc, string $seed = null): bool
     {
-        $this->assertReplayProtection();
+        $clock = $this->getClock();
+        $timestamp = $clock->now()->getTimestamp();
+        $acceptedSlice = floor($timestamp / 30);
+
+        $this->assertReplayProtection($acceptedSlice);
         $this->assertNotLocked();
 
-        $verified = $this->getTotp($user, $seed)->verify($totp, null, $this->timeWindow);
+        $verified = $this->getTotp($user, $seed)->verify($totp, $timestamp, $this->timeWindow);
 
         if ($verified) {
-            $acceptedSlice = floor(time() / 30);
             $this->assign([
                 'lastacceptedtimeslice' => $acceptedSlice,
             ]);
@@ -382,9 +406,8 @@ class d3totp extends BaseModel
         return parent::delete($oxid);
     }
 
-    protected function assertReplayProtection(): void
+    protected function assertReplayProtection(float $currentSlice): void
     {
-        $currentSlice = floor(time() / 30);
         $lastAcceptedTimeSlice = $this->getFieldData('lastacceptedtimeslice');
 
         if ($lastAcceptedTimeSlice && $currentSlice <= $lastAcceptedTimeSlice) {

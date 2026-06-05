@@ -122,6 +122,9 @@ class d3user_totp extends AdminDetailsController
             $oTotpBackupCodes->save();
         } catch (Exception $exception) {
             $this->_sSaveError = $exception->getMessage();
+        } finally {
+            Registry::getSession()->deleteVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME);
+            Registry::getSession()->deleteVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME);
         }
     }
 

@@ -94,6 +94,9 @@ class d3_account_totp extends AccountController
                 $oTotpBackupCodes->save();
             } catch (Exception $oExcp) {
                 Registry::get(UtilsView::class)->addErrorToDisplay($oExcp->getMessage());
+            } finally {
+                Registry::getSession()->deleteVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME);
+                Registry::getSession()->deleteVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME);
             }
         }
     }

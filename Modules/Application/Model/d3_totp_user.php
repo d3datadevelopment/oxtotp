@@ -15,10 +15,16 @@ declare(strict_types=1);
 
 namespace D3\Totp\Modules\Application\Model;
 
+use Assert\Assert;
+use Assert\InvalidArgumentException;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
+use Doctrine\DBAL\Driver\Exception as DBALDriverException;
+use Doctrine\DBAL\Exception as DBALException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class d3_totp_user extends d3_totp_user_parent
 {
@@ -50,15 +56,25 @@ class d3_totp_user extends d3_totp_user_parent
         return Registry::getSession();
     }
 
+    /**
+     * @return d3totp
+     * @throws DBALDriverException
+     * @throws DBALException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function d3getSessionedTotp(): d3totp
     {
         $totp = $this->d3getTotp();
 
-        if ($this->isLoaded()) {
+        try {
+            Assert::that($this->isLoaded())->true();
             $totp->loadByUserId($this->getId());
+
+            Assert::that($totp->isLoaded())->false();
             $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, $totp->getTotp($this)->getSecret());
             $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME, $totp->getTotp($this)->getLabel());
-        }
+        } catch (InvalidArgumentException) {}
 
         return $totp;
     }

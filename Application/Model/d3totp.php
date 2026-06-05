@@ -50,7 +50,7 @@ class d3totp extends BaseModel
     protected $_sCoreTable = 'd3totp';
     public null|string $userId = null;
     public null|TOTP $totp = null;
-    protected int $timeWindow = 2;
+    protected int $leeway = 2;  // accepted OTP code from X seconds before and after current time
     protected CryptoServiceInterface $crypto;
 
     /**
@@ -280,12 +280,12 @@ class d3totp extends BaseModel
     {
         $clock = $this->getClock();
         $timestamp = $clock->now()->getTimestamp();
-        $acceptedSlice = floor($timestamp / 30);
+        $acceptedSlice = floor(($timestamp + $this->leeway) / 30);
 
         $this->assertReplayProtection($acceptedSlice);
         $this->assertNotLocked();
 
-        $verified = $this->getTotp($user, $seed)->verify($totp, $timestamp, $this->timeWindow);
+        $verified = $this->getTotp($user, $seed)->verify($totp, $timestamp, $this->leeway);
 
         if ($verified) {
             $this->assign([

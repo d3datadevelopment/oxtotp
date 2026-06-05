@@ -26,6 +26,19 @@ final class Version20260601222327 extends AbstractMigration
         return 'Extend backupcode table columns.';
     }
 
+    public function preUp( Schema $schema ): void
+    {
+        $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+
+        parent::preUp( $schema );
+
+        $this->abortIf(!$schema->hasTable('d3totp_backupcodes'), 'Backup codes table does not exist.');
+
+        $table = $schema->getTable('d3totp_backupcodes');
+
+        $this->abortIf(!$table->hasColumn('BACKUPCODE'), 'Column does not exists.');
+    }
+
     /**
      * @throws Exception
      */

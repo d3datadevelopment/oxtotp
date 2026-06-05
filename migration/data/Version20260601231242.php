@@ -28,6 +28,19 @@ final class Version20260601231242 extends AbstractMigration
         return 'add backupcode version column';
     }
 
+    public function preUp( Schema $schema ): void
+    {
+        $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+
+        parent::preUp( $schema );
+
+        $this->abortIf(!$schema->hasTable('d3totp_backupcodes'), 'Backup codes table does not exist.');
+
+        $table = $schema->getTable('d3totp_backupcodes');
+
+        $this->skipIf($table->hasColumn('CODEVERSION'), 'Column already exists.');
+    }
+
     /**
      * @throws Exception
      */
@@ -36,8 +49,6 @@ final class Version20260601231242 extends AbstractMigration
         $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
         $table = $schema->getTable('d3totp_backupcodes');
-
-        $this->skipIf($table->hasColumn('CODEVERSION'), 'Column already exists.');
 
         $table->addColumn('CODEVERSION', (new IntegerType())->getName())
             ->setLength(1)

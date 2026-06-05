@@ -33,6 +33,8 @@ final class Version20260603082417 extends AbstractMigration
 
         parent::preUp($schema);
 
+        $this->abortIf(!$schema->hasTable('d3totp'), 'Totp table does not exist.');
+
         $table = $schema->getTable('d3totp');
 
         $this->skipIf($table->hasColumn('lastacceptedtimeslice'), 'Column already exists.');

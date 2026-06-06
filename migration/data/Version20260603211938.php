@@ -20,6 +20,9 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\DateTimeType;
 use Doctrine\Migrations\AbstractMigration;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Version20260603211938 extends AbstractMigration
 {
     public function getDescription(): string

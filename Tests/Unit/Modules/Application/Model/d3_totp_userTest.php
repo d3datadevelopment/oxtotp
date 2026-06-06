@@ -102,7 +102,12 @@ class d3_totp_userTest extends d3TotpUnitTestCase
      */
     public function d3getSessionedTotpReturnsRightInstance()
     {
-        $sut = oxNew(User::class);
+        $sut = $this->getMockBuilder(d3_totp_user::class)
+            ->onlyMethods(['isLoaded', 'getId', 'getFieldData'])
+            ->getMock();
+        $sut->method('isLoaded')->willReturn(true);
+        $sut->method('getId')->willReturn('userIdFixture');
+        $sut->method('getFieldData')->willReturn('fieldDataFixture');
 
         $otp = $this->callMethod(
             $sut,
@@ -114,9 +119,34 @@ class d3_totp_userTest extends d3TotpUnitTestCase
             $otp
         );
 
-        $this->assertSame(
-            $otp,
-            Registry::getSession()->getVariable(d3totp_conf::OTP_SESSION_VARNAME)
+        $this->assertIsString(
+            Registry::getSession()->getVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME)
+        );
+        $this->assertIsString(
+            Registry::getSession()->getVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME)
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\Totp\Modules\Application\Model\d3_totp_user::d3getSessionedTotp
+     */
+    public function d3getSessionedTotpWithoutUser()
+    {
+        $sut = $this->getMockBuilder(d3_totp_user::class)
+            ->onlyMethods(['isLoaded'])
+            ->getMock();
+        $sut->method('isLoaded')->willReturn(false);
+
+        $otp = $this->callMethod(
+            $sut,
+            'd3getSessionedTotp'
+        );
+
+        $this->assertInstanceOf(
+            d3totp::class,
+            $otp
         );
     }
 

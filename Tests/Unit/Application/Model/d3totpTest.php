@@ -21,11 +21,14 @@ use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\d3backupcode;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
+use D3\Totp\Application\Model\Exceptions\replayException;
+use D3\Totp\Application\Model\Exceptions\tooManyAttemptsException;
 use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ForwardCompatibility\Result;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Generator;
 use OTPHP\TOTP;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
@@ -58,6 +61,15 @@ class d3totpTest extends d3TotpUnitTestCase
         parent::tearDown();
 
         unset($this->_oModel);
+    }
+
+    protected function getUserFixture(string $username = 'username'): User
+    {
+        $user = oxNew(User::class);
+        $user->setId('foo');
+        $user->assign(['oxusername' => $username]);
+
+        return $user;
     }
 
     /**
@@ -517,7 +529,7 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $this->assertSame(
             $otpMock,
-            $this->callMethod($this->_oModel, 'getTotp')
+            $this->callMethod($this->_oModel, 'getTotp', [$this->getUserFixture()])
         );
     }
 
@@ -537,17 +549,15 @@ class d3totpTest extends d3TotpUnitTestCase
         /** @var d3totp|MockObject $oModelMock */
         $oModelMock = $this->d3getMockBuilder(d3totp::class)
             ->onlyMethods([
-                'getUser',
                 'getSavedSecret',
             ])
             ->getMock();
-        $oModelMock->method('getUser')->willReturn($oUserMock);
         $oModelMock->method('getSavedSecret')->willReturn('savedSecret');
 
         $this->_oModel = $oModelMock;
 
         /** @var TOTP $oTotp */
-        $oTotp = $this->callMethod($this->_oModel, 'getTotp');
+        $oTotp = $this->callMethod($this->_oModel, 'getTotp', [$oUserMock]);
 
         $this->assertInstanceOf(TOTP::class, $oTotp);
         $this->assertSame('username', $oTotp->getLabel());
@@ -572,17 +582,15 @@ class d3totpTest extends d3TotpUnitTestCase
         /** @var d3totp|MockObject $oModelMock */
         $oModelMock = $this->d3getMockBuilder(d3totp::class)
             ->onlyMethods([
-                'getUser',
                 'getSavedSecret',
             ])
             ->getMock();
-        $oModelMock->method('getUser')->willReturn($oUserMock);
         $oModelMock->method('getSavedSecret')->willReturn('savedSecret');
 
         $this->_oModel = $oModelMock;
 
         /** @var TOTP $oTotp */
-        $oTotp = $this->callMethod($this->_oModel, 'getTotp', ['givenSeed']);
+        $oTotp = $this->callMethod($this->_oModel, 'getTotp', [$oUserMock, 'givenSeed']);
 
         $this->assertInstanceOf(TOTP::class, $oTotp);
         $this->assertSame('oxusername', $oTotp->getLabel());
@@ -611,7 +619,7 @@ class d3totpTest extends d3TotpUnitTestCase
         $this->_oModel = $oModelMock;
 
         $this->assertIsString(
-            $this->callMethod($this->_oModel, 'getQrCodeElement')
+            $this->callMethod($this->_oModel, 'getQrCodeElement', [$this->getUserFixture()])
         );
     }
 
@@ -647,7 +655,7 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'getSecret');
+        $this->callMethod($this->_oModel, 'getSecret', [$this->getUserFixture()]);
     }
 
     /**
@@ -677,10 +685,11 @@ class d3totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Application\Model\d3totp::verify
+     * @covers \D3\Totp\Application\Model\d3totp::getClock
      */
     public function verifyPass()
     {
-        $otpMock = TOTP::createFromSecret('abc');
+        $otpMock = new TOTPMock();
 
         $userMock = oxNew(User::class);
         $userMock->setId('foo');
@@ -700,15 +709,16 @@ class d3totpTest extends d3TotpUnitTestCase
 
         /** @var d3totp|MockObject $oModelMock */
         $oModelMock = $this->d3getMockBuilder(d3totp::class)
-            ->onlyMethods(['getTotp', 'd3GetBackupCodeListObject'])
+            ->onlyMethods(['getTotp', 'd3GetBackupCodeListObject', 'resetFailedAttempts'])
             ->getMock();
         $oModelMock->method('getTotp')->willReturn($otpMock);
         $oModelMock->method('d3GetBackupCodeListObject')->willReturn($backupCodeListMock);
+        $oModelMock->expects($this->once())->method('resetFailedAttempts');
 
         $this->_oModel = $oModelMock;
 
         $this->assertTrue(
-            $this->callMethod($this->_oModel, 'verify', ['012345'])
+            $this->callMethod($this->_oModel, 'verify', [$userMock, '012345', ''])
         );
     }
 
@@ -716,6 +726,7 @@ class d3totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Application\Model\d3totp::verify
+     * @covers \D3\Totp\Application\Model\d3totp::getClock
      */
     public function verifyBackupCodePass()
     {
@@ -726,6 +737,8 @@ class d3totpTest extends d3TotpUnitTestCase
         $oBackupCodeListMock->expects($this->once())->method('verify')->willReturn(true);
 
         $otpMock = TOTP::createFromSecret('abc');
+
+        $userMock = $this->getUserFixture();
 
         /** @var d3totp|MockObject $oModelMock */
         $oModelMock = $this->d3getMockBuilder(d3totp::class)
@@ -740,7 +753,7 @@ class d3totpTest extends d3TotpUnitTestCase
         $this->_oModel = $oModelMock;
 
         $this->assertTrue(
-            $this->callMethod($this->_oModel, 'verify', ['012345'])
+            $this->callMethod($this->_oModel, 'verify', [$userMock, '012345', 'backupCode'])
         );
     }
 
@@ -748,6 +761,7 @@ class d3totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Application\Model\d3totp::verify
+     * @covers \D3\Totp\Application\Model\d3totp::getClock
      */
     public function verifyFailed()
     {
@@ -761,6 +775,8 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $otpMock = TOTP::createFromSecret('abc');
 
+        $userMock = $this->getUserFixture();
+
         /** @var d3totp|MockObject $oModelMock */
         $oModelMock = $this->d3getMockBuilder(d3totp::class)
             ->onlyMethods([
@@ -773,13 +789,14 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'verify', ['012345']);
+        $this->callMethod($this->_oModel, 'verify', [$userMock, '012345', 'backupCode']);
     }
 
     /**
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Application\Model\d3totp::verify
+     * @covers \D3\Totp\Application\Model\d3totp::getClock
      */
     public function verifyWithSeedFailed()
     {
@@ -793,6 +810,8 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $otpMock = TOTP::createFromSecret('abc');
 
+        $userMock = $this->getUserFixture();
+
         /** @var d3totp|MockObject $oModelMock */
         $oModelMock = $this->d3getMockBuilder(d3totp::class)
             ->onlyMethods([
@@ -805,7 +824,7 @@ class d3totpTest extends d3TotpUnitTestCase
 
         $this->_oModel = $oModelMock;
 
-        $this->callMethod($this->_oModel, 'verify', ['012345', 'abcdef']);
+        $this->callMethod($this->_oModel, 'verify', [$userMock, '012345', '', 'abcdef']);
     }
 
     /**
@@ -841,13 +860,40 @@ class d3totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Application\Model\d3totp::decrypt
+     * @covers \D3\Totp\Application\Model\d3totp::decryptWithKey
      */
-    public function decryptPass()
+    public function decryptMasterKeyPass()
     {
+        $encrypted = $this->callMethod($this->_oModel, 'encrypt', ['foobar']);
+
         $sReturn = $this->callMethod(
             $this->_oModel,
             'decrypt',
-            ['L5cSqld/1jpoSHnbxF1/+lGqN8OM7FWt2CagEkqNeRMvkyogrl0msvSuOpLwDwngvSa80bfDnfwWrPe5c6pdww==']
+            [$encrypted]
+        );
+
+        $this->assertSame('foobar', $sReturn);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::decrypt
+     * @covers \D3\Totp\Application\Model\d3totp::decryptWithKey
+     */
+    public function decryptLegacyKeyPass()
+    {
+        $sut = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['save'])
+            ->getMock();
+        $sut->expects($this->once())->method('save');
+
+        $encrypted = "+shEHpneNIIyxif+WP1L62vDNWJDx34XFB5PVzicAxvB42Lln2BAyXtllrJ3RO6UEB+XDaasVpPEsii8C6JDcA==";
+
+        $sReturn = $this->callMethod(
+            $sut,
+            'decrypt',
+            [$encrypted]
         );
 
         $this->assertSame('foobar', $sReturn);
@@ -954,5 +1000,115 @@ class d3totpTest extends d3TotpUnitTestCase
                 'getDbConnection'
             )
         );
+    }
+
+    /**
+     * @return void
+     * @throws ReflectionException
+     */
+    public function testAssertReplayProtection(): void
+    {
+        $this->_oModel->assign([
+            'lastacceptedtimeslice' => 375
+        ]);
+
+        $this->expectException(replayException::class);
+
+        $this->callMethod(
+            $this->_oModel,
+            'assertReplayProtection',
+            [375]
+        );
+    }
+
+    /**
+     * @return void
+     * @throws ReflectionException
+     */
+    public function testAssertNotLocked(): void
+    {
+        $this->_oModel->assign([
+            'lockeduntil' => date(
+                'Y-m-d H:i:s',
+                time() + 50
+            )
+        ]);
+
+        $this->expectException(tooManyAttemptsException::class);
+
+        $this->callMethod(
+            $this->_oModel,
+            'assertNotLocked'
+        );
+    }
+
+    /**
+     * @param string|null $id
+     * @param int         $invocationCount
+     *
+     * @return void
+     * @throws ReflectionException
+     * @dataProvider testResetFailedAttemptsDataProvider
+     */
+    public function testResetFailedAttempts(?string $id, int $invocationCount): void
+    {
+        $sut = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getId', 'save'])
+            ->getMock();
+        $sut->method('getId')->willReturn($id);
+        $sut->expects($this->exactly($invocationCount))->method('save');
+        $time = time();
+        $sut->assign([
+            'failedattempts' => 3,
+            'lockeduntil' => $time,
+        ]);
+
+        $this->callMethod(
+            $sut,
+            'resetFailedAttempts'
+        );
+
+        $this->assertSame($id ? 0 : 3, $sut->getFieldData('failedattempts'));
+        $this->assertSame($id ? null : $time, $sut->getFieldData('lockeduntil'));
+    }
+
+    public static function testResetFailedAttemptsDataProvider(): Generator
+    {
+        yield 'has id'  => ['myId', 1];
+        yield 'has no id'  => [null, 0];
+    }
+
+    /**
+     * @param string|null $id
+     * @param int         $invocationCount
+     *
+     * @return void
+     * @throws ReflectionException
+     * @dataProvider testResetFailedAttemptsDataProvider
+     */
+    public function testRegisterFailedAttempt(?string $id, int $invocationCount): void
+    {
+        $sut = $this->getMockBuilder(d3totp::class)
+            ->onlyMethods(['getId', 'save'])
+            ->getMock();
+        $sut->method('getId')->willReturn($id);
+        $sut->assign([
+            'failedattempts'    => 6,
+            'lockeduntil'       => time() - 1
+        ]);
+        $sut->expects($this->exactly($invocationCount))->method('save');
+
+        $this->callMethod(
+            $sut,
+            'registerFailedAttempt'
+        );
+
+        if ($id === null) {
+            $this->assertSame(6, $sut->getFieldData('failedattempts'));
+            $this->assertLessThan(time(), $sut->getFieldData('lockeduntil'));
+        } else {
+            $this->assertSame(7, $sut->getFieldData('failedattempts'));
+            $this->assertGreaterThanOrEqual(time(), $sut->getFieldData('lockeduntil'));
+        }
     }
 }

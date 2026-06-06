@@ -57,6 +57,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::isTotpAuthenticated
      */
     public function checkAccessRightsNoAuth()
     {
@@ -92,6 +93,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::isTotpAuthenticated
      */
     public function checkAccessRightsForce2FA()
     {
@@ -131,6 +133,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::isTotpAuthenticated
      */
     public function checkAccessRightsTotpNotActive()
     {
@@ -168,6 +171,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::isTotpAuthenticated
      */
     public function checkAccessRightsTotpFinished()
     {
@@ -177,7 +181,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
         $oSessionMock = $this->d3getMockBuilder(Session::class)
             ->onlyMethods(['getVariable'])
             ->getMock();
-        $oSessionMock->method('getVariable')->will($this->onConsecutiveCalls('foo', true));
+        $oSessionMock->method('getVariable')->willReturn('foo');
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->d3getMockBuilder(d3totp::class)
@@ -215,6 +219,7 @@ class d3_totp_utilsTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Modules\Core\d3_totp_utils::checkAccessRights
+     * @covers \D3\Totp\Modules\Core\d3_totp_utils::isTotpAuthenticated
      */
     public function checkAccessRightsTotpUnfinished()
     {

@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Tests\Unit\Modules\Application\Controller;
 
-use D3\Totp\Modules\Application\Controller\d3_totp_PaymentController;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Controller\PaymentController;
 

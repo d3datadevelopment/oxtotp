@@ -21,8 +21,8 @@ use RuntimeException;
 
 class CryptoService implements CryptoServiceInterface
 {
-    protected const MASTER_KEY = 'D3_TOTP_MASTER_KEY';
-    protected const MASTER_KEY_VERSION = 'D3_TOTP_MASTER_KEY_VERSION';
+    public const MASTER_KEY = 'D3_TOTP_MASTER_KEY';
+    public const MASTER_KEY_VERSION = 'D3_TOTP_MASTER_KEY_VERSION';
 
     public const KEY_VERSION_LEGACY = 1;
     public const KEY_VERSION_MASTER_KEY = 2;

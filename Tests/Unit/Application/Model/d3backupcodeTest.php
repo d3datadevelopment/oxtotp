@@ -17,11 +17,9 @@ namespace D3\Totp\Tests\Unit\Application\Model;
 
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3backupcode;
-use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
@@ -89,7 +87,7 @@ class d3backupcodeTest extends d3TotpUnitTestCase
     public function getRandomTotpBackupCodePass()
     {
         $this->assertMatchesRegularExpression(
-            '@[0-9]{6}@',
+            '@^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}-[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}-[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}$@',
             $this->callMethod($this->_oModel, 'getRandomTotpBackupCode')
         );
     }
@@ -101,29 +99,10 @@ class d3backupcodeTest extends d3TotpUnitTestCase
      */
     public function d3EncodeBCPass()
     {
-        /** @var User|MockObject $oUserMock */
-        $oUserMock = $this->d3getMockBuilder(User::class)
-            ->onlyMethods(['load'])
-            ->getMock();
-        $oUserMock->method('load')->willReturn(true);
-        $oUserMock->assign(
-            [
-                'oxpasssalt' => '6162636465666768696A6B',
-            ]
-        );
+        $hash = $this->callMethod($this->_oModel, 'd3EncodeBC', ['123456']);
 
-        /** @var d3backupcode|MockObject $oModelMock */
-        $oModelMock = $this->d3getMockBuilder(d3backupcode::class)
-            ->onlyMethods(['d3TotpGetUserObject'])
-            ->getMock();
-        $oModelMock->method('d3TotpGetUserObject')->willReturn($oUserMock);
-
-        $this->_oModel = $oModelMock;
-
-        $this->assertSame(
-            '9f7f502a8148f90732a4aa4d880b8cf5',
-            $this->callMethod($this->_oModel, 'd3EncodeBC', ['123456', 'userId'])
-        );
+        $this->assertTrue(password_verify('123456', $hash));
+        $this->assertSame('argon2id', password_get_info($hash)['algoName']);
     }
 
     /**

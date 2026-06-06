@@ -21,6 +21,7 @@ use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use Doctrine\DBAL\ForwardCompatibility\Result;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Generator;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Config;
@@ -152,16 +153,56 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
     }
 
     /**
-     * @test
+     * @param string $code
+     * @param bool $expected
+     * @return void
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\d3backupcodelist::getBaseObject
+     * @dataProvider verifyArgon2Provider
      */
-    public function getBaseObjectReturnsRightObject()
+    public function testVerifyArgon2(string $code, bool $expected)
     {
-        $oBaseObject = $this->callMethod($this->_oModel, 'getBaseObject');
+        $sut = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['loadUserArgonBackupCodes'])
+            ->getMock();
+        $sut->expects($this->once())->method('loadUserArgonBackupCodes');
 
-        $this->assertIsObject($oBaseObject);
-        $this->assertInstanceOf(d3backupcode::class, $oBaseObject);
+        $backupCode = $this->getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['delete'])
+            ->getMock();
+        $backupCode->expects($this->exactly((int) $expected))->method('delete');
+        $backupCode->assign([
+            'backupcode' => $backupCode->d3EncodeBC('foobar')
+        ]);
+        $sut->offsetSet('foo', $backupCode);
+
+        $this->assertSame(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'verifyArgon2',
+                [$code]
+            )
+        );
+    }
+
+    public static function verifyArgon2Provider(): Generator
+    {
+        yield 'passed' => ['foobar', true];
+        yield 'failed' => ['barfoo', false];
+    }
+
+    /**
+     * @return void
+     * @throws ReflectionException
+     */
+    public function testLoadUserArgonBackupCodes(): void
+    {
+        $sut = $this->getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['selectString'])
+            ->getMock();
+        $sut->expects($this->once())->method('selectString');
+
+        $this->callMethod($sut, 'loadUserArgonBackupCodes');
     }
 
     /**
@@ -169,9 +210,9 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\d3backupcodelist::verify
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::verifyLegacy
      */
-    public function verifyFoundTotp()
+    public function verifyLegacyFoundTotp()
     {
         /** @var User|MockObject $oUserMock */
         $oUserMock = $this->d3getMockBuilder(User::class)
@@ -214,7 +255,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $this->_oModel = $oModelMock;
 
         $this->assertTrue(
-            $this->callMethod($this->_oModel, 'verify', ['123456'])
+            $this->callMethod($this->_oModel, 'verifyLegacy', ['123456'])
         );
     }
 
@@ -378,36 +419,6 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $this->assertSame(
             25,
             $this->callMethod($this->_oModel, 'getAvailableCodeCount', ['foobar'])
-        );
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\d3backupcodelist::d3GetUser
-     */
-    public function d3GetUserReturnsRightInstance()
-    {
-        $this->assertInstanceOf(
-            User::class,
-            $this->callMethod($this->_oModel, 'd3GetUser')
-        );
-    }
-
-    /**
-     * @test
-     * @return void
-     * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\d3backupcodelist::getQueryBuilder
-     */
-    public function canGetQueryBuilder(): void
-    {
-        $this->assertInstanceOf(
-            QueryBuilder::class,
-            $this->callMethod(
-                $this->_oModel,
-                'getQueryBuilder'
-            )
         );
     }
 }

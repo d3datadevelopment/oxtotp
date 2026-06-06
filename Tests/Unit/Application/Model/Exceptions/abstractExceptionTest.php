@@ -13,19 +13,19 @@
 
 declare(strict_types=1);
 
-namespace D3\Totp\Tests\Unit\Application\Model;
+namespace D3\Totp\Tests\Unit\Application\Model\Exceptions;
 
 use D3\TestingTools\Development\CanAccessRestricted;
-use D3\Totp\Application\Model\d3RandomGenerator;
+use D3\Totp\Application\Model\Exceptions\wrongOtpException;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use ReflectionException;
 
-class d3RandomGeneratorTest extends d3TotpUnitTestCase
+abstract class abstractExceptionTest extends d3TotpUnitTestCase
 {
     use CanAccessRestricted;
 
-    /** @var d3RandomGenerator */
-    protected d3RandomGenerator $_oModel;
+    /** @var wrongOtpException */
+    protected $_oModel;
 
     /**
      * setup basic requirements
@@ -34,7 +34,7 @@ class d3RandomGeneratorTest extends d3TotpUnitTestCase
     {
         parent::setUp();
 
-        $this->_oModel = oxNew(d3RandomGenerator::class);
+        $this->_oModel = oxNew($this->sutClassName);
     }
 
     public function tearDown(): void
@@ -47,13 +47,16 @@ class d3RandomGeneratorTest extends d3TotpUnitTestCase
     /**
      * @test
      * @throws ReflectionException
-     * @covers \D3\Totp\Application\Model\d3RandomGenerator::getRandomTotpBackupCode
+     * @covers \D3\Totp\Application\Model\Exceptions\wrongOtpException::__construct
+     * @covers \D3\Totp\Application\Model\Exceptions\replayException::__construct
+     * @covers \D3\Totp\Application\Model\Exceptions\tooManyAttemptsException::__construct
      */
-    public function getRandomTotpBackupCodeReturnsRightCode()
+    public function constructorHasRightDefaultMessage()
     {
-        $this->assertMatchesRegularExpression(
-            '@^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}-[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}-[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}$@',
-            $this->callMethod($this->_oModel, 'getRandomTotpBackupCode')
+        $this->_oModel = oxNew($this->sutClassName);
+        $this->assertSame(
+            $this->expectedMessage,
+            $this->callMethod($this->_oModel, 'getMessage')
         );
     }
 }

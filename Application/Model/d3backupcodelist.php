@@ -100,29 +100,22 @@ class d3backupcodelist extends ListModel
 
     public function verify(string $code): bool
     {
-        $bc = $this->verifyArgon2($code);
-
-        if ($bc instanceof d3backupcode) {
-            $bc->delete();
-
-            return true;
-        }
-
-        return $this->verifyLegacy($code);
+        return $this->verifyArgon2($code) || $this->verifyLegacy($code);
     }
 
-    protected function verifyArgon2(string $code): ?d3backupcode
+    protected function verifyArgon2(string $code): bool
     {
         $this->loadUserArgonBackupCodes();
 
         /** @var d3backupcode $backupCode */
         foreach ($this->getArray() as $backupCode) {
             if (password_verify($code, $backupCode->getRawFieldData('backupcode'))) {
-                return $backupCode;
+                $backupCode->delete();
+                return true;
             }
         }
 
-        return null;
+        return false;
     }
 
     protected function loadUserArgonBackupCodes(): void

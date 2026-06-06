@@ -32,6 +32,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use Lcobucci\Clock\SystemClock;
 use OTPHP\TOTP;
+use OTPHP\TOTPInterface;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry;
@@ -202,7 +203,7 @@ class d3totp extends BaseModel
      * @return TOTP
      * @throws Exception
      */
-    public function getTotp(User $user, string $seed = null): TOTP
+    public function getTotp(User $user, string $seed = null): TOTPInterface
     {
         if (null == $this->totp) {
             $this->totp = TOTP::create(
@@ -330,12 +331,14 @@ class d3totp extends BaseModel
         $iv = openssl_random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, OPENSSL_RAW_DATA, $iv);
         $hmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
+
         return base64_encode($iv.$hmac.$ciphertext_raw);
     }
 
     /**
      * @param string $ciphertext
      * @return false|string
+     * @throws Exception
      */
     public function decrypt(string $ciphertext): false|string
     {

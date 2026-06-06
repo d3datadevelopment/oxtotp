@@ -23,7 +23,7 @@ abstract class d3TotpUnitTestCase extends TestCase
 {
     public function d3getMockBuilder($className): MockBuilder
     {
-        if (strpos($className, '\\') === false) {
+        if (!str_contains($className, '\\')) {
             $className = strtolower($className);
         }
         $editionClassName = RegistryAlias::getUtilsObject()->getClassName($className);

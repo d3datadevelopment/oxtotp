@@ -21,6 +21,9 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\Migrations\AbstractMigration;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Version20260601231242 extends AbstractMigration
 {
     public function getDescription(): string

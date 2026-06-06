@@ -44,8 +44,7 @@ class d3_totp_utils extends d3_totp_utils_parent
         $blAuth = parent::checkAccessRights();
         $blAuth = $this->d3AuthHook($blAuth);
         $userID = $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::OXID_ADMIN_AUTH);
-        $totpAuth = $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) &&
-            $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) == $userID;
+        $totpAuth = $this->isTotpAuthenticated($userID);
         $totp = $this->d3GetTotpObject();
         $totp->loadByUserId($userID);
 
@@ -59,7 +58,7 @@ class d3_totp_utils extends d3_totp_utils_parent
         }
 
         //staten der prüfung vom einmalpasswort
-        if ($blAuth && $totp->isActive() && false === $totpAuth) {
+        if ($blAuth && $totp->isActive() && !$totpAuth) {
             $this->redirect('index.php?cl=d3totpadminlogin', false);
         }
 
@@ -120,5 +119,15 @@ class d3_totp_utils extends d3_totp_utils_parent
         $moduleConfigurationBridge = $container->get(ModuleConfigurationDaoBridgeInterface::class);
         /** @var ModuleConfiguration $moduleConfiguration */
         return $moduleConfigurationBridge->get(Constants::OXID_MODULE_ID);
+    }
+
+    /**
+     * @param mixed $userID
+     * @return bool
+     */
+    private function isTotpAuthenticated(mixed $userID): bool
+    {
+        return $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) &&
+            $this->d3TotpGetSessionObject()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) == $userID;
     }
 }

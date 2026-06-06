@@ -20,6 +20,7 @@ use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Modules\Application\Controller\d3_totp_OrderController;
 use D3\Totp\Modules\Application\Controller\d3_totp_PaymentController;
 use D3\Totp\Modules\Application\Controller\d3_totp_UserController;
+use Exception;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Session;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -45,7 +46,7 @@ trait d3_totp_getUserTestTrait
 
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function tearDown(): void
     {

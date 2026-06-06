@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Tests\Unit\Application\Controller;
 
+use Assert\InvalidArgumentException;
 use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Controller\d3_account_totp;
 use D3\Totp\Application\Model\d3backupcodelist;
@@ -61,6 +62,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
     {
         $oUser = oxNew(User::class);
         $oUser->setId('foo');
+        $oUser->assign(['oxusername' => 'foo']);
         $oUser->assign(
             [
                 'oxpassword'    => 'foo',
@@ -158,6 +160,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
 
         $oUser = oxNew(User::class);
         $oUser->setId('foo');
+        $oUser->assign(['oxusername' => 'foo']);
 
         /** @var d3_account_totp|MockObject $oControllerMock */
         $oControllerMock = $this->d3getMockBuilder(d3_account_totp::class)
@@ -223,12 +226,14 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oTotpMock = $this->d3getMockBuilder(d3totp::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
+                'checkIfAlreadyExist',
                 'setSecret',
                 'assign',
                 'verify',
                 'save',
             ])
             ->getMock();
+        $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
         $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->expects($this->once())->method('verify')->willThrowException(new Exception('foo'));
@@ -236,6 +241,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
 
         $oUser = oxNew(User::class);
         $oUser->setId('foo');
+        $oUser->assign(['oxusername' => 'usernameFixture']);
 
         /** @var d3_account_totp|MockObject $oControllerMock */
         $oControllerMock = $this->d3getMockBuilder(d3_account_totp::class)
@@ -249,7 +255,8 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         $oControllerMock->method('getBackupCodeListObject')->willReturn($oBackupCodeListMock);
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
 
-        Registry::getSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $oTotpMock);
+        Registry::getSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, 'JBSWY3DPEHPK3PXP');
+        Registry::getSession()->setVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME, 'foo');
 
         $this->_oController = $oControllerMock;
 
@@ -275,12 +282,12 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             ->getMock();
         $oBackupCodeListMock->method('generateBackupCodes');
         $oBackupCodeListMock->expects($this->once())->method('save');
-        $oBackupCodeListMock->method('save');
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->d3getMockBuilder(d3totp::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
+                'checkIfAlreadyExist',
                 'setSecret',
                 'assign',
                 'verify',
@@ -288,6 +295,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
                 'setId',
             ])
             ->getMock();
+        $oTotpMock->method('checkIfAlreadyExist')->willReturn(false);
         $oTotpMock->method('setSecret');
         $oTotpMock->method('assign')->willReturn(true);
         $oTotpMock->method('verify')->willReturn(true);
@@ -296,6 +304,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
 
         $oUser = oxNew(User::class);
         $oUser->setId('foo');
+        $oUser->assign(['oxusername' => 'usernameFixture']);
 
         /** @var d3_account_totp|MockObject $oControllerMock */
         $oControllerMock = $this->d3getMockBuilder(d3_account_totp::class)
@@ -305,7 +314,8 @@ class d3_account_totpTest extends d3TotpUnitTestCase
                 'getTotpObject'
             ])
             ->getMock();
-        Registry::getSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $oTotpMock);
+        Registry::getSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, 'JBSWY3DPEHPK3PXP');
+        Registry::getSession()->setVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME, 'foo');
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getUser')->willReturn($oUser);
         $oControllerMock->method('getBackupCodeListObject')->willReturn($oBackupCodeListMock);
@@ -372,10 +382,12 @@ class d3_account_totpTest extends d3TotpUnitTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\Totp\Application\Controller\d3_account_totp::delete
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::verifyPassword
      */
     public function canDelete()
     {
         $_GET['totp_use'] = '0';
+        $_GET['password'] = 'secret';
 
         /** @var d3totp|MockObject $oTotpMock */
         $oTotpMock = $this->d3getMockBuilder(d3totp::class)
@@ -396,10 +408,53 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getTotpObject',
                 'getUser',
+                'verifyPassword',
             ])
             ->getMock();
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->expects($this->once())->method('getUser')->willReturn($oUser);
+        $oControllerMock->expects($this->once())->method('verifyPassword')->with($oUser, 'secret');
+
+        $this->_oController = $oControllerMock;
+
+        $this->callMethod($this->_oController, 'delete');
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Controller\d3_account_totp::delete
+     */
+    public function cantDeleteBecauseOfWrongPassword()
+    {
+        $_GET['totp_use'] = '0';
+        $_GET['password'] = 'secret';
+
+        /** @var d3totp|MockObject $oTotpMock */
+        $oTotpMock = $this->d3getMockBuilder(d3totp::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([
+                'delete',
+                'loadByUserId',
+            ])
+            ->getMock();
+        $oTotpMock->expects($this->never())->method('delete')->willReturn(true);
+        $oTotpMock->method('loadByUserId');
+
+        $oUser = oxNew(User::class);
+        $oUser->setId('foo');
+
+        /** @var d3_account_totp|MockObject $oControllerMock */
+        $oControllerMock = $this->d3getMockBuilder(d3_account_totp::class)
+            ->onlyMethods([
+                'getTotpObject',
+                'getUser',
+                'verifyPassword',
+            ])
+            ->getMock();
+        $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
+        $oControllerMock->expects($this->once())->method('getUser')->willReturn($oUser);
+        $oControllerMock->expects($this->once())->method('verifyPassword')->willThrowException(new InvalidArgumentException('msg', 0));
 
         $this->_oController = $oControllerMock;
 

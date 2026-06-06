@@ -19,10 +19,8 @@ use D3\TestingTools\Development\CanAccessRestricted;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
-use D3\Totp\Modules\Application\Model\d3_totp_user;
 use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
 use OxidEsales\Eshop\Application\Controller\Admin\LoginController;
-use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\UtilsServer;
@@ -212,7 +210,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @return array
      */
-    public function canRunTotpAfterLoginSetLanguageDataProvider(): array
+    public static function canRunTotpAfterLoginSetLanguageDataProvider(): array
     {
         return [
             'existing language'     => [0],
@@ -243,7 +241,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
         $oSessionMock = $this->d3getMockBuilder(Session::class)
             ->onlyMethods(['getVariable'])
             ->getMock();
-        $oSessionMock->method('getVariable')->with(d3totp_conf::SESSION_ADMIN_AUTH)->willReturn($loggedin);
+        $oSessionMock->method('getVariable')->willReturn($loggedin);
 
         /** @var d3_totp_LoginController|MockObject $oControllerMock */
         $oControllerMock = $this->d3getMockBuilder(d3_totp_LoginController::class)
@@ -268,7 +266,7 @@ class d3_totp_LoginControllerTest extends d3TotpUnitTestCase
     /**
      * @return array
      */
-    public function d3TotpLoginMissingTestDataProvider(): array
+    public static function d3TotpLoginMissingTestDataProvider(): array
     {
         return [
             'totp not active, not logged in' => [false, false, false],

@@ -109,9 +109,12 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
      */
     public function d3TotpLoginMissing(d3totp $totp): bool
     {
+        $adminTotpAuth = $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH);
+        $adminAuth = $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH);
+
         return $totp->isActive()
-            && (false == $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) ||
-                $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) != $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH)
+            && (!$adminTotpAuth ||
+                $adminTotpAuth != $adminAuth
             );
     }
 

@@ -13,14 +13,12 @@
 
 declare(strict_types=1);
 
-namespace D3\Totp\Tests\Unit\Modules\Application\Controller;
+namespace D3\Totp\Tests\Unit\Application\Model\Exceptions;
 
-use D3\Totp\Tests\Unit\d3TotpUnitTestCase;
-use OxidEsales\Eshop\Application\Controller\OrderController;
+use D3\Totp\Application\Model\Exceptions\tooManyAttemptsException;
 
-class d3_totp_OrderControllerTest extends d3TotpUnitTestCase
+class tooManyAttemptsExceptionTest extends abstractExceptionTest
 {
-    use d3_totp_getUserTestTrait;
-
-    protected $sControllerClass = OrderController::class;
+    protected $sutClassName = tooManyAttemptsException::class;
+    protected $expectedMessage = 'D3_TOTP_ERROR_LOCKOUT';
 }

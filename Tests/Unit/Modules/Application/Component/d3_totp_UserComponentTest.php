@@ -585,7 +585,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oController = oxNew(UserComponent::class);
 
         $this->assertTrue(
-            $this->callMethod($oController, 'd3TotpHasValidTotp', ['123456', $oTotpMock])
+            $this->callMethod($oController, 'd3TotpHasValidTotp', ['123456', 'abcdef', $oTotpMock])
         );
     }
 
@@ -609,7 +609,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oController = oxNew(UserComponent::class);
 
         $this->assertTrue(
-            $this->callMethod($oController, 'd3TotpHasValidTotp', ['123456', $oTotpMock])
+            $this->callMethod($oController, 'd3TotpHasValidTotp', ['123456', 'abcdef', $oTotpMock])
         );
     }
 
@@ -633,7 +633,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oController = oxNew(UserComponent::class);
 
         $this->expectException(wrongOtpException::class);
-        $this->callMethod($oController, 'd3TotpHasValidTotp', ['', $oTotpMock]);
+        $this->callMethod($oController, 'd3TotpHasValidTotp', ['', '', $oTotpMock]);
     }
 
     /**
@@ -656,7 +656,7 @@ class d3_totp_UserComponentTest extends d3TotpUnitTestCase
         $oController = oxNew(UserComponent::class);
 
         $this->assertFalse(
-            $this->callMethod($oController, 'd3TotpHasValidTotp', ['123456', $oTotpMock])
+            $this->callMethod($oController, 'd3TotpHasValidTotp', ['123456', 'abcdef', $oTotpMock])
         );
     }
 

@@ -25,7 +25,6 @@ use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\SystemEventHandler;
 use OxidEsales\Eshop\Core\Utils;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
 class totpSystemEventHandlerTest extends d3TotpUnitTestCase

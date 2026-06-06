@@ -17,7 +17,9 @@ use OxidEsales\ComposerPlugin\Installer\Package\ShopPackageInstaller;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\ConnectionProviderInterface;
 
+// @codeCoverageIgnoreStart
 require_once(__DIR__.'/../../../autoload.php');
 require_once __DIR__.'/../../../../'. ShopPackageInstaller::SHOP_SOURCE_DIRECTORY .'/bootstrap.php';
 
 return ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get();
+// @codeCoverageIgnoreEnd

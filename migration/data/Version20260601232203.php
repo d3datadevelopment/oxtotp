@@ -20,6 +20,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Version20260601232203 extends AbstractMigration
 {
     public function getDescription(): string

@@ -260,11 +260,13 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
+        $oControllerMock->method('getUserObject')->willReturn($this->getUserFixture('foobar'));
 
         $this->_oController = $oControllerMock;
 
         $_GET['otp'] = '123456';
-        Registry::getSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $oTotpMock);
+        Registry::getSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, 'JBSWY3DPEHPK3PXP');
+        Registry::getSession()->setVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME, 'foobar');
 
         $this->callMethod($this->_oController, 'save');
     }
@@ -313,6 +315,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
+        $oControllerMock->method('getUserObject')->willReturn($this->getUserFixture('foobar'));
 
         $this->_oController = $oControllerMock;
 
@@ -367,13 +370,24 @@ class d3user_totpTest extends d3TotpUnitTestCase
         $oControllerMock->method('getEditObjectId')->willReturn('foobar');
         $oControllerMock->method('getTotpObject')->willReturn($oTotpMock);
         $oControllerMock->method('getBackupcodeListObject')->willReturn($oBackupCodeListMock);
+        $oControllerMock->method('getUserObject')->willReturn($this->getUserFixture('foobar'));
 
         $this->_oController = $oControllerMock;
 
         $_GET['otp'] = '123456';
-        Registry::getSession()->setVariable(d3totp_conf::OTP_SESSION_VARNAME, $oTotpMock);
+        Registry::getSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, 'JBSWY3DPEHPK3PXP');
+        Registry::getSession()->setVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME, 'foobar');
 
         $this->callMethod($this->_oController, 'save');
+    }
+
+    protected function getUserFixture(string $id): User
+    {
+        $user = oxNew(User::class);
+        $user->setId($id);
+        $user->assign(['oxusername' => $id]);
+
+        return $user;
     }
 
     /**

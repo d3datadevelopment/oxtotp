@@ -65,8 +65,9 @@ class d3_account_totp extends AccountController
                 /** @var d3_totp_user $user */
                 $user = $this->getUser();
                 $oTotp = $this->getTotpObject();
-                Assert::that($oTotp->checkIfAlreadyExist($this->getCurrentUserId()))->false('D3_TOTP_ALREADY_EXIST');
-
+                Assert::that(
+                    $oTotp->checkIfAlreadyExist($this->getCurrentUserId())
+                )->false('D3_TOTP_ALREADY_EXIST');
                 $oTotpBackupCodes = $this->getBackupCodeListObject();
                 $aParams = [
                     'd3totp__usetotp' => 1,
@@ -75,11 +76,11 @@ class d3_account_totp extends AccountController
                 $secret = Registry::getSession()->getVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME);
                 $label = Registry::getSession()->getVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME);
                 $init = oxNew(d3totp::class);
-                $init->getTotp($user)->setSecret($secret);
-                $init->getTotp($user)->setLabel($label);
+                $otp = $init->getTotp($user);
+                $otp->setSecret($secret);
+                $otp->setLabel($label);
                 $seed = $init->getSecret($user);
                 $otp = Registry::getRequest()->getRequestEscapedParameter("otp");
-
                 Assert::that($seed)->notBlank('D3_TOTP_EMPTY_SEED');
                 Assert::that($otp)
                     ->integerish('D3_TOTP_MISSING_VALIDATION')
@@ -134,6 +135,7 @@ class d3_account_totp extends AccountController
      * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @codeCoverageIgnore
      */
     protected function verifyPassword(User $user, string $password): void
     {

@@ -108,6 +108,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      */
     public function d3TotpCheckTotpLogin(): false|string
     {
+        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
+
         $logger = TotpRegistry::getLogger();
 
         $logger->info('TOTP verification process', ['status' => 'started']);
@@ -115,26 +117,31 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
         $totpCode = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
         $totpBcCode = trim((string) Registry::getRequest()->getRequestEscapedParameter('d3totpbc'));
 
-        /** @var d3_totp_user $oUser */
-        $oUser = oxNew(User::class);
-        $sUserId = Registry::getSession()->getVariable(d3totp_conf::SESSION_CURRENTUSER);
-        $oUser->load($sUserId);
-
-        $totp = $this->d3GetTotpObject();
-        $totp->loadByUserId($sUserId);
-
         try {
+            Assert::that($sUserId)->notBlank();
+
+            $totp = $this->d3GetTotpObject();
+            $totp->loadByUserId($sUserId);
+
             if (!$this->d3TotpIsNoTotpOrNoLogin($totp) && $this->d3TotpHasValidTotp($totpCode, $totpBcCode, $totp)) {
                 // relogin, don't extract from this try block
+
+                /** @var d3_totp_user $oUser */
+                $oUser = oxNew(User::class);
+                $oUser->load($sUserId);
+
                 $this->d3TotpGetSession()->setVariable(d3totp_conf::SESSION_AUTH, $oUser->getId());
                 $this->d3TotpGetSession()->setVariable(d3totp_conf::OXID_FRONTEND_AUTH, $oUser->getId());
                 $this->setUser($oUser);
                 $this->setLoginStatus(USER_LOGIN_SUCCESS);
                 $this->afterLogin($oUser);
 
+                $currentClass = $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_CURRENTCLASS);
                 $this->d3TotpClearSessionVariables();
 
                 $logger->info('TOTP verification process', ['status' => 'finished', 'success' => true]);
+
+                $this->d3TotpGetUtils()->redirect('index.php?cl='.$currentClass, false);
 
                 return false;
             }
@@ -146,7 +153,7 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 "",
                 'd3totplogin'
             );
-        }
+        } catch (\Assert\InvalidArgumentException) {}
 
         $logger->info('TOTP verification process', ['status' => 'finished', 'success' => false]);
 

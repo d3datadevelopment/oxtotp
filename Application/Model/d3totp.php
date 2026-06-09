@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Model;
 
+use Assert\Assert;
+use Assert\InvalidArgumentException;
 use BaconQrCode\Renderer\RendererInterface;
 use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
@@ -293,25 +295,33 @@ class d3totp extends BaseModel
         $this->assertReplayProtection($acceptedSlice);
         $this->assertNotLocked();
 
-        $verified = $this->getTotp($user, $seed)->verify($totp, $timestamp, $this->leeway);
+        try {
+            Assert::that($totp)->notBlank();
 
-        if ($verified) {
-            $this->assign([
-                'lastacceptedtimeslice' => $acceptedSlice,
-            ]);
-            $this->resetFailedAttempts();
 
-            return true;
-        }
+            $verified = $this->getTotp( $user, $seed )->verify( $totp, $timestamp, $this->leeway );
 
-        if (null == $seed) {
+            if ( $verified ) {
+                $this->assign( [
+                                   'lastacceptedtimeslice' => $acceptedSlice,
+                               ] );
+                $this->resetFailedAttempts();
+
+                return true;
+            }
+        } catch (InvalidArgumentException) {}
+
+        try {
+            Assert::that($seed)->null();
+            Assert::that($totpBc)->notBlank();
+
             $verified = $this->d3GetBackupCodeListObject()->verify($totpBc);
 
             if ($verified) {
                 $this->resetFailedAttempts();
                 return true;
             }
-        }
+        } catch (InvalidArgumentException) {}
 
         $this->registerFailedAttempt();
 

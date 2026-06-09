@@ -728,6 +728,49 @@ class d3totpTest extends d3TotpUnitTestCase
      * @covers \D3\Totp\Application\Model\d3totp::verify
      * @covers \D3\Totp\Application\Model\d3totp::getClock
      */
+    public function verifyEmptyTotpCode()
+    {
+        $otpMock = new TOTPMock();
+
+        $userMock = oxNew(User::class);
+        $userMock->setId('foo');
+        $userMock->assign(['oxpasssalt' => '6162636465666768696A6B']);
+
+        $backupCodeMock = $this->d3getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['d3TotpGetUserObject'])
+            ->getMock();
+        $backupCodeMock->method('d3TotpGetUserObject')->willReturn($userMock);
+
+        $backupCodeListMock = $this->d3getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods(['d3GetUser', 'getBaseObject', 'verify'])
+            ->getMock();
+        $backupCodeListMock->method('d3GetUser')->willReturn($userMock);
+        $backupCodeListMock->method('getBaseObject')->willReturn($backupCodeMock);
+        $backupCodeListMock->method('verify')->willReturn(true);
+
+        /** @var d3totp|MockObject $oModelMock */
+        $oModelMock = $this->d3getMockBuilder(d3totp::class)
+            ->onlyMethods(['getTotp', 'd3GetBackupCodeListObject', 'resetFailedAttempts'])
+            ->getMock();
+        $oModelMock->method('getTotp')->willReturn($otpMock);
+        $oModelMock->method('d3GetBackupCodeListObject')->willReturn($backupCodeListMock);
+        $oModelMock->expects($this->never())->method('resetFailedAttempts');
+
+        $this->_oModel = $oModelMock;
+
+        $this->expectException(wrongOtpException::class);
+
+        $this->assertTrue(
+            $this->callMethod($this->_oModel, 'verify', [$userMock, '', ''])
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3totp::verify
+     * @covers \D3\Totp\Application\Model\d3totp::getClock
+     */
     public function verifyBackupCodePass()
     {
         /** @var d3backupcodelist|MockObject $oBackupCodeListMock */

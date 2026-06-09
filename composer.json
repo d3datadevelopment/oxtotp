@@ -70,9 +70,9 @@
 
     "phpstan": "./vendor/bin/phpstan --configuration=./vendor/d3/oxid-twofactor-onetimepassword/phpstan.neon",
 
-    "phpunit": "XDEBUG_MODE=off vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/Tests/",
-    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/Tests/ --coverage-html=vendor/d3/oxid-twofactor-onetimepassword/Tests/reports/coverage",
-    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/Tests/ --coverage-html=vendor/d3/oxid-twofactor-onetimepassword/Tests/reports/coverage --path-coverage",
+    "phpunit": "XDEBUG_MODE=off vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/",
+    "phpunit-line-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/ --coverage-html=vendor/d3/oxid-twofactor-onetimepassword/Tests/reports/coverage",
+    "phpunit-path-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --config=vendor/d3/oxid-twofactor-onetimepassword/ --coverage-html=vendor/d3/oxid-twofactor-onetimepassword/Tests/reports/coverage --path-coverage",
 
     "phpunuhi": "./vendor/bin/phpunuhi --configuration=vendor/d3/oxid-twofactor-onetimepassword/phpunuhi.xml validate"
   },

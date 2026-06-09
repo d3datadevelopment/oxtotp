@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          backupGlobals="true"
-         bootstrap="../../../../source/bootstrap.php"
+         bootstrap="../../../source/bootstrap.php"
          colors="true"
          backupStaticAttributes="false"
          convertErrorsToExceptions="true"
@@ -17,7 +17,7 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd">
   <testsuites>
     <testsuite name="Unit">
-      <directory>Unit/</directory>
+      <directory>Tests/Unit/</directory>
     </testsuite>
     <!--    <testsuite name="Integration">-->
     <!--      <directory>integration/</directory>-->

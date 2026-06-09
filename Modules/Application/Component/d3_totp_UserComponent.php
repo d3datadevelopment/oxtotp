@@ -20,11 +20,14 @@ use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
 use D3\Totp\Application\Model\Exceptions\wrongOtpException;
+use \D3\Totp\Core\Registry as TotpRegistry;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
 use InvalidArgumentException;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Utils;
@@ -45,6 +48,10 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      */
     protected function afterLogin($oUser)
     {
+        $logger = TotpRegistry::getLogger();
+
+        $logger->info('TOTP init process', ['status' => 'started']);
+
         Assert::that($oUser)->isInstanceOf(User::class, 'user argument must an instance of User class');
 
         try {
@@ -55,6 +62,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
             if ($totp->isActive()
                 && $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_AUTH) != $oUser->getId()
             ) {
+                $logger->info('TOTP is active, perform request');
+
                 $this->d3TotpGetSession()->setVariable(
                     d3totp_conf::SESSION_CURRENTCLASS,
                     $this->getParent()->getClassKey() != 'd3totplogin' ? $this->getParent()->getClassKey() : 'start'
@@ -69,10 +78,14 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 );
 
                 $sUrl = Registry::getConfig()->getShopHomeUrl() . 'cl=d3totplogin';
+
+                $logger->info('TOTP init process', ['status' => 'finished', 'type' => 'start TOTP request']);
+
                 $this->d3TotpGetUtils()->redirect($sUrl, false);
             }
-        } catch (InvalidArgumentException) {
-        }
+        } catch (InvalidArgumentException) {}
+
+        $logger->info('TOTP init process', ['status' => 'finished', 'type' => 'without TOTP request']);
 
         return parent::afterLogin($oUser);
     }
@@ -94,6 +107,10 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      */
     public function d3TotpCheckTotpLogin(): false|string
     {
+        $logger = TotpRegistry::getLogger();
+
+        $logger->info('TOTP verification process', ['status' => 'started']);
+
         $totpCode = implode('', Registry::getRequest()->getRequestEscapedParameter('d3totp') ?: []);
         $totpBcCode = trim((string) Registry::getRequest()->getRequestEscapedParameter('d3totpbc'));
 
@@ -116,11 +133,15 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 
                 $this->d3TotpClearSessionVariables();
 
+                $logger->info('TOTP verification process', ['status' => 'finished', 'success' => true]);
+
                 return false;
             }
         } catch (totpExceptionInterface $oEx) {
             $this->d3TotpGetUtilsView()->addErrorToDisplay($oEx, false, false, "", 'd3totplogin');
         }
+
+        $logger->info('TOTP verification process', ['status' => 'finished', 'success' => false]);
 
         return 'd3totplogin';
     }

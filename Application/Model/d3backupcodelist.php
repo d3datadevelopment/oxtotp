@@ -16,12 +16,15 @@ declare(strict_types=1);
 namespace D3\Totp\Application\Model;
 
 use D3\Totp\Application\Controller\Admin\d3user_totp;
+use D3\Totp\Core\Registry as TotpRegistry;
 use Doctrine\DBAL\Driver\Exception as DBALDriverException;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Config;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\ListModel;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
@@ -105,6 +108,8 @@ class d3backupcodelist extends ListModel
      * @throws ContainerExceptionInterface
      * @throws DBALDriverException
      * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      * @throws NotFoundExceptionInterface
      */
     public function verify(string $code): bool
@@ -118,17 +123,26 @@ class d3backupcodelist extends ListModel
      * @return bool
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     protected function verifyArgon2(string $code): bool
     {
+        $logger = TotpRegistry::getLogger();
+
+        $logger->info('verify backup code against argon keys');
+
         $this->loadUserArgonBackupCodes();
 
         /** @var d3backupcode $backupCode */
         foreach ($this->getArray() as $backupCode) {
             if (password_verify($code, $backupCode->getRawFieldData('backupcode'))) {
+                $logger->info('valid backup code found');
                 return $backupCode->delete();
             }
         }
+
+        $logger->info('no (valid) backup code found');
 
         return false;
     }
@@ -170,6 +184,10 @@ class d3backupcodelist extends ListModel
      */
     protected function verifyLegacy(string $totp): bool
     {
+        $logger = TotpRegistry::getLogger();
+
+        $logger->info('verify backup code against legacy keys');
+
         $qb = $this->getQueryBuilder();
         $qb->select('oxid')
             ->from($this->getBaseObject()->getViewName())
@@ -191,8 +209,12 @@ class d3backupcodelist extends ListModel
             );
 
         if ($sVerify = $qb->execute()->fetchOne()) {
+            $logger->info('valid backup code found');
+
             return $this->getBaseObject()->delete($sVerify);
         }
+
+        $logger->info('no (valid) backup code found');
 
         return false;
     }

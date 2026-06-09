@@ -89,6 +89,25 @@ $aModule = [
             'type' => 'int',
             'value' => 1,
         ],
+        [
+            'group'     => 'd3totp_logging',
+            'name'      => 'D3_TOTP_setting_logLevel',
+            'type'      => 'select',
+            'value'     => 'info',
+            'constraints'   => 'debug|info|notice|warning|error|critical|alert|emergency',
+        ],
+        [
+            'group'     => 'd3totp_logging',
+            'name'      => 'D3_TOTP_setting_keptlogfiles',
+            'type'      => 'str',
+            'value'     => '7',
+        ],
+        [
+            'group'     => 'd3totp_logging',
+            'name'      => 'D3_TOTP_setting_logOnErrorsOnly',
+            'type'      => 'bool',
+            'value'     => true,
+        ],
     ],
     'events'                => [
         'onActivate'        => ModuleSetup\Events::class.'::onActivate',

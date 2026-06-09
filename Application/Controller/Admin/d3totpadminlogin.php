@@ -20,6 +20,7 @@ use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
+use D3\Totp\Core\Registry as TotpRegistry;
 use D3\Totp\Modules\Application\Controller\Admin\d3_totp_LoginController;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\Driver\Exception;
@@ -247,10 +248,12 @@ class d3totpadminlogin extends AdminController
 
     /**
      * @return LoggerInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function getLogger(): LoggerInterface
     {
-        return Registry::getLogger();
+        return TotpRegistry::getLogger();
     }
 
     /**

@@ -18,6 +18,7 @@ namespace D3\Totp\Application\Controller;
 use D3\Totp\Application\Model\Constants;
 use D3\Totp\Application\Model\d3backupcodelist;
 use D3\Totp\Application\Model\d3totp_conf;
+use D3\Totp\Core\Registry as TotpRegistry;
 use Doctrine\DBAL\Driver\Exception;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Core\Registry;
@@ -36,6 +37,8 @@ class d3totplogin extends FrontendController
         }
 
         $this->addTplParam('navFormParams', Registry::getSession()->getVariable(d3totp_conf::SESSION_NAVFORMPARAMS));
+
+        TotpRegistry::getLogger()->info('show TOTP request form');
 
         return parent::render();
     }

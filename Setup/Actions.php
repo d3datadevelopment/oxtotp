@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Setup;
 
+use D3\Totp\Core\Registry as TotpRegistry;
 use D3\OxidServiceBridges\Internal\Framework\Templating\Cache\ShopTemplateCacheServiceBridge;
 use D3\OxidServiceBridges\Internal\Framework\Templating\Cache\ShopTemplateCacheServiceBridgeInterface;
 use Exception;
@@ -27,6 +28,7 @@ use OxidEsales\Eshop\Core\Utils;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class Actions
@@ -79,9 +81,14 @@ class Actions
         return oxNew(Utils::class);
     }
 
+    /**
+     * @return LoggerInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function getLogger(): LoggerInterface
     {
-        return Registry::getLogger();
+        return TotpRegistry::getLogger();
     }
 
     /**

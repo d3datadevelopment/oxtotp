@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Model;
 
+use D3\Totp\Core\Registry;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -101,5 +102,19 @@ class d3backupcode extends BaseModel
     public function getQueryBuilder(): QueryBuilder
     {
         return ContainerFactory::getInstance()->getContainer()->get(QueryBuilderFactoryInterface::class)->create();
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function delete( $oxid = null )
+    {
+        $return = parent::delete( $oxid );
+
+        if (!$return) {
+            Registry::getLogger()->warning( 'Unable to delete TOTP backup code', [ 'id' => $this->getId()]);
+        }
+
+        return $return;
     }
 }

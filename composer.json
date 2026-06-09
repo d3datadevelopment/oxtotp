@@ -45,6 +45,7 @@
     "lcobucci/clock": "^2.2 || ^3",
     "bacon/bacon-qr-code": "^2.0 || ^3.0",
     "d3/oxidservicebridges": "^2.1.0.0",
+    "d3/logger-factory": "^2.0",
     "beberlei/assert": "^v3.3.2"
   },
   "require-dev": {

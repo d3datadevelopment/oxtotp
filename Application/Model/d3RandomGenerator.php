@@ -15,8 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Model;
 
-use Random\RandomException;
-
 class d3RandomGenerator
 {
     public const CHAR_DIGITS    = '0123456789';
@@ -24,7 +22,6 @@ class d3RandomGenerator
 
     /**
      * @return string
-     * @throws RandomException
      */
     public static function getRandomTotpBackupCode(): string
     {

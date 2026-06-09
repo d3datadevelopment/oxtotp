@@ -18,4 +18,7 @@ namespace D3\Totp\Application\Model;
 class Constants
 {
     public const OXID_MODULE_ID = 'd3totp';
+    public const CONFIG_LOGLEVEL = 'D3_TOTP_setting_logLevel';
+    public const CONFIG_KEPTLOGFILES = 'D3_TOTP_setting_keptlogfiles';
+    public const CONFIG_LOGERRORSONLY = 'D3_TOTP_setting_logOnErrorsOnly';
 }

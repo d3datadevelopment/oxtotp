@@ -22,8 +22,8 @@ use BaconQrCode\Writer;
 use D3\Totp\Application\Factory\BaconQrCodeFactory;
 use D3\Totp\Application\Model\Exceptions\tooManyAttemptsException;
 use D3\Totp\Application\Model\Exceptions\replayException;
-use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
 use D3\Totp\Application\Model\Exceptions\wrongOtpException;
+use D3\Totp\Core\Registry as TotpRegistry;
 use D3\Totp\Services\CryptoService;
 use D3\Totp\Services\CryptoServiceInterface;
 use DateTimeZone;
@@ -36,6 +36,8 @@ use Lcobucci\Clock\SystemClock;
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\BaseModel;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
@@ -278,16 +280,23 @@ class d3totp extends BaseModel
     }
 
     /**
+     * @param User        $user
+     * @param string      $totp
+     * @param string      $totpBc
      * @param string|null $seed
      *
+     * @return bool
      * @throws ContainerExceptionInterface
+     * @throws DBALDriverException
      * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      * @throws NotFoundExceptionInterface
-     * @throws totpExceptionInterface
-     * @throws Exception
      */
     public function verify(User $user, string $totp, string $totpBc, string $seed = null): bool
     {
+        $logger = TotpRegistry::getLogger();
+
         $clock = $this->getClock();
         $timestamp = $clock->now()->getTimestamp();
         $acceptedSlice = floor(($timestamp + $this->leeway) / 30);
@@ -298,17 +307,20 @@ class d3totp extends BaseModel
         try {
             Assert::that($totp)->notBlank();
 
+            $logger->info('verify OTP code against seed');
 
             $verified = $this->getTotp( $user, $seed )->verify( $totp, $timestamp, $this->leeway );
 
             if ( $verified ) {
-                $this->assign( [
-                                   'lastacceptedtimeslice' => $acceptedSlice,
-                               ] );
+                $logger->info( 'TOTP code successful verified' );
+
+                $this->assign(['lastacceptedtimeslice' => $acceptedSlice] );
                 $this->resetFailedAttempts();
 
                 return true;
             }
+
+            $logger->info('unable to verify TOTP code');
         } catch (InvalidArgumentException) {}
 
         try {
@@ -321,6 +333,8 @@ class d3totp extends BaseModel
                 $this->resetFailedAttempts();
                 return true;
             }
+
+            $logger->info('unable to verify backup code');
         } catch (InvalidArgumentException) {}
 
         $this->registerFailedAttempt();
@@ -426,31 +440,48 @@ class d3totp extends BaseModel
         return parent::delete($oxid);
     }
 
+    /**
+     * @param float $currentSlice
+     *
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function assertReplayProtection(float $currentSlice): void
     {
         $lastAcceptedTimeSlice = $this->getFieldData('lastacceptedtimeslice');
 
         if ($lastAcceptedTimeSlice && $currentSlice <= $lastAcceptedTimeSlice) {
+            TotpRegistry::getLogger()->info('blocked because of replay protection');
             throw oxNew(replayException::class);
         }
     }
 
+    /**
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function assertNotLocked(): void
     {
         $lockedUntil = $this->getFieldData('lockeduntil');
 
         if ($lockedUntil && strtotime($lockedUntil) > time()) {
+            TotpRegistry::getLogger()->info('blocked because of too many attempts', ['locked until' => $lockedUntil]);
             throw oxNew(tooManyAttemptsException::class);
         }
     }
 
     /**
      * @return void
-     * @throws Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function resetFailedAttempts(): void
     {
         if (!$this->getId()) return;
+
+        TotpRegistry::getLogger()->info('reset failed attempts');
 
         $this->assign([
             'failedattempts' => 0,
@@ -462,7 +493,8 @@ class d3totp extends BaseModel
 
     /**
      * @return void
-     * @throws Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function registerFailedAttempt(): void
     {
@@ -471,15 +503,21 @@ class d3totp extends BaseModel
         $failedAttempts =
             (int) $this->getFieldData('failedattempts') + 1;
 
+        TotpRegistry::getLogger()->info('register failed attempts', ['attempts' => $failedAttempts]);
+
         $data = [
             'failedattempts' => $failedAttempts,
         ];
 
         if ($failedAttempts >= self::LOCK_THRESHOLD) {
-            $data['lockeduntil'] = date(
+            $lockedTime = date(
                 'Y-m-d H:i:s',
                 time() + self::LOCKTIME_IN_SECONDS
             );
+
+            TotpRegistry::getLogger()->info('register locked time', ['locked until' => $lockedTime]);
+
+            $data['lockeduntil'] = $lockedTime;
         }
 
         $this->assign($data);

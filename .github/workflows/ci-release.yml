@@ -1,0 +1,82 @@
+name: CI Release
+
+on:
+  push:
+    branches:
+      - 'rel_*'
+      - 'main'
+      - 'master'
+  workflow_dispatch:
+    inputs:
+      debug:
+        required: false
+        default: "false"
+
+jobs:
+  package-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: oxid
+          MYSQL_USER: oxid
+          MYSQL_PASSWORD: oxid
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # min
+          - oxid_ref: "dev-b-7.0-ce"
+            php: "8.0"
+          # max
+          - oxid_ref: "dev-b-7.5-ce"
+            php: "8.5"
+            
+    name: OXID ${{ matrix.oxid_ref }} in PHP ${{ matrix.php }} tests
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_NAME: oxid
+      DB_USER: oxid
+      DB_PASS: oxid
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run OXID tests
+        uses: d3datadevelopment/ci-actions/oxid-plugin-test@php-tests--v1.1.0
+        with:
+          php_version: ${{ matrix.php }}
+          oxid_ref: ${{ matrix.oxid_ref }}
+          composer_package_name: "d3/oxid-twofactor-onetimepassword"
+          oxid_module_ids: ""
+          syntax_check_paths: "."
+          debug: ${{ github.event.inputs.debug }}
+          test_suites: "Unit"
+          git_access_token: ${{ secrets.GITEA_READ_REPO_TOKEN }}
+
+  report-status:
+    runs-on: ubuntu-latest
+    needs: package-tests
+    if: always()
+    steps:
+      - name: Report CI status
+        uses: d3datadevelopment/ci-actions/status-reporter@status-reporter--v1.0.0
+        with:
+          api_status_endpoint: "${{ vars.GITEA_API }}${{ github.sha }}"
+          auth_token: ${{ secrets.GITEA_WRITE_STATUS_TOKEN }}
+          state: ${{ needs.package-tests.result }}
+          description: "CI result: ${{ needs.package-tests.result }}"
+          target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

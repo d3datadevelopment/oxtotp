@@ -201,7 +201,7 @@ class d3totpadminlogin extends AdminController
 
             return "admin_start";
         } catch (totpExceptionInterface $e) {
-            Registry::getUtilsView()->addErrorToDisplay($e);
+            Registry::getUtilsView()->addErrorToDisplay($e->getMessage());
             $this->getLogger()->error($e->getMessage(), ['UserId'   => $userId]);
             $this->getLogger()->debug($e->getTraceAsString());
         }

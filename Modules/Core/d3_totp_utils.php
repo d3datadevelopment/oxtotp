@@ -23,6 +23,7 @@ use OxidEsales\Eshop\Core\Config;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridge;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
@@ -117,7 +118,7 @@ class d3_totp_utils extends d3_totp_utils_parent
     {
         $container = ContainerFactory::getInstance()->getContainer();
         $moduleConfigurationBridge = $container->get(ModuleConfigurationDaoBridgeInterface::class);
-        /** @var ModuleConfiguration $moduleConfiguration */
+        /** @var ModuleConfigurationDaoBridge $moduleConfigurationBridge */
         return $moduleConfigurationBridge->get(Constants::OXID_MODULE_ID);
     }
 

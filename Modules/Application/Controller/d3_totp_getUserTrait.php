@@ -35,6 +35,7 @@ trait d3_totp_getUserTrait
      */
     public function getUser(): false|User
     {
+        /** @var false|null|User $user */
         $user = parent::getUser();
 
         if ($user && $user->isLoaded() && $user->getId()) {

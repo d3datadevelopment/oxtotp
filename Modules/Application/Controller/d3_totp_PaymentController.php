@@ -18,6 +18,4 @@ namespace D3\Totp\Modules\Application\Controller;
 class d3_totp_PaymentController extends d3_totp_PaymentController_parent
 {
     use d3_totp_getUserTrait;
-
-    private $parentClass = d3_totp_PaymentController_parent::class;
 }

@@ -19,8 +19,7 @@ use Assert\Assert;
 use D3\Totp\Application\Model\d3totp;
 use D3\Totp\Application\Model\d3totp_conf;
 use D3\Totp\Application\Model\Exceptions\totpExceptionInterface;
-use D3\Totp\Application\Model\Exceptions\wrongOtpException;
-use \D3\Totp\Core\Registry as TotpRegistry;
+use D3\Totp\Core\Registry as TotpRegistry;
 use D3\Totp\Modules\Application\Model\d3_totp_user;
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as DBALException;
@@ -102,6 +101,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
      * @return false|string
      * @throws ContainerExceptionInterface
      * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      * @throws Exception
      * @throws NotFoundExceptionInterface
      */
@@ -138,7 +139,13 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 return false;
             }
         } catch (totpExceptionInterface $oEx) {
-            $this->d3TotpGetUtilsView()->addErrorToDisplay($oEx, false, false, "", 'd3totplogin');
+            $this->d3TotpGetUtilsView()->addErrorToDisplay(
+                $oEx->getMessage(),
+                false,
+                false,
+                "",
+                'd3totplogin'
+            );
         }
 
         $logger->info('TOTP verification process', ['status' => 'finished', 'success' => false]);
@@ -180,14 +187,17 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
     }
 
     /**
-     * @param string $sTotp
+     * @param string $totpCode
+     * @param string $totpBcCode
      * @param d3totp $totp
+     *
      * @return bool
      * @throws ContainerExceptionInterface
      * @throws DBALException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      * @throws Exception
      * @throws NotFoundExceptionInterface
-     * @throws wrongOtpException
      */
     public function d3TotpHasValidTotp(string $totpCode, string $totpBcCode, d3totp $totp): bool
     {

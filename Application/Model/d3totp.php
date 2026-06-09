@@ -181,6 +181,7 @@ class d3totp extends BaseModel
 
     /**
      * @return string|null
+     * @throws Exception
      */
     public function getSavedSecret(): ?string
     {
@@ -231,7 +232,10 @@ class d3totp extends BaseModel
     }
 
     /**
+     * @param User $user
+     *
      * @return string
+     * @throws Exception
      */
     public function getQrCodeElement(User $user): string
     {
@@ -251,7 +255,10 @@ class d3totp extends BaseModel
     }
 
     /**
+     * @param User $user
+     *
      * @return string
+     * @throws Exception
      */
     public function getSecret(User $user): string
     {

@@ -98,11 +98,27 @@ class d3backupcodelist extends ListModel
         return $object;
     }
 
+    /**
+     * @param string $code
+     *
+     * @return bool
+     * @throws ContainerExceptionInterface
+     * @throws DBALDriverException
+     * @throws DBALException
+     * @throws NotFoundExceptionInterface
+     */
     public function verify(string $code): bool
     {
         return $this->verifyArgon2($code) || $this->verifyLegacy($code);
     }
 
+    /**
+     * @param string $code
+     *
+     * @return bool
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function verifyArgon2(string $code): bool
     {
         $this->loadUserArgonBackupCodes();
@@ -110,14 +126,18 @@ class d3backupcodelist extends ListModel
         /** @var d3backupcode $backupCode */
         foreach ($this->getArray() as $backupCode) {
             if (password_verify($code, $backupCode->getRawFieldData('backupcode'))) {
-                $backupCode->delete();
-                return true;
+                return $backupCode->delete();
             }
         }
 
         return false;
     }
 
+    /**
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function loadUserArgonBackupCodes(): void
     {
         $qb = $this->getQueryBuilder();
@@ -146,7 +166,7 @@ class d3backupcodelist extends ListModel
      * @throws NotFoundExceptionInterface
      * @throws DBALDriverException
      * @throws DBALException
-     * @deprecated
+     * @deprecated will removed in upcoming major
      */
     protected function verifyLegacy(string $totp): bool
     {
@@ -170,13 +190,11 @@ class d3backupcodelist extends ListModel
                 )
             );
 
-        $sVerify = $qb->execute()->fetchOne();
-
-        if ($sVerify) {
-            $this->getBaseObject()->delete($sVerify);
+        if ($sVerify = $qb->execute()->fetchOne()) {
+            return $this->getBaseObject()->delete($sVerify);
         }
 
-        return (bool) $sVerify;
+        return false;
     }
 
     /**

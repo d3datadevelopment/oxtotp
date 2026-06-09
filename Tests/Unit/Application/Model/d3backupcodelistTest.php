@@ -169,7 +169,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $backupCode = $this->getMockBuilder(d3backupcode::class)
             ->onlyMethods(['delete'])
             ->getMock();
-        $backupCode->expects($this->exactly((int) $expected))->method('delete');
+        $backupCode->expects($this->exactly((int) $expected))->method('delete')->willReturn(true);
         $backupCode->assign([
             'backupcode' => $backupCode->d3EncodeBC('foobar')
         ]);
@@ -203,6 +203,62 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $sut->expects($this->once())->method('selectString');
 
         $this->callMethod($sut, 'loadUserArgonBackupCodes');
+    }
+
+    /**
+     * @test
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::verifyLegacy
+     */
+    public function verifyLegacyFailed()
+    {
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->d3getMockBuilder(User::class)
+            ->onlyMethods(['getId'])
+            ->getMock();
+        $oUserMock->method('getId')->willReturn('foobar');
+        $oUserMock->assign(['oxpasssalt' => '6162636465666768696A6B']);
+
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->d3getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['delete', 'd3TotpGetUserObject'])
+            ->getMock();
+        $oBackupCodeMock->expects($this->never())->method('delete')->willReturn(true);
+        $oBackupCodeMock->method('d3TotpGetUserObject')->willReturn($oUserMock);
+
+        $resultMock = $this->d3getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['fetchOne'])
+            ->getMock();
+        $resultMock->method('fetchOne')->willReturn(0);
+
+        $qbMock = $this->d3getMockBuilder(QueryBuilder::class)
+            ->setConstructorArgs([
+                ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get()
+            ])
+            ->onlyMethods(['execute'])
+            ->getMock();
+        $qbMock->method('execute')->willReturn($resultMock);
+
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->d3getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods([
+                'getQueryBuilder',
+                'getBaseObject',
+                'd3GetUser',
+            ])
+            ->getMock();
+        $oModelMock->method('getQueryBuilder')->willReturn($qbMock);
+        $oModelMock->method('getBaseObject')->willReturn($oBackupCodeMock);
+        $oModelMock->method('d3GetUser')->willReturn($oUserMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->assertFalse(
+            $this->callMethod($this->_oModel, 'verifyLegacy', ['123456'])
+        );
     }
 
     /**
@@ -255,6 +311,60 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
         $this->_oModel = $oModelMock;
 
         $this->assertTrue(
+            $this->callMethod($this->_oModel, 'verifyLegacy', ['123456'])
+        );
+    }
+
+    /**
+     * @test
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
+     * @covers \D3\Totp\Application\Model\d3backupcodelist::verifyLegacy
+     */
+    public function verifyLegacyFoundCantDeleteTotp()
+    {
+        /** @var User|MockObject $oUserMock */
+        $oUserMock = $this->d3getMockBuilder(User::class)
+            ->onlyMethods(['getId'])
+            ->getMock();
+        $oUserMock->method('getId')->willReturn('foobar');
+        $oUserMock->assign(['oxpasssalt' => '6162636465666768696A6B']);
+
+        /** @var d3backupcode|MockObject $oBackupCodeMock */
+        $oBackupCodeMock = $this->d3getMockBuilder(d3backupcode::class)
+            ->onlyMethods(['delete', 'd3TotpGetUserObject'])
+            ->getMock();
+        $oBackupCodeMock->expects($this->once())->method('delete')->willReturn(false);
+        $oBackupCodeMock->method('d3TotpGetUserObject')->willReturn($oUserMock);
+
+        $resultMock = $this->d3getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['fetchOne'])
+            ->getMock();
+        $resultMock->method('fetchOne')->willReturn('1');
+
+        $qbMock = $this->d3getMockBuilder(QueryBuilder::class)
+            ->setConstructorArgs([ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get()])
+            ->onlyMethods(['execute'])
+            ->getMock();
+        $qbMock->method('execute')->willReturn($resultMock);
+
+        /** @var d3backupcodelist|MockObject $oModelMock */
+        $oModelMock = $this->d3getMockBuilder(d3backupcodelist::class)
+            ->onlyMethods([
+                'getQueryBuilder',
+                'getBaseObject',
+                'd3GetUser',
+            ])
+            ->getMock();
+        $oModelMock->method('getQueryBuilder')->willReturn($qbMock);
+        $oModelMock->method('getBaseObject')->willReturn($oBackupCodeMock);
+        $oModelMock->method('d3GetUser')->willReturn($oUserMock);
+
+        $this->_oModel = $oModelMock;
+
+        $this->assertFalse(
             $this->callMethod($this->_oModel, 'verifyLegacy', ['123456'])
         );
     }

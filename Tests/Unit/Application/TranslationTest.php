@@ -9,7 +9,6 @@ class TranslationTest extends d3TotpUnitTestCase
 {
     /**
      * @test
-     * @return void
      * @dataProvider canGetTranslationDataProvider
      */
     public function canGetTranslation(string $path): void

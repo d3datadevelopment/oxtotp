@@ -40,7 +40,7 @@
     "php": ">=8.0",
     "ext-xmlwriter": "*",
     "ext-openssl": "*",
-    "oxid-esales/oxideshop-ce": "7.0 - 7.4",
+    "oxid-esales/oxideshop-ce": "7.0 - 7.5",
     "spomky-labs/otphp": "^10.0 || ^11.0",
     "lcobucci/clock": "^2.2 || ^3",
     "bacon/bacon-qr-code": "^2.0 || ^3.0",
@@ -52,7 +52,7 @@
     "phpunit/phpunit" : "^9.6",
     "d3/testingtools": "^1.0",
     "friendsofphp/php-cs-fixer": "^3.9",
-    "phpstan/phpstan": "^1.8",
+    "phpstan/phpstan": "^1.10",
     "boxblinkracer/phpunuhi": "^1.12"
   },
   "autoload": {

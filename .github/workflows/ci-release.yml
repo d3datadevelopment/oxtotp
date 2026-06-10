@@ -61,7 +61,7 @@ jobs:
           php_version: ${{ matrix.php }}
           oxid_ref: ${{ matrix.oxid_ref }}
           composer_package_name: "d3/oxid-twofactor-onetimepassword"
-          oxid_module_ids: ""
+          oxid_module_ids: "d3totp"
           syntax_check_paths: "."
           debug: ${{ github.event.inputs.debug }}
           test_suites: "Unit"

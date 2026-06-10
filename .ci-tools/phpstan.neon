@@ -1,22 +1,22 @@
 parameters:
     scanFiles:
-        - IntelliSenseHelper.php
-        - ../../oxid-esales/oxideshop-ce/source/bootstrap.php
-        - ../../oxid-esales/oxideshop-ce/source/oxfunctions.php
-        - ../../oxid-esales/oxideshop-ce/source/overridablefunctions.php
+        - ../IntelliSenseHelper.php
+        - ../../../oxid-esales/oxideshop-ce/source/bootstrap.php
+        - ../../../oxid-esales/oxideshop-ce/source/oxfunctions.php
+        - ../../../oxid-esales/oxideshop-ce/source/overridablefunctions.php
     paths:
-        - Application
-        - assets
-        - Core
-        - migration
-        - Modules
-        - Services
-        - Setup
-        - views
-        - metadata.php
+        - ../Application
+        - ../assets
+        - ../Core
+        - ../migration
+        - ../Modules
+        - ../Services
+        - ../Setup
+        - ../views
+        - ../metadata.php
     excludePaths:
-        - .php-cs-fixer.php
-        - Tests
+        - ../Tests
+        - ../.ci-tools
     level: 6
     phpVersion: 80300
     ignoreErrors:

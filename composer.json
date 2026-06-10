@@ -52,7 +52,7 @@
     "phpunit/phpunit" : "^9.6",
     "d3/testingtools": "^1.0",
     "friendsofphp/php-cs-fixer": "^3.9",
-    "phpstan/phpstan": "^1.10",
+    "phpstan/phpstan": "^2.2",
     "boxblinkracer/phpunuhi": "^1.12"
   },
   "autoload": {

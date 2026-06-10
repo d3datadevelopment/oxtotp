@@ -5,10 +5,17 @@ parameters:
         - ../../oxid-esales/oxideshop-ce/source/oxfunctions.php
         - ../../oxid-esales/oxideshop-ce/source/overridablefunctions.php
     paths:
-        - .
+        - Application
+        - assets
+        - Core
+        - migration
+        - Modules
+        - Services
+        - Setup
+        - views
+        - metadata.php
     excludePaths:
         - .php-cs-fixer.php
-        - rector.php
         - Tests
     level: 6
     phpVersion: 80300
@@ -17,7 +24,6 @@ parameters:
         - '#Unable to resolve the template type T in call to function oxNew#'
         - '#(Property|Method) D3\\Totp\\Modules\\.* has no (return type|type) specified.#'
         - identifier: missingType.iterableValue
-    tips:
-        treatPhpDocTypesAsCertain: false
+    treatPhpDocTypesAsCertain: false
     parallel:
         processTimeout: 900.0

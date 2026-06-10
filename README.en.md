@@ -17,7 +17,7 @@ This module provides a 2-factor authentication (time-dependent one-time password
 
 ### Setup
 ![Setup Backend](assets/setup_backend.jpg "Setup Backend")
-![Setup Frontend](assets/setup_frontend.jpg "Setup Frontend")
+![Setup Frontend](assets/setup_frontend.png "Setup Frontend")
 
 ### Login
 ![Login Backend](assets/login_backend.png "Login Backend")
@@ -32,6 +32,7 @@ This package requires an OXID eShop installed with Composer in one of the follow
 - 7.2.x
 - 7.3.x
 - 7.4.x
+- 7.5.x
 
 and its requirements.
 

@@ -17,7 +17,7 @@ Dieses Modul stellt eine 2-Faktor-Authentisierung (zeitabhängiges Einmalpasswor
 
 ### Einrichtung
 ![Einrichtung Backend](assets/setup_backend.jpg "Einrichtung Backend")
-![Einrichtung Frontend](assets/setup_frontend.jpg "Einrichtung Frontend")
+![Einrichtung Frontend](assets/setup_frontend.png "Einrichtung Frontend")
 
 ### Login
 ![Login Backend](assets/login_backend.png "Login Backend")
@@ -32,6 +32,7 @@ Dieses Paket erfordert einen mit Composer installierten OXID eShop in einer der 
 - 7.2.x
 - 7.3.x
 - 7.4.x
+- 7.5.x
 
 und dessen Anforderungen.
 

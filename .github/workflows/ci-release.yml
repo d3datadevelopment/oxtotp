@@ -38,7 +38,7 @@ jobs:
         include:
           # min
           - oxid_ref: "dev-b-7.0-ce"
-            php: "8.0"
+            php: "8.1"
           # max
           - oxid_ref: "dev-b-7.5-ce"
             php: "8.5"

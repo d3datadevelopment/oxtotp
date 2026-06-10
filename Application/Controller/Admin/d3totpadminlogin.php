@@ -224,9 +224,9 @@ class d3totpadminlogin extends AdminController
         $user->load($userId);
 
         return (
-                $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) &&
-                $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) == $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH)
-            )
+            $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) &&
+            $this->d3TotpGetSession()->getVariable(d3totp_conf::SESSION_ADMIN_AUTH) == $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH)
+        )
             || $totp->verify($user, $totpCode, $totpBcCode);
     }
 

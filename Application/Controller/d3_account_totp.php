@@ -111,20 +111,20 @@ class d3_account_totp extends AccountController
     public function delete(): void
     {
         try {
-            if ( Registry::getRequest()->getRequestEscapedParameter( 'totp_use' ) !== '1' ) {
+            if (Registry::getRequest()->getRequestEscapedParameter('totp_use') !== '1') {
                 $user  = $this->getUser();
                 $oTotp = $this->getTotpObject();
-                if ( $user instanceof User && $user->getId() ) {
-                    $oTotp->loadByUserId( $user->getId() );
+                if ($user instanceof User && $user->getId()) {
+                    $oTotp->loadByUserId($user->getId());
                     $this->verifyPassword(
                         $user,
-                        trim( Registry::getRequest()->getRequestEscapedParameter('password'))
+                        trim(Registry::getRequest()->getRequestEscapedParameter('password'))
                     );
                     $oTotp->delete();
                 }
             }
-        } catch ( Exception $oExcp ) {
-            Registry::get( UtilsView::class )->addErrorToDisplay( $oExcp->getMessage() );
+        } catch (Exception $oExcp) {
+            Registry::get(UtilsView::class)->addErrorToDisplay($oExcp->getMessage());
         }
     }
 

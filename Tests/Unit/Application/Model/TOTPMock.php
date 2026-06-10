@@ -21,12 +21,12 @@ use OTPHP\TOTPInterface;
 
 class TOTPMock implements TOTPInterface
 {
-    public function verify( string $otp, ?int $input = null, ?int $window = null ): bool
+    public function verify(string $otp, ?int $input = null, ?int $window = null): bool
     {
         return true;
     }
 
-    public static function createFromSecret( string $secret ): OTPInterface
+    public static function createFromSecret(string $secret): OTPInterface
     {
         return new TOTP('abc');
     }
@@ -36,28 +36,34 @@ class TOTPMock implements TOTPInterface
         return new TOTP('abc');
     }
 
-    public function setSecret( string $secret ): void {}
+    public function setSecret(string $secret): void
+    {
+    }
 
-    public function withSecret( string $secret ): OTPInterface
+    public function withSecret(string $secret): OTPInterface
     {
         return new TOTP('abc');
     }
 
-    public function setDigits( int $digits ): void {}
+    public function setDigits(int $digits): void
+    {
+    }
 
-    public function withDigits( int $digits ): OTPInterface
+    public function withDigits(int $digits): OTPInterface
     {
         return new TOTP('abc');
     }
 
-    public function setDigest( string $digest ): void {}
+    public function setDigest(string $digest): void
+    {
+    }
 
-    public function withDigest( string $digest ): OTPInterface
+    public function withDigest(string $digest): OTPInterface
     {
         return new TOTP('abc');
     }
 
-    public function at( int $input ): string
+    public function at(int $input): string
     {
         return 'abc';
     }
@@ -67,9 +73,11 @@ class TOTPMock implements TOTPInterface
         return 'abc';
     }
 
-    public function setLabel( string $label ): void {}
+    public function setLabel(string $label): void
+    {
+    }
 
-    public function withLabel( string $label ): OTPInterface
+    public function withLabel(string $label): OTPInterface
     {
         return new TOTP('abc');
     }
@@ -84,9 +92,11 @@ class TOTPMock implements TOTPInterface
         return "Issuer";
     }
 
-    public function setIssuer( string $issuer ): void {}
+    public function setIssuer(string $issuer): void
+    {
+    }
 
-    public function withIssuer( string $issuer ): OTPInterface
+    public function withIssuer(string $issuer): OTPInterface
     {
         return new TOTP('abc');
     }
@@ -96,9 +106,11 @@ class TOTPMock implements TOTPInterface
         return true;
     }
 
-    public function setIssuerIncludedAsParameter( bool $issuer_included_as_parameter ): void {}
+    public function setIssuerIncludedAsParameter(bool $issuer_included_as_parameter): void
+    {
+    }
 
-    public function withIssuerIncludedAsParameter( bool $issuer_included_as_parameter ): OTPInterface
+    public function withIssuerIncludedAsParameter(bool $issuer_included_as_parameter): OTPInterface
     {
         return new TOTP('abc');
     }
@@ -113,12 +125,12 @@ class TOTPMock implements TOTPInterface
         return 'abc';
     }
 
-    public function getParameter( string $parameter ): mixed
+    public function getParameter(string $parameter): mixed
     {
         return 'abc';
     }
 
-    public function hasParameter( string $parameter ): bool
+    public function hasParameter(string $parameter): bool
     {
         return true;
     }
@@ -128,9 +140,11 @@ class TOTPMock implements TOTPInterface
         return [];
     }
 
-    public function setParameter( string $parameter, mixed $value ): void {}
+    public function setParameter(string $parameter, mixed $value): void
+    {
+    }
 
-    public function withParameter( string $parameter, mixed $value ): OTPInterface
+    public function withParameter(string $parameter, mixed $value): OTPInterface
     {
         return new TOTP('abc');
     }
@@ -140,26 +154,30 @@ class TOTPMock implements TOTPInterface
         return "abc";
     }
 
-    public function getQrCodeUri( string $uri, string $placeholder ): string
+    public function getQrCodeUri(string $uri, string $placeholder): string
     {
         return "abc";
     }
 
-    public static function create( ?string $secret = null, int $period = self::DEFAULT_PERIOD, string $digest = self::DEFAULT_DIGEST, int $digits = self::DEFAULT_DIGITS ): TOTPInterface
+    public static function create(?string $secret = null, int $period = self::DEFAULT_PERIOD, string $digest = self::DEFAULT_DIGEST, int $digits = self::DEFAULT_DIGITS): TOTPInterface
     {
         return new TOTP('abc');
     }
 
-    public function setPeriod( int $period ): void {}
+    public function setPeriod(int $period): void
+    {
+    }
 
-    public function withPeriod( int $period ): TOTPInterface
+    public function withPeriod(int $period): TOTPInterface
     {
         return new TOTP('abc');
     }
 
-    public function setEpoch( int $epoch ): void {}
+    public function setEpoch(int $epoch): void
+    {
+    }
 
-    public function withEpoch( int $epoch ): TOTPInterface
+    public function withEpoch(int $epoch): TOTPInterface
     {
         return new TOTP('abc');
     }

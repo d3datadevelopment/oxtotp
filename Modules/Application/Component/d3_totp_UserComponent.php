@@ -82,7 +82,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
 
                 $this->d3TotpGetUtils()->redirect($sUrl, false);
             }
-        } catch (InvalidArgumentException) {}
+        } catch (InvalidArgumentException) {
+        }
 
         $logger->info('TOTP init process', ['status' => 'finished', 'type' => 'without TOTP request']);
 
@@ -153,7 +154,8 @@ class d3_totp_UserComponent extends d3_totp_UserComponent_parent
                 "",
                 'd3totplogin'
             );
-        } catch (\Assert\InvalidArgumentException) {}
+        } catch (\Assert\InvalidArgumentException) {
+        }
 
         $logger->info('TOTP verification process', ['status' => 'finished', 'success' => false]);
 

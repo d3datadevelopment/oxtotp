@@ -552,7 +552,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getBackupCodeListObject',
                 'getUser',
-                'getEditObjectId'
+                'getEditObjectId',
             ])
             ->getMock();
         $oControllerMock->method('getBackupCodeListObject')->willReturn($oBackupCodeListMock);
@@ -578,7 +578,7 @@ class d3user_totpTest extends d3TotpUnitTestCase
         /** @var d3user_totp|MockObject $oControllerMock */
         $oControllerMock = $this->d3getMockBuilder(d3user_totp::class)
             ->onlyMethods([
-                'getEditObjectId'
+                'getEditObjectId',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('getEditObjectId')->willReturn('foo');

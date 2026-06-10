@@ -135,7 +135,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'd3TotpGetSession',
                 'd3TotpGetTotpObject',
-                'd3TotpGetUserObject'
+                'd3TotpGetUserObject',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpGetSession')->willReturn($oSessionMock);
@@ -519,7 +519,7 @@ class d3totpadminloginTest extends d3TotpUnitTestCase
                 'd3TotpHasValidTotp',
                 'd3TotpGetSession',
                 'd3GetLoginController',
-                'd3TotpGetUserObject'
+                'd3TotpGetUserObject',
             ])
             ->getMock();
         $oControllerMock->method('d3TotpHasValidTotp')->willReturn(true);

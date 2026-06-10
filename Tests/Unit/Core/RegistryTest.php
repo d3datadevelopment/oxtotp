@@ -40,7 +40,7 @@ class RegistryTest extends d3TotpUnitTestCase
      */
     public function testGetLoggerNewTestInstance()
     {
-        $this->setValue( new Registry(), 'registry', []);
+        $this->setValue(new Registry(), 'registry', []);
 
         $this->assertInstanceOf(
             Logger::class,
@@ -60,7 +60,7 @@ class RegistryTest extends d3TotpUnitTestCase
     public function testGetLoggerNewProductionInstance()
     {
         $_SESSION['ignoreTestState'] = true;
-        $this->setValue( new Registry(), 'registry', []);
+        $this->setValue(new Registry(), 'registry', []);
 
         $this->assertInstanceOf(
             Logger::class,

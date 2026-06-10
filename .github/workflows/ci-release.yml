@@ -42,7 +42,7 @@ jobs:
           # max
           - oxid_ref: "dev-b-7.5-ce"
             php: "8.5"
-            
+
     name: OXID ${{ matrix.oxid_ref }} in PHP ${{ matrix.php }} tests
 
     env:

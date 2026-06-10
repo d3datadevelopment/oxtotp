@@ -1052,7 +1052,7 @@ class d3totpTest extends d3TotpUnitTestCase
     public function testAssertReplayProtection(): void
     {
         $this->_oModel->assign([
-            'lastacceptedtimeslice' => 375
+            'lastacceptedtimeslice' => 375,
         ]);
 
         $this->expectException(replayException::class);
@@ -1074,7 +1074,7 @@ class d3totpTest extends d3TotpUnitTestCase
             'lockeduntil' => date(
                 'Y-m-d H:i:s',
                 time() + 50
-            )
+            ),
         ]);
 
         $this->expectException(tooManyAttemptsException::class);
@@ -1137,7 +1137,7 @@ class d3totpTest extends d3TotpUnitTestCase
         $sut->method('getId')->willReturn($id);
         $sut->assign([
             'failedattempts'    => 6,
-            'lockeduntil'       => time() - 1
+            'lockeduntil'       => time() - 1,
         ]);
         $sut->expects($this->exactly($invocationCount))->method('save');
 

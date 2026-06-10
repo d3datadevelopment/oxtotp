@@ -171,7 +171,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
             ->getMock();
         $backupCode->expects($this->exactly((int) $expected))->method('delete')->willReturn(true);
         $backupCode->assign([
-            'backupcode' => $backupCode->d3EncodeBC('foobar')
+            'backupcode' => $backupCode->d3EncodeBC('foobar'),
         ]);
         $sut->offsetSet('foo', $backupCode);
 
@@ -236,7 +236,7 @@ class d3backupcodelistTest extends d3TotpUnitTestCase
 
         $qbMock = $this->d3getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([
-                ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get()
+                ContainerFactory::getInstance()->getContainer()->get(ConnectionProviderInterface::class)->get(),
             ])
             ->onlyMethods(['execute'])
             ->getMock();

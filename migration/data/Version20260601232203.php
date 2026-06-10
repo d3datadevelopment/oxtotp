@@ -30,11 +30,11 @@ final class Version20260601232203 extends AbstractMigration
         return 'add backupcode version column';
     }
 
-    public function preUp( Schema $schema ): void
+    public function preUp(Schema $schema): void
     {
         $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
-        parent::preUp( $schema );
+        parent::preUp($schema);
 
         $this->abortIf(!$schema->hasTable('d3totp_backupcodes'), 'Backup codes table does not exist.');
 

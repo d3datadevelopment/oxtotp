@@ -107,12 +107,12 @@ class d3backupcode extends BaseModel
     /**
      * @codeCoverageIgnore
      */
-    public function delete( $oxid = null )
+    public function delete($oxid = null)
     {
-        $return = parent::delete( $oxid );
+        $return = parent::delete($oxid);
 
         if (!$return) {
-            Registry::getLogger()->warning( 'Unable to delete TOTP backup code', [ 'id' => $this->getId()]);
+            Registry::getLogger()->warning('Unable to delete TOTP backup code', [ 'id' => $this->getId()]);
         }
 
         return $return;

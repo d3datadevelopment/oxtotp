@@ -74,7 +74,8 @@ class d3_totp_user extends d3_totp_user_parent
             Assert::that($totp->isLoaded())->false();
             $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, $totp->getTotp($this)->getSecret());
             $this->d3TotpGetSession()->setVariable(d3totp_conf::OTP_LABEL_SESSION_VARNAME, $totp->getTotp($this)->getLabel());
-        } catch (InvalidArgumentException) {}
+        } catch (InvalidArgumentException) {
+        }
 
         return $totp;
     }

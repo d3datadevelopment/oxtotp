@@ -248,7 +248,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getUser',
                 'getBackupCodeListObject',
-                'getTotpObject'
+                'getTotpObject',
             ])
             ->getMock();
         $oControllerMock->method('getUser')->willReturn($oUser);
@@ -311,7 +311,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
             ->onlyMethods([
                 'getUser',
                 'getBackupCodeListObject',
-                'getTotpObject'
+                'getTotpObject',
             ])
             ->getMock();
         Registry::getSession()->setVariable(d3totp_conf::OTP_SECRET_SESSION_VARNAME, 'JBSWY3DPEHPK3PXP');
@@ -493,7 +493,7 @@ class d3_account_totpTest extends d3TotpUnitTestCase
         /** @var d3_account_totp|MockObject $oControllerMock */
         $oControllerMock = $this->d3getMockBuilder(d3_account_totp::class)
             ->onlyMethods([
-                'getUser'
+                'getUser',
             ])
             ->getMock();
         $oControllerMock->expects($this->once())->method('getUser')->willReturn($userMock);

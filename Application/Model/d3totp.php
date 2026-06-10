@@ -309,19 +309,20 @@ class d3totp extends BaseModel
 
             $logger->info('verify OTP code against seed');
 
-            $verified = $this->getTotp( $user, $seed )->verify( $totp, $timestamp, $this->leeway );
+            $verified = $this->getTotp($user, $seed)->verify($totp, $timestamp, $this->leeway);
 
-            if ( $verified ) {
-                $logger->info( 'TOTP code successful verified' );
+            if ($verified) {
+                $logger->info('TOTP code successful verified');
 
-                $this->assign(['lastacceptedtimeslice' => $acceptedSlice] );
+                $this->assign(['lastacceptedtimeslice' => $acceptedSlice]);
                 $this->resetFailedAttempts();
 
                 return true;
             }
 
             $logger->info('unable to verify TOTP code');
-        } catch (InvalidArgumentException) {}
+        } catch (InvalidArgumentException) {
+        }
 
         try {
             Assert::that($seed)->null();
@@ -335,7 +336,8 @@ class d3totp extends BaseModel
             }
 
             $logger->info('unable to verify backup code');
-        } catch (InvalidArgumentException) {}
+        } catch (InvalidArgumentException) {
+        }
 
         $this->registerFailedAttempt();
 
@@ -479,7 +481,9 @@ class d3totp extends BaseModel
      */
     protected function resetFailedAttempts(): void
     {
-        if (!$this->getId()) return;
+        if (!$this->getId()) {
+            return;
+        }
 
         TotpRegistry::getLogger()->info('reset failed attempts');
 
@@ -498,7 +502,9 @@ class d3totp extends BaseModel
      */
     protected function registerFailedAttempt(): void
     {
-        if (!$this->getId()) return;
+        if (!$this->getId()) {
+            return;
+        }
 
         $failedAttempts =
             (int) $this->getFieldData('failedattempts') + 1;

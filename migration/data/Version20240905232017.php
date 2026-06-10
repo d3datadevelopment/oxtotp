@@ -116,7 +116,7 @@ final class Version20240905232017 extends AbstractMigration
     public function removeTotpTable(Schema $schema): void
     {
         if ($schema->hasTable('d3totp')) {
-             $schema->dropTable('d3totp');
+            $schema->dropTable('d3totp');
         }
     }
 

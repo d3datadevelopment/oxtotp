@@ -51,6 +51,7 @@ return [
     'SHOP_MODULE_D3_TOTP_setting_logLevel_alert'      => 'alert',
     'SHOP_MODULE_D3_TOTP_setting_logLevel_emergency'  => 'emergency',
     'SHOP_MODULE_D3_TOTP_setting_keptlogfiles'        => 'kept log files (in days)',
+    'HELP_SHOP_MODULE_D3_TOTP_setting_keptlogfiles'   => 'A new file is created for each day. Older files are automatically deleted.',
     'SHOP_MODULE_D3_TOTP_setting_logOnErrorsOnly'     => 'write log on errors only',
 
     'D3_TOTP_REGISTEREXIST'                           => 'existing registration',

@@ -15,4 +15,6 @@ declare(strict_types=1);
 
 namespace D3\Totp\Application\Model\Exceptions;
 
-interface totpExceptionInterface {}
+interface totpExceptionInterface
+{
+}

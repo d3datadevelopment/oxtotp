@@ -113,7 +113,8 @@ class d3_totp_LoginController extends d3_totp_LoginController_parent
         $adminAuth = $this->d3TotpGetSession()->getVariable(d3totp_conf::OXID_ADMIN_AUTH);
 
         return $totp->isActive()
-            && (!$adminTotpAuth ||
+            && (
+                !$adminTotpAuth ||
                 $adminTotpAuth != $adminAuth
             );
     }
